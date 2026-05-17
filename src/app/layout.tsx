@@ -2,6 +2,7 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, DM_Sans } from 'next/font/google'
 import './globals.css'
+import BackToTop from '@/components/BackToTop'
 
 const playfair = Playfair_Display({
   subsets:  ['latin'],
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en-NZ" className={`${playfair.variable} ${dmSans.variable}`}>
       <body className="bg-cream font-sans text-forest-700 antialiased">
         {children}
+        <BackToTop />
       </body>
     </html>
   )
