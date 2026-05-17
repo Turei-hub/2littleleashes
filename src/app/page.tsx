@@ -51,12 +51,12 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-forest-900/65" />
 
         {/* Logo watermark — above overlay, behind text */}
-        <div className="pointer-events-none absolute right-8 top-1/2 z-[5] hidden -translate-y-1/2 opacity-40 sm:block lg:right-16">
+        <div className="pointer-events-none absolute left-8 top-1/2 z-[5] hidden -translate-y-1/2 opacity-40 sm:block lg:left-16">
           <Image
-            src="/images/logo.jpg"
+            src="/images/logo.png"
             alt=""
-            width={300}
-            height={300}
+            width={280}
+            height={280}
             className="object-contain"
           />
         </div>
