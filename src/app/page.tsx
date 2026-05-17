@@ -1,5 +1,6 @@
 // src/app/page.tsx
 import Link from 'next/link'
+import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ServiceCard from '@/components/ServiceCard'
@@ -18,12 +19,19 @@ export default function HomePage() {
       <Navbar />
 
       {/* ── HERO ──────────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest-700 via-forest-600 to-forest-400 px-4 py-20 sm:px-6 lg:px-8">
-        {/* Decorative blobs */}
-        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-amber-300 opacity-20" />
-        <div className="pointer-events-none absolute -bottom-10 left-0 h-48 w-48 rounded-full bg-amber-300 opacity-20" />
+      <section className="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
+        {/* Background photo */}
+        <Image
+          src="/images/Meihana1.jpg"
+          alt="Meihana walking dogs in Rotorua"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        {/* Dark teal overlay for text readability */}
+        <div className="absolute inset-0 bg-forest-900/65" />
 
-        <div className="relative mx-auto max-w-5xl">
+        <div className="relative z-10 mx-auto max-w-5xl">
           <div className="max-w-2xl animate-fade-up">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/75">
               📍 Rotorua, New Zealand · Est. 2022
@@ -33,7 +41,7 @@ export default function HomePage() {
               2 Little Leashes Dog Walkers Rotorua
             </h1>
 
-            <p className="mt-4 text-base leading-relaxed text-white/85 sm:text-lg">
+            <p className="mt-4 text-base leading-relaxed text-white/90 sm:text-lg">
               Kia ora! We&apos;re 2 Little Leashes – A dog-crazy whānau who absolutely LOVE spending time with furry friends. Rain or shine, we&apos;re ready with leashes, smiles, treats, and heaps of energy!
             </p>
 
