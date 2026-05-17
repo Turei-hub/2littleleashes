@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase-server'
 import BookingActions from './BookingActions'
 import LogoutButton from './LogoutButton'
@@ -59,7 +60,15 @@ export default async function AdminPage() {
             <p className="text-xs text-white/50">2 Little Leashes · Admin</p>
             <h1 className="text-lg font-bold text-white">Bookings Dashboard</h1>
           </div>
-          <LogoutButton />
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-1.5 text-sm font-medium text-white/60 transition hover:border-white/50 hover:text-white/90"
+            >
+              ← Home
+            </Link>
+            <LogoutButton />
+          </div>
         </div>
       </header>
 
