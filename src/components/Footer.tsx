@@ -44,8 +44,14 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-white/10 pt-6 text-center text-xs">
+        <div className="mt-8 border-t border-white/10 pt-6 flex flex-col items-center gap-2 text-center text-xs sm:flex-row sm:justify-between">
           <p>© {new Date().getFullYear()} 2 Little Leashes Dog Walkers Rotorua · All rights reserved</p>
+          <Link
+            href="/admin/login"
+            className="flex items-center gap-1 text-white/25 transition hover:text-white/60"
+          >
+            🔒 Owner Portal
+          </Link>
         </div>
       </div>
     </footer>
