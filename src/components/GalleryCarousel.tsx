@@ -5,34 +5,31 @@ import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 
-const ALL_IMAGES = [
-  ...Array.from({ length: 15 }, (_, i) => `dog-photo-${i + 1}.jpg`),
-  'dog-walk-rotorua.jpg',
-  'meihana-bulldogs-truck.jpg',
-  'pack-walk-truck.jpg',
+const IMAGES = [
+  ...Array.from({ length: 15 }, (_, i) => `/images/dog-photo-${i + 1}.jpg`),
+  '/images/dog-walk-rotorua.jpg',
+  '/images/meihana-bulldogs-truck.jpg',
+  '/images/pack-walk-truck.jpg',
 ]
 
-const IMAGES = ALL_IMAGES.map(name => `/images/${name}`)
-
 export default function GalleryCarousel() {
-  const [current,  setCurrent]  = useState(0)
+  const [featured, setFeatured] = useState(0)
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [paused,   setPaused]   = useState(false)
 
-  const prev = useCallback(() => setCurrent(i => (i - 1 + IMAGES.length) % IMAGES.length), [])
-  const next = useCallback(() => setCurrent(i => (i + 1) % IMAGES.length), [])
+  const prevFeatured = useCallback(() => setFeatured(i => (i - 1 + IMAGES.length) % IMAGES.length), [])
+  const nextFeatured = useCallback(() => setFeatured(i => (i + 1) % IMAGES.length), [])
+  const prevLb       = useCallback(() => setLightbox(i => i !== null ? (i - 1 + IMAGES.length) % IMAGES.length : null), [])
+  const nextLb       = useCallback(() => setLightbox(i => i !== null ? (i + 1) % IMAGES.length : null), [])
 
-  const prevLb = useCallback(() => setLightbox(i => i !== null ? (i - 1 + IMAGES.length) % IMAGES.length : null), [])
-  const nextLb = useCallback(() => setLightbox(i => i !== null ? (i + 1) % IMAGES.length : null), [])
-
-  // Auto-play — pause when hovered or lightbox is open
+  // Auto-cycle featured photo
   useEffect(() => {
     if (paused || lightbox !== null) return
-    const t = setInterval(next, 3000)
+    const t = setInterval(nextFeatured, 3000)
     return () => clearInterval(t)
-  }, [paused, lightbox, next])
+  }, [paused, lightbox, nextFeatured])
 
-  // Keyboard navigation in lightbox
+  // Keyboard nav in lightbox
   useEffect(() => {
     if (lightbox === null) return
     const handler = (e: KeyboardEvent) => {
@@ -44,7 +41,7 @@ export default function GalleryCarousel() {
     return () => window.removeEventListener('keydown', handler)
   }, [lightbox, prevLb, nextLb])
 
-  // Prevent body scroll when lightbox is open
+  // Lock body scroll when lightbox open
   useEffect(() => {
     document.body.style.overflow = lightbox !== null ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -52,68 +49,77 @@ export default function GalleryCarousel() {
 
   return (
     <>
-      {/* ── CAROUSEL ─────────────────────────────────────────────────────────── */}
+      {/* ── FEATURED AUTO-CYCLING PHOTO ──────────────────────────────────────── */}
       <div
-        className="group relative h-[600px] w-full cursor-pointer overflow-hidden"
+        className="group relative h-[400px] w-full cursor-pointer overflow-hidden bg-forest-900"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
-        onClick={() => setLightbox(current)}
+        onClick={() => setLightbox(featured)}
       >
-        {/* Slides */}
         {IMAGES.map((src, i) => (
           <div
             key={src}
             className={`absolute inset-0 transition-opacity duration-700 ${
-              i === current ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              i === featured ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
           >
             <Image
               src={src}
-              alt={`Dog photo ${i + 1}`}
+              alt={`Featured dog photo ${i + 1}`}
               fill
-              className="object-cover object-center"
+              className="object-contain"
               priority={i === 0}
             />
           </div>
         ))}
 
-        {/* Prev arrow */}
+        {/* Arrows */}
         <button
-          onClick={e => { e.stopPropagation(); prev() }}
-          className="absolute left-3 top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-amber-400 text-white shadow-lg transition hover:bg-amber-500 sm:left-5 sm:h-13 sm:w-13"
+          onClick={e => { e.stopPropagation(); prevFeatured() }}
+          className="absolute left-4 top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-amber-400 text-white shadow-lg transition hover:bg-forest-600"
           aria-label="Previous photo"
         >
           <ChevronLeft size={22} />
         </button>
-
-        {/* Next arrow */}
         <button
-          onClick={e => { e.stopPropagation(); next() }}
-          className="absolute right-3 top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-amber-400 text-white shadow-lg transition hover:bg-amber-500 sm:right-5 sm:h-13 sm:w-13"
+          onClick={e => { e.stopPropagation(); nextFeatured() }}
+          className="absolute right-4 top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-amber-400 text-white shadow-lg transition hover:bg-forest-600"
           aria-label="Next photo"
         >
           <ChevronRight size={22} />
         </button>
 
-        {/* Dot indicators */}
-        <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5">
-          {IMAGES.map((_, i) => (
-            <button
-              key={i}
-              onClick={e => { e.stopPropagation(); setCurrent(i) }}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === current
-                  ? 'w-6 bg-amber-400'
-                  : 'w-2 bg-white/50 hover:bg-white/80'
-              }`}
-              aria-label={`Go to photo ${i + 1}`}
-            />
-          ))}
+        {/* Counter */}
+        <div className="absolute bottom-3 right-4 z-10 rounded-full bg-forest-700/70 px-3 py-1 text-xs text-white/80 backdrop-blur-sm">
+          {featured + 1} / {IMAGES.length}
         </div>
 
-        {/* "Click to expand" hint — appears on hover */}
-        <div className="absolute right-4 top-4 z-10 rounded-full bg-forest-700/60 px-3 py-1 text-xs text-white/80 backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
+        {/* Expand hint */}
+        <div className="absolute bottom-3 left-4 z-10 rounded-full bg-forest-700/60 px-3 py-1 text-xs text-white/80 backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
           Click to expand
+        </div>
+      </div>
+
+      {/* ── MASONRY GRID ─────────────────────────────────────────────────────── */}
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <p className="mb-6 text-sm text-forest-600/60">All photos · click any to expand</p>
+        <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
+          {IMAGES.map((src, i) => (
+            <div
+              key={src}
+              className="mb-4 break-inside-avoid cursor-pointer overflow-hidden rounded-xl transition-opacity hover:opacity-90"
+              onClick={() => setLightbox(i)}
+            >
+              <Image
+                src={src}
+                alt={`Dog photo ${i + 1}`}
+                width={600}
+                height={800}
+                style={{ width: '100%', height: 'auto' }}
+                className="rounded-xl"
+              />
+            </div>
+          ))}
         </div>
       </div>
 
@@ -123,18 +129,18 @@ export default function GalleryCarousel() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
           onClick={() => setLightbox(null)}
         >
-          {/* Close button */}
+          {/* Close */}
           <button
             className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25"
             onClick={() => setLightbox(null)}
-            aria-label="Close lightbox"
+            aria-label="Close"
           >
             <X size={20} />
           </button>
 
           {/* Prev */}
           <button
-            className="absolute left-3 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-forest-600/80 text-white transition hover:bg-forest-500 sm:left-8"
+            className="absolute left-3 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-amber-400 text-white shadow-lg transition hover:bg-forest-600 sm:left-8"
             onClick={e => { e.stopPropagation(); prevLb() }}
             aria-label="Previous photo"
           >
@@ -143,20 +149,20 @@ export default function GalleryCarousel() {
 
           {/* Image */}
           <div
-            className="relative h-[82vh] w-[92vw] max-w-5xl"
+            className="relative h-[85vh] w-[90vw] max-w-4xl"
             onClick={e => e.stopPropagation()}
           >
             <Image
               src={IMAGES[lightbox]}
               alt={`Dog photo ${lightbox + 1}`}
               fill
-              className="object-cover object-center"
+              className="object-contain"
             />
           </div>
 
           {/* Next */}
           <button
-            className="absolute right-3 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-forest-600/80 text-white transition hover:bg-forest-500 sm:right-8"
+            className="absolute right-3 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-amber-400 text-white shadow-lg transition hover:bg-forest-600 sm:right-8"
             onClick={e => { e.stopPropagation(); nextLb() }}
             aria-label="Next photo"
           >
