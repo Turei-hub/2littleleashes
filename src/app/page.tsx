@@ -53,7 +53,7 @@ export default function HomePage() {
         {/* Logo watermark — above overlay, behind text */}
         <div className="pointer-events-none absolute left-8 top-1/2 z-[5] hidden -translate-y-1/2 opacity-40 sm:block lg:left-16">
           <Image
-            src="/images/logo.png"
+            src="/images/logo.jpg"
             alt=""
             width={280}
             height={280}
