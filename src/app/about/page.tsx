@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const WHY_US = [
   { icon: '📸', title: 'Photo after every session', body: 'We send a photo update after every walk or visit so you can see your dog having the time of their life.' },
   { icon: '📍', title: 'GPS-tracked walks',          body: 'Every walk is GPS tracked so you know exactly which Rotorua trails your dog explored.' },
-  { icon: '🌿', title: 'Rotorua's best locations',   body: 'Forests, lake tracks, bush paths — we mix up locations so walks stay exciting and stimulating.' },
+  { icon: '🌿', title: 'Rotorua&apos;s best locations',   body: 'Forests, lake tracks, bush paths — we mix up locations so walks stay exciting and stimulating.' },
   { icon: '🚗', title: 'Free pick-up & drop-off',    body: 'We come to you. Your dog is collected and returned safely from your home.' },
   { icon: '💊', title: 'Medical care welcome',        body: 'Medication administration and dogs with special needs are welcome — just let us know at booking.' },
   { icon: '🤝', title: 'Meet & greet first',          body: 'Before any walk we visit your home, meet your dog, and understand their needs. No surprises.' },
