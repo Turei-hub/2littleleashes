@@ -72,7 +72,7 @@ export default function Navbar() {
             className="flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-1.5 text-sm font-medium text-white/60 transition hover:border-white/50 hover:text-white/90"
           >
             <Lock size={13} />
-            Admin Login
+            Portal
           </Link>
         </div>
 
@@ -118,7 +118,7 @@ export default function Navbar() {
             className="flex items-center justify-center gap-1.5 rounded-lg border border-white/25 px-3 py-2 text-sm font-medium text-white/60 transition hover:border-white/50 hover:text-white/90"
           >
             <Lock size={13} />
-            Admin Login
+            Portal
           </Link>
         </div>
       )}
