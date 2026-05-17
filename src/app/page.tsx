@@ -5,16 +5,23 @@ import Footer from '@/components/Footer'
 import ServiceCard from '@/components/ServiceCard'
 import { SERVICES, POLICIES } from '@/lib/data'
 
+const WHY_CHOOSE = [
+  { icon: '🐾', title: 'Local Family Business', body: 'Safe, friendly & full of care' },
+  { icon: '🐶', title: 'Always Supervised by Dad', body: 'Owner and main point of contact' },
+  { icon: '🦴', title: 'Love, Laughs & Happy Tails', body: 'Every walk comes with genuine fun and care' },
+  { icon: '💌', title: 'Flexible & Affordable', body: 'For every whānau' },
+]
+
 export default function HomePage() {
   return (
     <>
       <Navbar />
 
       {/* ── HERO ──────────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-forest-700 px-4 py-20 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-gradient-to-br from-forest-700 via-forest-600 to-forest-400 px-4 py-20 sm:px-6 lg:px-8">
         {/* Decorative blobs */}
-        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-forest-600 opacity-30" />
-        <div className="pointer-events-none absolute -bottom-10 left-0 h-48 w-48 rounded-full bg-forest-600 opacity-20" />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-amber-300 opacity-20" />
+        <div className="pointer-events-none absolute -bottom-10 left-0 h-48 w-48 rounded-full bg-amber-300 opacity-20" />
 
         <div className="relative mx-auto max-w-5xl">
           <div className="max-w-2xl animate-fade-up">
@@ -23,13 +30,11 @@ export default function HomePage() {
             </div>
 
             <h1 className="font-display text-4xl font-bold leading-tight text-white sm:text-5xl">
-              Tail-wagging fun &amp;{' '}
-              <em className="italic text-amber-300">reliable care</em>{' '}
-              for your dog
+              2 Little Leashes Dog Walkers Rotorua
             </h1>
 
-            <p className="mt-4 text-base leading-relaxed text-white/65 sm:text-lg">
-              We make life easier for busy dog parents — keeping your pets happy, active, and cared for like family. GPS-tracked walks and a photo update every single session.
+            <p className="mt-4 text-base leading-relaxed text-white/85 sm:text-lg">
+              Kia ora! We&apos;re 2 Little Leashes – A dog-crazy whānau who absolutely LOVE spending time with furry friends. Rain or shine, we&apos;re ready with leashes, smiles, treats, and heaps of energy!
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -63,8 +68,8 @@ export default function HomePage() {
       </section>
 
       {/* ── STAT BAR ──────────────────────────────────────────────────────────── */}
-      <div className="bg-amber-500">
-        <div className="mx-auto grid max-w-5xl grid-cols-2 divide-x divide-amber-400/50 sm:grid-cols-4">
+      <div className="bg-amber-200">
+        <div className="mx-auto grid max-w-5xl grid-cols-2 divide-x divide-forest-700/20 sm:grid-cols-4">
           {[
             { n: '$30',   l: 'From / walk' },
             { n: 'FREE',  l: 'First walk' },
@@ -72,8 +77,8 @@ export default function HomePage() {
             { n: 'GPS',   l: 'Every walk' },
           ].map(s => (
             <div key={s.n} className="py-4 text-center">
-              <p className="font-display text-xl font-bold text-white">{s.n}</p>
-              <p className="text-xs text-white/70">{s.l}</p>
+              <p className="font-display text-xl font-bold text-forest-700">{s.n}</p>
+              <p className="text-xs text-forest-600/70">{s.l}</p>
             </div>
           ))}
         </div>
@@ -122,6 +127,23 @@ export default function HomePage() {
           <Link href="/book" className="mt-4 shrink-0 btn-primary sm:mt-0">
             Claim free walk →
           </Link>
+        </div>
+      </section>
+
+      {/* ── WHY CHOOSE US ─────────────────────────────────────────────────────── */}
+      <section className="section">
+        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600/60">Why choose us</p>
+        <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">We&apos;re different — here&apos;s why</h2>
+        <div className="mt-8 grid gap-5 sm:grid-cols-2">
+          {WHY_CHOOSE.map(item => (
+            <div key={item.title} className="flex gap-4 rounded-xl border border-forest-700/10 bg-forest-50 p-5">
+              <div className="text-3xl shrink-0">{item.icon}</div>
+              <div>
+                <h3 className="font-semibold text-forest-700">{item.title}</h3>
+                <p className="mt-1 text-sm text-forest-600/80">{item.body}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -10,28 +10,28 @@ const config: Config = {
     extend: {
       colors: {
         forest: {
-          50:  '#e8f2ec',
-          100: '#c5dccd',
-          200: '#9fc4ac',
-          300: '#78ac8a',
-          400: '#5a9a6f',
-          500: '#3b8855',
-          600: '#2d5a3d',
-          700: '#1a3a2a',   // primary dark
-          800: '#112618',
-          900: '#081308',
+          50:  '#edf7f3',   // sage/mint light bg
+          100: '#cce9de',
+          200: '#9fe1cb',   // light mint brand
+          300: '#6dcdb2',
+          400: '#48b897',
+          500: '#32977c',
+          600: '#267862',
+          700: '#1a5c4a',   // primary dark (navbar, footer)
+          800: '#0f3c30',
+          900: '#071e18',
         },
         amber: {
-          50:  '#fef3c7',
-          100: '#fde68a',
-          200: '#fcd34d',
-          300: '#fbbf24',
-          400: '#f59e0b',   // mid
-          500: '#d97706',   // primary cta
-          600: '#b45309',
-          700: '#92400e',
-          800: '#78350f',
-          900: '#451a03',
+          50:  '#eaf7f2',   // light mint bg (replaces warm cream)
+          100: '#c5ead9',
+          200: '#9fe1cb',   // light mint
+          300: '#9fe1cb',   // accent text on dark bg
+          400: '#5dcaa5',   // brand mid-teal
+          500: '#4ab896',   // CTA buttons
+          600: '#32977c',
+          700: '#267862',
+          800: '#124030',
+          900: '#071e18',
         },
         cream: {
           DEFAULT: '#faf8f4',
