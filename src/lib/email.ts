@@ -16,6 +16,7 @@ export interface BookingData {
   meetGreetPref: string
   notes: string
   paymentRef: string
+  bookingType: 'free' | 'paid'
 }
 
 function createTransport() {
@@ -85,10 +86,17 @@ export async function sendCustomerConfirmation(data: BookingData) {
         <div class="detail-row"><span class="detail-label">Meet &amp; greet</span><span class="detail-value">${data.meetGreetPref}</span></div>
       </div>
 
+      ${data.bookingType === 'free' ? `
       <div class="highlight">
         🎉 <strong>Reminder: your first walk is FREE!</strong> This gives ${data.dogName} a chance to get comfortable with Meihana before the regular sessions begin.
       </div>
-
+      <div class="steps">
+        <p style="font-size:13px;font-weight:600;color:#1a3a2a;margin-bottom:12px;">What happens next:</p>
+        <div class="step"><div class="step-num">1</div><div class="step-text">Meihana will contact you within 24 hours to schedule your free meet &amp; greet at your home.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">At the meet &amp; greet we go over ${data.dogName}'s personality, habits, and any medical needs.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Your first free walk is booked — and the adventures begin! 🌿</div></div>
+      </div>
+      ` : `
       <div style="background:#e0f2f1;border:1px solid #4db6ac;border-radius:8px;padding:16px 20px;margin:20px 0;">
         <h3 style="color:#00695c;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin:0 0 12px;">Payment details</h3>
         <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid rgba(0,105,92,0.15);">
@@ -103,15 +111,15 @@ export async function sendCustomerConfirmation(data: BookingData) {
           <span style="color:#00897b;">Your reference</span>
           <span style="font-weight:700;font-size:15px;color:#00695c;letter-spacing:1px;">${data.paymentRef}</span>
         </div>
-        <p style="font-size:12px;color:#00695c;margin:10px 0 0;">Once paid, simply reply to this email with a screenshot of your transfer. ✓</p>
+        <p style="font-size:12px;color:#00695c;margin:10px 0 0;">Please make your bank transfer using the reference above, then reply with a screenshot. ✓</p>
       </div>
-
       <div class="steps">
         <p style="font-size:13px;font-weight:600;color:#1a3a2a;margin-bottom:12px;">What happens next:</p>
-        <div class="step"><div class="step-num">1</div><div class="step-text">Meihana will contact you within 24 hours to schedule your free meet &amp; greet at your home.</div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-text">At the meet &amp; greet we go over ${data.dogName}'s personality, habits, and any medical needs.</div></div>
-        <div class="step"><div class="step-num">3</div><div class="step-text">Your first free walk is booked — and the adventures begin! 🌿</div></div>
+        <div class="step"><div class="step-num">1</div><div class="step-text">Make your bank transfer to 12-3456-7890123-00 using reference <strong>${data.paymentRef}</strong>.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Reply to this email with a screenshot of your transfer so Meihana can verify it.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Meihana will confirm your booking and be in touch with pickup details. 🌿</div></div>
       </div>
+      `}
     </div>
     <div class="footer">
       <p>Questions? Reply to this email or call/text Meihana directly.</p>

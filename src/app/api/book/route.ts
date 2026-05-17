@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       preferredDate,
       meetGreetPref,
       notes,
-      screenshotUrl,
+      bookingType,
     } = body
 
     // Basic server-side validation
@@ -54,25 +54,23 @@ export async function POST(req: NextRequest) {
       meetGreetPref: meetGreetPref.trim(),
       notes:         notes?.trim()        || '',
       paymentRef:    buildPaymentRef(dogName.trim(), ownerName.trim()),
+      bookingType:   (bookingType === 'paid' ? 'paid' : 'free') as 'free' | 'paid',
     }
-
-    const uploadedUrl = typeof screenshotUrl === 'string' && screenshotUrl.trim() ? screenshotUrl.trim() : null
 
     // 1. Save to Supabase (required — fail fast if this errors)
     const { error: dbError } = await supabase.from('bookings').insert({
-      owner_name:              bookingData.ownerName,
-      email:                   bookingData.email,
-      phone:                   bookingData.phone,
-      suburb:                  bookingData.suburb,
-      dog_name:                bookingData.dogName,
-      breed:                   bookingData.breed,
-      service:                 bookingData.service,
-      preferred_date:          bookingData.preferredDate,
-      meet_greet_pref:         bookingData.meetGreetPref,
-      notes:                   bookingData.notes,
-      payment_status:          uploadedUrl ? 'uploaded' : 'none',
-      payment_screenshot_url:  uploadedUrl,
-      payment_reference:       bookingData.paymentRef,
+      owner_name:        bookingData.ownerName,
+      email:             bookingData.email,
+      phone:             bookingData.phone,
+      suburb:            bookingData.suburb,
+      dog_name:          bookingData.dogName,
+      breed:             bookingData.breed,
+      service:           bookingData.service,
+      preferred_date:    bookingData.preferredDate,
+      meet_greet_pref:   bookingData.meetGreetPref,
+      notes:             bookingData.notes,
+      payment_status:    'none',
+      payment_reference: bookingData.paymentRef,
     })
 
     if (dbError) {
