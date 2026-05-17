@@ -106,7 +106,7 @@ export default function PricingCalculator() {
           <div className="flex justify-between"><span>Base ({svc.label})</span><span>${svc.base}</span></div>
           {extraDogs > 0 && <div className="flex justify-between"><span>Extra dogs ({dogs - 1} × $10)</span><span>${extraDogs}</span></div>}
           {wkndFee   > 0 && <div className="flex justify-between"><span>Weekend surcharge</span><span>${wkndFee}</span></div>}
-          {svc.service === 'walk-multi' && frequency > 1 && (
+          {service === 'walk-multi' && frequency > 1 && (
             <div className="flex justify-between text-amber-300"><span>Multi-walk discount applied ✓</span><span>–</span></div>
           )}
         </div>
