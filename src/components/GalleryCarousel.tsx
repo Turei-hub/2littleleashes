@@ -54,7 +54,7 @@ export default function GalleryCarousel() {
     <>
       {/* ── CAROUSEL ─────────────────────────────────────────────────────────── */}
       <div
-        className="group relative h-72 cursor-pointer overflow-hidden sm:h-[440px] lg:h-[580px]"
+        className="group relative h-[600px] w-full cursor-pointer overflow-hidden"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onClick={() => setLightbox(current)}
@@ -71,19 +71,16 @@ export default function GalleryCarousel() {
               src={src}
               alt={`Dog photo ${i + 1}`}
               fill
-              className="object-cover"
+              className="object-cover object-center"
               priority={i === 0}
             />
           </div>
         ))}
 
-        {/* Gradient overlay — bottom fade for dots legibility */}
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/50 to-transparent" />
-
         {/* Prev arrow */}
         <button
           onClick={e => { e.stopPropagation(); prev() }}
-          className="absolute left-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-forest-700/70 text-white backdrop-blur-sm transition hover:bg-forest-600 sm:left-5 sm:h-12 sm:w-12"
+          className="absolute left-3 top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-amber-400 text-white shadow-lg transition hover:bg-amber-500 sm:left-5 sm:h-13 sm:w-13"
           aria-label="Previous photo"
         >
           <ChevronLeft size={22} />
@@ -92,7 +89,7 @@ export default function GalleryCarousel() {
         {/* Next arrow */}
         <button
           onClick={e => { e.stopPropagation(); next() }}
-          className="absolute right-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-forest-700/70 text-white backdrop-blur-sm transition hover:bg-forest-600 sm:right-5 sm:h-12 sm:w-12"
+          className="absolute right-3 top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-amber-400 text-white shadow-lg transition hover:bg-amber-500 sm:right-5 sm:h-13 sm:w-13"
           aria-label="Next photo"
         >
           <ChevronRight size={22} />
@@ -153,7 +150,7 @@ export default function GalleryCarousel() {
               src={IMAGES[lightbox]}
               alt={`Dog photo ${lightbox + 1}`}
               fill
-              className="object-contain"
+              className="object-cover object-center"
             />
           </div>
 
