@@ -41,7 +41,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
         {/* Background photo */}
         <Image
-          src="/images/Meihana1.jpg"
+          src="/images/meihana-bulldogs-truck.jpg"
           alt="Meihana walking dogs in Rotorua"
           fill
           className="object-cover object-center"
