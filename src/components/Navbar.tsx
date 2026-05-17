@@ -3,6 +3,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import clsx from 'clsx'
@@ -26,9 +27,13 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500 text-xl transition group-hover:bg-amber-400">
-            🐾
-          </div>
+          <Image
+            src="/images/logo.jpg"
+            alt="2 Little Leashes"
+            width={40}
+            height={40}
+            className="rounded-full transition group-hover:opacity-90"
+          />
           <div>
             <p className="font-display text-sm font-semibold leading-tight text-white">
               2 Little Leashes
