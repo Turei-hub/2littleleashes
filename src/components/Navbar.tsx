@@ -66,9 +66,10 @@ export default function Navbar() {
           >
             Book now →
           </Link>
+          <span className="mx-2 h-5 w-px bg-white/20" aria-hidden="true" />
           <Link
             href="/admin/login"
-            className="ml-1 flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-1.5 text-sm font-medium text-white/60 transition hover:border-white/50 hover:text-white/90"
+            className="flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-1.5 text-sm font-medium text-white/60 transition hover:border-white/50 hover:text-white/90"
           >
             <Lock size={13} />
             Admin Login
@@ -110,10 +111,11 @@ export default function Navbar() {
           >
             Book now →
           </Link>
+          <hr className="my-3 border-white/10" />
           <Link
             href="/admin/login"
             onClick={() => setOpen(false)}
-            className="mt-2 flex items-center justify-center gap-1.5 rounded-lg border border-white/25 px-3 py-2 text-sm font-medium text-white/60 transition hover:border-white/50 hover:text-white/90"
+            className="flex items-center justify-center gap-1.5 rounded-lg border border-white/25 px-3 py-2 text-sm font-medium text-white/60 transition hover:border-white/50 hover:text-white/90"
           >
             <Lock size={13} />
             Admin Login
