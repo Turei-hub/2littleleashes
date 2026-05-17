@@ -9,23 +9,7 @@ export const metadata: Metadata = {
   description: 'Photos from walks and visits with 2 Little Leashes dog walkers in Rotorua, NZ.',
 }
 
-const IMAGES = [
-  'att.buYauiExv-KJ71-gS_DX1BhXT1GuNhcE15SgSOdE5Lw.JPG',
-  'att.CQieh2OtAzyLqYTGleKygtc3qFHAoj_mge0DyBiCLoM.JPG',
-  'att.jzulYcFjfrCt6w6ySbFaTikTFJ7ur-NPH3GOCCzhwnw.JPG',
-  'att.kbyYyUg-SOAJYdegM9YaeAoX7R3Vi-onoeBQ39VjWcs.JPG',
-  'att.kruW9XTjBO92CZJiNaObGq5WqNRzbRHCKL2T9uweCT8.JPG',
-  'att.MGyXYW3il0f696w8kaK-hr7igDMUq47Ttnwm8jXoXTg.JPG',
-  'att.o62-7COnTnrm5RMLKDclHd25FqefCI-fSatopxRSxWE.JPG',
-  'att.pEBvY_XurccN5gmcS9wpnY36dOCvlGYlVeMB8jVz8kQ.JPG',
-  'att.q7bj3aFo2GSrDsU8YekhNDuKMe2cgy_S0JIh2v3_ynQ.JPG',
-  'att.Snat5bRmVSXMgRM90fuXcHdQeZp56h8sulXsUOmlJlU.JPG',
-  'att.v7AdpTW4OVT7Zcy8LLH1Pqd7fX6zVeLh3mif6GirCTg.JPG',
-  'att.VqmBkRwvF1XYh-z3A_NrYoo1oRFNK0l7kAYZmX4smJg.JPG',
-  'att.vr7KAwinVzm0iJKuCpM9ptXyNQ-DAZaEadQSU-ori2I.JPG',
-  'att.wIQt-jwdjmENWAi_9aKZSSMd3ylW5NUBYho3W64e6So.JPG',
-  'att.1AjjFPuTCwJmDENd1XkWpabEAKS_j-hcvGTtAdY4HGA.JPG',
-]
+const IMAGES = Array.from({ length: 15 }, (_, i) => `dog-photo-${i + 1}.jpg`)
 
 export default function GalleryPage() {
   return (
