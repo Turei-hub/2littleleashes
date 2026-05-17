@@ -18,6 +18,9 @@ type Booking = {
   notes: string
   status: string
   created_at: string
+  payment_status: string | null
+  payment_screenshot_url: string | null
+  payment_reference: string | null
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -32,6 +35,29 @@ function StatusBadge({ status }: { status: string }) {
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
   )
+}
+
+function PaymentBadge({ status, url }: { status: string; url: string | null }) {
+  if (status === 'verified') {
+    return (
+      <span className="inline-flex rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-700">
+        Verified ✓
+      </span>
+    )
+  }
+  if (status === 'uploaded' && url) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 hover:bg-green-200"
+      >
+        Screenshot ↗
+      </a>
+    )
+  }
+  return <span className="text-xs text-forest-600/40">No payment</span>
 }
 
 export default async function AdminPage() {
@@ -115,6 +141,7 @@ export default async function AdminPage() {
                     <th className="px-4 py-3">Preferred date</th>
                     <th className="px-4 py-3">Notes</th>
                     <th className="px-4 py-3">Status</th>
+                    <th className="px-4 py-3">Payment</th>
                     <th className="px-4 py-3">Actions</th>
                   </tr>
                 </thead>
@@ -147,7 +174,15 @@ export default async function AdminPage() {
                         <StatusBadge status={b.status ?? 'pending'} />
                       </td>
                       <td className="px-4 py-3">
-                        <BookingActions id={b.id} currentStatus={b.status ?? 'pending'} />
+                        <PaymentBadge status={b.payment_status ?? 'none'} url={b.payment_screenshot_url} />
+                      </td>
+                      <td className="px-4 py-3">
+                        <BookingActions
+                          id={b.id}
+                          currentStatus={b.status ?? 'pending'}
+                          paymentStatus={b.payment_status ?? 'none'}
+                          screenshotUrl={b.payment_screenshot_url}
+                        />
                       </td>
                     </tr>
                   ))}

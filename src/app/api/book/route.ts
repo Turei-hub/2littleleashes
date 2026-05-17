@@ -6,6 +6,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { sendCustomerConfirmation, sendOwnerAlert } from '@/lib/email'
 import { supabase } from '@/lib/supabase'
 
+function buildPaymentRef(dogName: string, ownerName: string): string {
+  const parts = ownerName.trim().split(/\s+/)
+  const surname = parts.length > 1 ? parts[parts.length - 1] : parts[0]
+  return `${dogName.toUpperCase()}-${surname.slice(0, 4).toUpperCase()}`
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -21,6 +27,7 @@ export async function POST(req: NextRequest) {
       preferredDate,
       meetGreetPref,
       notes,
+      screenshotUrl,
     } = body
 
     // Basic server-side validation
@@ -46,20 +53,26 @@ export async function POST(req: NextRequest) {
       preferredDate: preferredDate?.trim() || '',
       meetGreetPref: meetGreetPref.trim(),
       notes:         notes?.trim()        || '',
+      paymentRef:    buildPaymentRef(dogName.trim(), ownerName.trim()),
     }
+
+    const uploadedUrl = typeof screenshotUrl === 'string' && screenshotUrl.trim() ? screenshotUrl.trim() : null
 
     // 1. Save to Supabase (required — fail fast if this errors)
     const { error: dbError } = await supabase.from('bookings').insert({
-      owner_name:      bookingData.ownerName,
-      email:           bookingData.email,
-      phone:           bookingData.phone,
-      suburb:          bookingData.suburb,
-      dog_name:        bookingData.dogName,
-      breed:           bookingData.breed,
-      service:         bookingData.service,
-      preferred_date:  bookingData.preferredDate,
-      meet_greet_pref: bookingData.meetGreetPref,
-      notes:           bookingData.notes,
+      owner_name:              bookingData.ownerName,
+      email:                   bookingData.email,
+      phone:                   bookingData.phone,
+      suburb:                  bookingData.suburb,
+      dog_name:                bookingData.dogName,
+      breed:                   bookingData.breed,
+      service:                 bookingData.service,
+      preferred_date:          bookingData.preferredDate,
+      meet_greet_pref:         bookingData.meetGreetPref,
+      notes:                   bookingData.notes,
+      payment_status:          uploadedUrl ? 'uploaded' : 'none',
+      payment_screenshot_url:  uploadedUrl,
+      payment_reference:       bookingData.paymentRef,
     })
 
     if (dbError) {

@@ -1,10 +1,11 @@
 'use client'
 // src/components/BookingForm.tsx
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { CheckCircle, AlertCircle, Loader } from 'lucide-react'
+import { CheckCircle, AlertCircle, Loader, Upload } from 'lucide-react'
 import { SERVICE_OPTIONS, MEET_GREET_OPTIONS } from '@/lib/data'
+import { supabase } from '@/lib/supabase'
 
 interface FormValues {
   ownerName:    string
@@ -22,25 +23,53 @@ interface FormValues {
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 export default function BookingForm() {
-  const [status,  setStatus]  = useState<Status>('idle')
-  const [message, setMessage] = useState('')
+  const [status,      setStatus]      = useState<Status>('idle')
+  const [message,     setMessage]     = useState('')
+  const [paymentFile, setPaymentFile] = useState<File | null>(null)
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<FormValues>({
     defaultValues: { service: SERVICE_OPTIONS[0].value, meetGreetPref: MEET_GREET_OPTIONS[0] },
   })
 
+  const watchedOwnerName = watch('ownerName')
+  const watchedDogName   = watch('dogName')
+
+  const paymentRef = useMemo(() => {
+    if (!watchedDogName || !watchedOwnerName) return null
+    const parts = watchedOwnerName.trim().split(/\s+/)
+    const surname = parts.length > 1 ? parts[parts.length - 1] : parts[0]
+    return `${watchedDogName.toUpperCase()}-${surname.slice(0, 4).toUpperCase()}`
+  }, [watchedDogName, watchedOwnerName])
+
   const onSubmit = async (data: FormValues) => {
     setStatus('loading')
     try {
+      // Upload payment screenshot if provided (best-effort)
+      let screenshotUrl = ''
+      if (paymentFile) {
+        const ext  = paymentFile.name.split('.').pop()
+        const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+        const { data: uploadData } = await supabase.storage
+          .from('payment-screenshots')
+          .upload(path, paymentFile, { contentType: paymentFile.type })
+        if (uploadData) {
+          const { data: urlData } = supabase.storage
+            .from('payment-screenshots')
+            .getPublicUrl(uploadData.path)
+          screenshotUrl = urlData.publicUrl
+        }
+      }
+
       const res  = await fetch('/api/book', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(data),
+        body:    JSON.stringify({ ...data, screenshotUrl }),
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Unknown error')
@@ -181,6 +210,57 @@ export default function BookingForm() {
           placeholder="e.g. Buddy is nervous around large dogs, gate code is 1234, currently on monthly flea treatment"
           {...register('notes')}
         />
+      </div>
+
+      {/* Payment section */}
+      <div className="space-y-3">
+        {/* Bank details info box — shown only when paymentRef is ready */}
+        {paymentRef && (
+          <div className="rounded-lg border border-teal-300 bg-teal-50 p-4">
+            <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-teal-700">
+              💳 Payment details
+            </p>
+            <p className="text-sm text-teal-800">
+              <span className="font-medium">Bank:</span> 12-3456-7890123-00
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+              <span className="font-medium">Account:</span> 2 Little Leashes
+            </p>
+            <p className="mt-2 text-sm text-teal-800">
+              Your reference:{' '}
+              <span className="inline-block rounded-md bg-teal-100 px-2 py-0.5 font-mono font-bold tracking-widest text-teal-700">
+                {paymentRef}
+              </span>
+            </p>
+            <p className="mt-2 text-xs text-teal-600">
+              Make your transfer now and upload the screenshot below.
+            </p>
+          </div>
+        )}
+
+        {/* File upload — always visible */}
+        <div className="field">
+          <label htmlFor="paymentScreenshot" className="flex items-center gap-1.5">
+            Payment screenshot
+            <span className="text-xs font-normal text-forest-600/50">(optional)</span>
+          </label>
+          <label
+            htmlFor="paymentScreenshot"
+            className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-forest-700/20 bg-forest-50/50 px-4 py-3 text-sm text-forest-600/70 hover:border-teal-400 hover:bg-teal-50/40 transition-colors"
+          >
+            <Upload size={16} className="shrink-0 text-teal-600" />
+            {paymentFile
+              ? <span className="font-medium text-teal-700">{paymentFile.name}</span>
+              : <span>Choose a file…</span>
+            }
+          </label>
+          <input
+            id="paymentScreenshot"
+            type="file"
+            accept=".jpg,.jpeg,.png,.pdf"
+            className="sr-only"
+            onChange={e => setPaymentFile(e.target.files?.[0] ?? null)}
+          />
+        </div>
       </div>
 
       {/* Error banner */}

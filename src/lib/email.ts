@@ -15,6 +15,7 @@ export interface BookingData {
   preferredDate: string
   meetGreetPref: string
   notes: string
+  paymentRef: string
 }
 
 function createTransport() {
@@ -86,6 +87,23 @@ export async function sendCustomerConfirmation(data: BookingData) {
 
       <div class="highlight">
         🎉 <strong>Reminder: your first walk is FREE!</strong> This gives ${data.dogName} a chance to get comfortable with Meihana before the regular sessions begin.
+      </div>
+
+      <div style="background:#e0f2f1;border:1px solid #4db6ac;border-radius:8px;padding:16px 20px;margin:20px 0;">
+        <h3 style="color:#00695c;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin:0 0 12px;">Payment details</h3>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid rgba(0,105,92,0.15);">
+          <span style="color:#00897b;">Bank account</span>
+          <span style="font-weight:700;color:#00695c;">12-3456-7890123-00</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid rgba(0,105,92,0.15);">
+          <span style="color:#00897b;">Account name</span>
+          <span style="font-weight:600;color:#00695c;">2 Little Leashes</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;">
+          <span style="color:#00897b;">Your reference</span>
+          <span style="font-weight:700;font-size:15px;color:#00695c;letter-spacing:1px;">${data.paymentRef}</span>
+        </div>
+        <p style="font-size:12px;color:#00695c;margin:10px 0 0;">Once paid, simply reply to this email with a screenshot of your transfer. ✓</p>
       </div>
 
       <div class="steps">
@@ -315,6 +333,74 @@ export async function sendWinBackEmail(data: {
     from:    process.env.FROM_EMAIL,
     to:      data.ownerEmail,
     subject: `🐾 We miss ${data.dogName}! Come back for a walk 🌿`,
+    html,
+  })
+}
+
+// ─── 6. Booking confirmed (after payment verified) ────────────────────────────
+export async function sendBookingConfirmed(data: {
+  ownerName: string
+  email: string
+  dogName: string
+  preferredDate: string
+}) {
+  const transporter = createTransport()
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #faf8f4; margin: 0; padding: 20px; color: #1c2b22; }
+    .card { background: #fff; border-radius: 12px; max-width: 540px; margin: 0 auto; overflow: hidden; border: 1px solid #e0ddd6; }
+    .header { background: #00897b; padding: 28px 32px; }
+    .header h1 { color: #fff; font-size: 22px; margin: 0 0 4px; }
+    .header p { color: rgba(255,255,255,0.7); margin: 0; font-size: 13px; }
+    .body { padding: 28px 32px; }
+    .badge { display: inline-block; background: #e0f2f1; border: 1px solid #4db6ac; border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 700; color: #00695c; letter-spacing: .5px; margin-bottom: 20px; }
+    .greeting { font-size: 16px; margin-bottom: 16px; }
+    .message { font-size: 14px; color: #5a7060; line-height: 1.7; background: #e0f2f1; border-radius: 8px; padding: 18px 20px; margin: 16px 0; }
+    .footer { background: #f0ede6; padding: 20px 32px; font-size: 12px; color: #93a89a; text-align: center; }
+    .footer a { color: #00695c; text-decoration: none; font-weight: 600; }
+    @media (max-width: 600px) { .body, .header, .footer { padding: 20px; } }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <h1>✅ Booking Confirmed!</h1>
+      <p>2 Little Leashes Dog Walkers · Rotorua</p>
+    </div>
+    <div class="body">
+      <div class="badge">✓ Payment verified</div>
+      <p class="greeting">Kia ora ${data.ownerName}! 🎉</p>
+      <div class="message">
+        <p style="margin:0 0 10px;">Your booking for <strong>${data.dogName}</strong> is confirmed!</p>
+        ${data.preferredDate ? `<p style="margin:0 0 10px;">We'll see you on <strong>${data.preferredDate}</strong>.</p>` : ''}
+        <p style="margin:0;">Meihana will be in touch with pickup details. 🐾</p>
+      </div>
+      <p style="font-size:13px;color:#5a7060;margin-top:20px;">
+        If you have any questions, just reply to this email. We can't wait to take ${data.dogName} out on an adventure!
+      </p>
+      <p style="font-size:13px;color:#5a7060;margin-top:16px;">
+        Ngā mihi nui — Meihana &amp; the 2 Little Leashes team 🐾
+      </p>
+    </div>
+    <div class="footer">
+      <p>Questions? Reply to this email or call/text Meihana directly.</p>
+      <p style="margin-top:8px;"><a href="${process.env.NEXT_PUBLIC_SITE_URL}">2littleleashes.co.nz</a> · Rotorua, New Zealand</p>
+    </div>
+  </div>
+</body>
+</html>
+`
+
+  await transporter.sendMail({
+    from:    process.env.FROM_EMAIL,
+    to:      data.email,
+    subject: `✅ Booking confirmed for ${data.dogName} — 2 Little Leashes`,
     html,
   })
 }
