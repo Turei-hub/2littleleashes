@@ -46,11 +46,13 @@ const config: Config = {
         'fade-up':   'fadeUp 0.5s ease both',
         'fade-in':   'fadeIn 0.4s ease both',
         'slide-in':  'slideIn 0.4s ease both',
+        'marquee':   'marquee 40s linear infinite',
       },
       keyframes: {
         fadeUp:  { '0%': { opacity: '0', transform: 'translateY(16px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
         fadeIn:  { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
         slideIn: { '0%': { opacity: '0', transform: 'translateX(-12px)' }, '100%': { opacity: '1', transform: 'translateX(0)' } },
+        marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
       },
     },
   },

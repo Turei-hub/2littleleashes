@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import clsx from 'clsx'
+import MarqueeBanner from '@/components/MarqueeBanner'
 
 const NAV_LINKS = [
   { href: '/',          label: 'Home' },
@@ -19,6 +20,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
+    <>
     <header className="sticky top-0 z-50 bg-forest-700 shadow-md">
       <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
 
@@ -99,5 +101,7 @@ export default function Navbar() {
         </div>
       )}
     </header>
+    <MarqueeBanner />
+    </>
   )
 }
