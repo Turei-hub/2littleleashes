@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Playfair_Display, DM_Sans } from 'next/font/google'
 import './globals.css'
 import BackToTop from '@/components/BackToTop'
+import AdminFloatingButton from '@/components/AdminFloatingButton'
 
 const playfair = Playfair_Display({
   subsets:  ['latin'],
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-cream font-sans text-forest-700 antialiased">
         {children}
         <BackToTop />
+        <AdminFloatingButton />
       </body>
     </html>
   )
