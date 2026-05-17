@@ -50,6 +50,17 @@ export default function HomePage() {
         {/* Dark teal overlay for text readability */}
         <div className="absolute inset-0 bg-forest-900/65" />
 
+        {/* Logo watermark — above overlay, behind text */}
+        <div className="pointer-events-none absolute right-8 top-1/2 z-[5] hidden -translate-y-1/2 opacity-40 sm:block lg:right-16">
+          <Image
+            src="/images/logo.jpg"
+            alt=""
+            width={300}
+            height={300}
+            className="object-contain"
+          />
+        </div>
+
         <div className="relative z-10 mx-auto max-w-5xl">
           <div className="max-w-2xl animate-fade-up">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/75">
