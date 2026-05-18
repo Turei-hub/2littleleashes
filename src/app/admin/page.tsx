@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createAdminClient, createSessionClient } from '@/lib/supabase-server'
 import BookingActions from './BookingActions'
+import GallerySubmissionActions from './GallerySubmissionActions'
 import LogoutButton from './LogoutButton'
 
 type Booking = {
@@ -66,10 +67,10 @@ export default async function AdminPage() {
   if (!session) redirect('/admin/login')
 
   const adminClient = createAdminClient()
-  const { data: bookings } = await adminClient
-    .from('bookings')
-    .select('*')
-    .order('created_at', { ascending: false })
+  const [{ data: bookings }, { data: pendingPhotos }] = await Promise.all([
+    adminClient.from('bookings').select('*').order('created_at', { ascending: false }),
+    adminClient.from('gallery_submissions').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
+  ])
 
   const all       = (bookings ?? []) as Booking[]
   const pending   = all.filter(b => (b.status ?? 'pending') === 'pending').length
@@ -191,6 +192,61 @@ export default async function AdminPage() {
             </div>
           </div>
         )}
+
+        {/* ── PENDING PHOTOS ──────────────────────────────────────────────────── */}
+        <div className="mt-10">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-base font-semibold text-forest-700">
+              Pending photos
+              {(pendingPhotos?.length ?? 0) > 0 && (
+                <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+                  {pendingPhotos!.length}
+                </span>
+              )}
+            </h2>
+          </div>
+
+          {(pendingPhotos?.length ?? 0) === 0 ? (
+            <div className="rounded-xl border border-forest-700/10 bg-white p-10 text-center text-sm text-forest-600/50">
+              No pending photo submissions.
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {pendingPhotos!.map((photo: {
+                id: string
+                dog_name: string
+                caption: string | null
+                image_url: string
+                created_at: string
+              }) => (
+                <div key={photo.id} className="overflow-hidden rounded-xl border border-forest-700/10 bg-white shadow-sm">
+                  <div className="relative aspect-video w-full bg-forest-50">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photo.image_url}
+                      alt={photo.dog_name}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <p className="font-semibold text-forest-700">{photo.dog_name}</p>
+                    {photo.caption && (
+                      <p className="mt-0.5 text-xs text-forest-600">{photo.caption}</p>
+                    )}
+                    <p className="mt-1 text-xs text-forest-600/50">
+                      {new Date(photo.created_at).toLocaleDateString('en-NZ', {
+                        day: 'numeric', month: 'short', year: '2-digit',
+                      })}
+                    </p>
+                    <div className="mt-3">
+                      <GallerySubmissionActions id={photo.id} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </main>
     </div>
   )

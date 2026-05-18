@@ -5,14 +5,19 @@ import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 
-const IMAGES = [
-  ...Array.from({ length: 15 }, (_, i) => `/images/dog-photo-${i + 1}.jpg`),
-  '/images/dog-walk-rotorua.jpg',
-  '/images/meihana-bulldogs-truck.jpg',
-  '/images/pack-walk-truck.jpg',
+export type GalleryImage = { src: string; alt: string }
+
+const STATIC: GalleryImage[] = [
+  ...Array.from({ length: 15 }, (_, i) => ({
+    src: `/images/dog-photo-${i + 1}.jpg`,
+    alt: `Dog photo ${i + 1}`,
+  })),
+  { src: '/images/dog-walk-rotorua.jpg',       alt: 'Dog walk in Rotorua' },
+  { src: '/images/meihana-bulldogs-truck.jpg',  alt: 'Meihana with dogs' },
+  { src: '/images/pack-walk-truck.jpg',         alt: 'Pack walk' },
 ]
 
-// Only keep prev/current/next mounted so the other 15 images aren't loaded at all
+// Only keep prev/current/next mounted so the other images aren't loaded at all
 function nearbySet(current: number, total: number) {
   return new Set([
     (current - 1 + total) % total,
@@ -21,16 +26,18 @@ function nearbySet(current: number, total: number) {
   ])
 }
 
-export default function GalleryCarousel() {
+export default function GalleryCarousel({ extra = [] }: { extra?: GalleryImage[] }) {
+  const IMAGES = [...STATIC, ...extra]
+
   const [featured, setFeatured] = useState(0)
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [paused,   setPaused]   = useState(false)
   const [loaded,   setLoaded]   = useState<Set<number>>(new Set())
 
-  const prevFeatured = useCallback(() => setFeatured(i => (i - 1 + IMAGES.length) % IMAGES.length), [])
-  const nextFeatured = useCallback(() => setFeatured(i => (i + 1) % IMAGES.length), [])
-  const prevLb       = useCallback(() => setLightbox(i => i !== null ? (i - 1 + IMAGES.length) % IMAGES.length : null), [])
-  const nextLb       = useCallback(() => setLightbox(i => i !== null ? (i + 1) % IMAGES.length : null), [])
+  const prevFeatured = useCallback(() => setFeatured(i => (i - 1 + IMAGES.length) % IMAGES.length), [IMAGES.length])
+  const nextFeatured = useCallback(() => setFeatured(i => (i + 1) % IMAGES.length),                  [IMAGES.length])
+  const prevLb       = useCallback(() => setLightbox(i => i !== null ? (i - 1 + IMAGES.length) % IMAGES.length : null), [IMAGES.length])
+  const nextLb       = useCallback(() => setLightbox(i => i !== null ? (i + 1) % IMAGES.length : null),                  [IMAGES.length])
 
   // Auto-cycle featured photo
   useEffect(() => {
@@ -68,8 +75,7 @@ export default function GalleryCarousel() {
         onMouseLeave={() => setPaused(false)}
         onClick={() => setLightbox(featured)}
       >
-        {IMAGES.map((src, i) => {
-          // Only mount the 3 images around the current — keeps 15 images out of the DOM
+        {IMAGES.map(({ src, alt }, i) => {
           if (!nearby.has(i)) return null
           return (
             <div
@@ -80,7 +86,7 @@ export default function GalleryCarousel() {
             >
               <Image
                 src={src}
-                alt={`Featured dog photo ${i + 1}`}
+                alt={alt}
                 fill
                 sizes="100vw"
                 quality={85}
@@ -122,19 +128,18 @@ export default function GalleryCarousel() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
         <p className="mb-6 text-sm text-forest-600/60">All photos · click any to expand</p>
         <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
-          {IMAGES.map((src, i) => (
+          {IMAGES.map(({ src, alt }, i) => (
             <div
               key={src}
               className="relative mb-4 break-inside-avoid cursor-pointer overflow-hidden rounded-xl bg-forest-100"
               onClick={() => setLightbox(i)}
             >
-              {/* Skeleton pulse shown until image loads */}
               {!loaded.has(i) && (
                 <div className="absolute inset-0 animate-pulse bg-forest-100" />
               )}
               <Image
                 src={src}
-                alt={`Dog photo ${i + 1}`}
+                alt={alt}
                 width={600}
                 height={800}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
@@ -180,8 +185,8 @@ export default function GalleryCarousel() {
             onClick={e => e.stopPropagation()}
           >
             <Image
-              src={IMAGES[lightbox]}
-              alt={`Dog photo ${lightbox + 1}`}
+              src={IMAGES[lightbox].src}
+              alt={IMAGES[lightbox].alt}
               fill
               sizes="(max-width: 896px) 90vw, 896px"
               quality={85}
