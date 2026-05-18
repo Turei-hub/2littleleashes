@@ -35,13 +35,13 @@ export const metadata: Metadata = {
     url:         SITE_URL,
     title:       '2 Little Leashes Dog Walkers | Rotorua, NZ',
     description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE.',
-    images: [{ url: '/images/dog-walk-rotorua.jpg', width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: '2 Little Leashes dog walkers Rotorua' }],
   },
   twitter: {
     card:        'summary_large_image',
     title:       '2 Little Leashes Dog Walkers | Rotorua, NZ',
     description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE.',
-    images:      ['/images/dog-walk-rotorua.jpg'],
+    images:      ['/og-image.jpg'],
   },
   alternates: {
     canonical: SITE_URL,
