@@ -17,14 +17,16 @@ export async function PATCH(
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
   }
 
-  const { error } = await createAdminClient()
+  const newStatus = action === 'approve' ? 'approved' : 'rejected'
+  const { data, error, count } = await createAdminClient()
     .from('gallery_submissions')
-    .update({ status: action === 'approve' ? 'approved' : 'rejected' })
+    .update({ status: newStatus })
     .eq('id', params.id)
+    .select()
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ success: true, updated: data })
 }

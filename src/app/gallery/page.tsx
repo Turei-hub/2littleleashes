@@ -28,9 +28,9 @@ export const metadata: Metadata = {
 }
 
 export default async function GalleryPage() {
-  const { data: approved } = await createAdminClient()
+  const { data: approved, error } = await createAdminClient()
     .from('gallery_submissions')
-    .select('image_url, dog_name, caption')
+    .select('image_url, dog_name, caption, status')
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
 
