@@ -12,10 +12,20 @@ const IMAGES = [
   '/images/pack-walk-truck.jpg',
 ]
 
+// Only keep prev/current/next mounted so the other 15 images aren't loaded at all
+function nearbySet(current: number, total: number) {
+  return new Set([
+    (current - 1 + total) % total,
+    current,
+    (current + 1) % total,
+  ])
+}
+
 export default function GalleryCarousel() {
   const [featured, setFeatured] = useState(0)
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [paused,   setPaused]   = useState(false)
+  const [loaded,   setLoaded]   = useState<Set<number>>(new Set())
 
   const prevFeatured = useCallback(() => setFeatured(i => (i - 1 + IMAGES.length) % IMAGES.length), [])
   const nextFeatured = useCallback(() => setFeatured(i => (i + 1) % IMAGES.length), [])
@@ -47,6 +57,8 @@ export default function GalleryCarousel() {
     return () => { document.body.style.overflow = '' }
   }, [lightbox])
 
+  const nearby = nearbySet(featured, IMAGES.length)
+
   return (
     <>
       {/* ── FEATURED AUTO-CYCLING PHOTO ──────────────────────────────────────── */}
@@ -56,22 +68,28 @@ export default function GalleryCarousel() {
         onMouseLeave={() => setPaused(false)}
         onClick={() => setLightbox(featured)}
       >
-        {IMAGES.map((src, i) => (
-          <div
-            key={src}
-            className={`absolute inset-0 transition-opacity duration-700 ${
-              i === featured ? 'opacity-100' : 'opacity-0 pointer-events-none'
-            }`}
-          >
-            <Image
-              src={src}
-              alt={`Featured dog photo ${i + 1}`}
-              fill
-              className="object-contain"
-              priority={i === 0}
-            />
-          </div>
-        ))}
+        {IMAGES.map((src, i) => {
+          // Only mount the 3 images around the current — keeps 15 images out of the DOM
+          if (!nearby.has(i)) return null
+          return (
+            <div
+              key={src}
+              className={`absolute inset-0 transition-opacity duration-700 ${
+                i === featured ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              <Image
+                src={src}
+                alt={`Featured dog photo ${i + 1}`}
+                fill
+                sizes="100vw"
+                quality={85}
+                className="object-contain"
+                priority={i === featured}
+              />
+            </div>
+          )
+        })}
 
         {/* Arrows */}
         <button
@@ -107,16 +125,25 @@ export default function GalleryCarousel() {
           {IMAGES.map((src, i) => (
             <div
               key={src}
-              className="mb-4 break-inside-avoid cursor-pointer overflow-hidden rounded-xl transition-opacity hover:opacity-90"
+              className="relative mb-4 break-inside-avoid cursor-pointer overflow-hidden rounded-xl bg-forest-100"
               onClick={() => setLightbox(i)}
             >
+              {/* Skeleton pulse shown until image loads */}
+              {!loaded.has(i) && (
+                <div className="absolute inset-0 animate-pulse bg-forest-100" />
+              )}
               <Image
                 src={src}
                 alt={`Dog photo ${i + 1}`}
                 width={600}
                 height={800}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
+                quality={80}
                 style={{ width: '100%', height: 'auto' }}
-                className="rounded-xl"
+                className={`rounded-xl transition-opacity duration-500 hover:opacity-90 ${
+                  loaded.has(i) ? 'opacity-100' : 'opacity-0'
+                }`}
+                onLoad={() => setLoaded(prev => new Set(prev).add(i))}
               />
             </div>
           ))}
@@ -156,7 +183,10 @@ export default function GalleryCarousel() {
               src={IMAGES[lightbox]}
               alt={`Dog photo ${lightbox + 1}`}
               fill
+              sizes="(max-width: 896px) 90vw, 896px"
+              quality={85}
               className="object-contain"
+              priority
             />
           </div>
 
