@@ -51,9 +51,9 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-forest-700/80" />
         <div className="relative z-10 mx-auto max-w-5xl">
           <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">About us</p>
-          <h1 className="font-display mt-1 text-4xl font-bold text-white">Meet Meihana</h1>
+          <h1 className="font-display mt-1 text-4xl font-bold text-white">Our Whānau, Our Business</h1>
           <p className="mt-3 text-white text-sm max-w-xl">
-            The heart and hands behind every walk, wash, and check-in.
+            A family dog walking and care business, built with love — right here in Rotorua.
           </p>
         </div>
       </section>
@@ -66,13 +66,19 @@ export default function AboutPage() {
             <Image src="/images/meihana.jpg" alt="Meihana" fill className="object-cover" />
           </div>
           <div>
-            <h2 className="font-display text-2xl font-bold text-white">Meihana</h2>
-            <p className="text-sm text-mint mb-4">Founder & Lead Walker · 2 Little Leashes Rotorua</p>
+            <h2 className="font-display text-2xl font-bold text-white">Meihana Herbert</h2>
+            <p className="text-sm text-mint mb-4">Business Owner and Dad · 2 Little Leashes Rotorua</p>
             <p className="text-sm text-white/75 leading-relaxed">
-              Based in Rotorua, I started 2 Little Leashes to give local dog owners genuine peace of mind. Every walk is personally supervised by me — no subcontractors, no shortcuts. I believe every dog deserves to feel safe, properly exercised, and loved on every walk.
+              Kia ora! We&apos;re a whānau dog walking and care business right here in Rotorua.
             </p>
             <p className="mt-3 text-sm text-white/75 leading-relaxed">
-              Whether it's a solo stroll through the neighbourhood, an epic 10km Sunday mission through Rotorua's forests, or a gentle home check-in while you're at work — I treat every dog like my own.
+              At 2 Little Leashes, it&apos;s all about the girls. They&apos;ve grown up surrounded by dogs and cats their whole lives. Not long ago, we said goodbye to our beloved Corgi, Odie, who lived with us for 13 amazing years. He wasn&apos;t just a pet — he was part of our whānau.
+            </p>
+            <p className="mt-3 text-sm text-white/75 leading-relaxed">
+              Now we&apos;ve welcomed Coby and Tahu, our Auntie&apos;s cheeky British Bulldogs into our crew. Loud, lazy, funny, and full of personality — just like the girls.
+            </p>
+            <p className="mt-3 text-sm text-white/75 leading-relaxed">
+              The girls came up with the idea themselves, and named it 2 Little Leashes all on their own. This isn&apos;t just a hobby — it&apos;s a lesson in commitment, care, and community.
             </p>
           </div>
         </div>
