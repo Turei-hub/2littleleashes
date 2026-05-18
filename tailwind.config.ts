@@ -37,6 +37,9 @@ const config: Config = {
           DEFAULT: '#faf8f4',
           dark:    '#f0ede6',
         },
+        mint: {
+          DEFAULT: '#E0FFF7',
+        },
       },
       fontFamily: {
         display: ['var(--font-display)', 'Georgia', 'serif'],

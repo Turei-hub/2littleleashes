@@ -141,7 +141,7 @@ export default function HomePage() {
           ].map(s => (
             <div key={s.n} className="py-4 text-center">
               <p className="font-display text-xl font-bold text-forest-700">{s.n}</p>
-              <p className="text-xs text-forest-600/70">{s.l}</p>
+              <p className="text-xs text-forest-700">{s.l}</p>
             </div>
           ))}
         </div>
@@ -149,7 +149,7 @@ export default function HomePage() {
 
       {/* ── SERVICES ──────────────────────────────────────────────────────────── */}
       <section className="section">
-        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600/60">What we offer</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">What we offer</p>
         <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">Four services, one team</h2>
         <p className="mt-2 text-sm text-forest-600">
           All services are personally supervised by Meihana. A meet &amp; greet at your home is required before your first booking.
@@ -197,7 +197,7 @@ export default function HomePage() {
 
       {/* ── WHY CHOOSE US ─────────────────────────────────────────────────────── */}
       <section className="section">
-        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600/60">Why choose us</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">Why choose us</p>
         <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">We&apos;re different — here&apos;s why</h2>
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
           {WHY_CHOOSE.map(item => {
@@ -220,7 +220,7 @@ export default function HomePage() {
       {/* ── REVIEWS ───────────────────────────────────────────────────────────── */}
       <section className="bg-forest-50 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
-          <p className="text-xs font-semibold uppercase tracking-wider text-forest-600/60">Happy clients</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">Happy clients</p>
           <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">What Rotorua families say</h2>
           <p className="mt-2 text-sm text-forest-600">Real reviews from real dog owners on Facebook.</p>
 
@@ -237,7 +237,7 @@ export default function HomePage() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-forest-700">{review.name}</p>
-                      <p className="text-xs text-forest-600/50">Facebook Review</p>
+                      <p className="text-xs text-forest-600">Facebook Review</p>
                     </div>
                   </div>
                 </div>
@@ -249,7 +249,7 @@ export default function HomePage() {
 
       {/* ── POLICIES ──────────────────────────────────────────────────────────── */}
       <section className="section">
-        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600/60">How we work</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">How we work</p>
         <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">What to expect</h2>
         <p className="mt-2 text-sm text-forest-600">Simple policies, no surprises.</p>
 
@@ -276,7 +276,7 @@ export default function HomePage() {
             <PawPrint className="h-7 w-7 text-white" />
           </div>
           <h2 className="font-display text-3xl font-bold text-white">Ready to get started?</h2>
-          <p className="mt-3 text-white/65 text-sm">
+          <p className="mt-3 text-white text-sm">
             Fill out the booking form and Meihana will be in touch within 24 hours to arrange your free meet &amp; greet.
           </p>
           <div className="mt-6 flex justify-center gap-3 flex-wrap">

@@ -37,7 +37,7 @@ export default function Navbar() {
             <p className="font-display text-sm font-semibold leading-tight text-white">
               2 Little Leashes
             </p>
-            <p className="text-[10px] font-light leading-tight text-white/50 tracking-wide">
+            <p className="text-[10px] font-light leading-tight text-white/75 tracking-wide">
               Rotorua, New Zealand
             </p>
           </div>
@@ -53,7 +53,7 @@ export default function Navbar() {
                 'rounded-md px-3 py-1.5 text-sm font-medium transition',
                 pathname === link.href
                   ? 'bg-white/15 text-white'
-                  : 'text-white/65 hover:bg-white/10 hover:text-white'
+                  : 'text-white/80 hover:bg-white/10 hover:text-white'
               )}
             >
               {link.label}
@@ -89,7 +89,7 @@ export default function Navbar() {
                 'block rounded-md px-3 py-2 text-sm font-medium transition',
                 pathname === link.href
                   ? 'bg-white/15 text-white'
-                  : 'text-white/65 hover:bg-white/10 hover:text-white'
+                  : 'text-white/80 hover:bg-white/10 hover:text-white'
               )}
             >
               {link.label}

@@ -90,19 +90,19 @@ export default function PricingCalculator() {
       <div className="mt-5 rounded-xl bg-forest-700 p-5">
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
-            <p className="text-xs font-medium text-white/50 uppercase tracking-wide">Per visit</p>
+            <p className="text-xs font-medium text-mint uppercase tracking-wide">Per visit</p>
             <p className="font-display text-4xl font-bold text-white">${perVisit}</p>
           </div>
           {svc.weekly && frequency > 1 && (
             <div className="text-right">
-              <p className="text-xs font-medium text-white/50 uppercase tracking-wide">Weekly total</p>
+              <p className="text-xs font-medium text-mint uppercase tracking-wide">Weekly total</p>
               <p className="font-display text-2xl font-semibold text-amber-300">${weeklyTotal}</p>
             </div>
           )}
         </div>
 
         {/* Breakdown */}
-        <div className="mt-3 space-y-1 border-t border-white/10 pt-3 text-xs text-white/60">
+        <div className="mt-3 space-y-1 border-t border-white/10 pt-3 text-xs text-white/75">
           <div className="flex justify-between"><span>Base ({svc.label})</span><span>${svc.base}</span></div>
           {extraDogs > 0 && <div className="flex justify-between"><span>Extra dogs ({dogs - 1} × $10)</span><span>${extraDogs}</span></div>}
           {wkndFee   > 0 && <div className="flex justify-between"><span>Weekend surcharge</span><span>${wkndFee}</span></div>}

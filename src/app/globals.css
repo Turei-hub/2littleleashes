@@ -23,7 +23,7 @@
 @layer components {
   /* Reusable button variants */
   .btn-primary {
-    @apply inline-flex items-center gap-2 rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-400 active:scale-95;
+    @apply inline-flex items-center gap-2 rounded-lg bg-forest-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-forest-600 active:scale-95;
   }
   .btn-secondary {
     @apply inline-flex items-center gap-2 rounded-lg border border-white/25 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-white/10 active:scale-95;

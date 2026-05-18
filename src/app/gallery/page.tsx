@@ -31,7 +31,7 @@ export default function GalleryPage() {
         <div className="mx-auto max-w-5xl">
           <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">Gallery</p>
           <h1 className="font-display mt-1 text-4xl font-bold text-white">Happy dogs on happy walks</h1>
-          <p className="mt-3 max-w-xl text-sm text-white/65">
+          <p className="mt-3 max-w-xl text-sm text-white">
             Real photos from real walks — click any photo to expand. Auto-plays every 3 seconds.
           </p>
         </div>

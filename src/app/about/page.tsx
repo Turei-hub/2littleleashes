@@ -39,11 +39,19 @@ export default function AboutPage() {
     <>
       <Navbar />
 
-      <section className="bg-forest-700 px-4 py-14 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl">
+      <section className="relative overflow-hidden bg-forest-700 px-4 py-14 sm:px-6 lg:px-8">
+        <Image
+          src="/images/meihana-bulldogs-truck.jpg"
+          alt="Meihana with dogs — 2 Little Leashes Rotorua"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-forest-700/80" />
+        <div className="relative z-10 mx-auto max-w-5xl">
           <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">About us</p>
           <h1 className="font-display mt-1 text-4xl font-bold text-white">Meet Meihana</h1>
-          <p className="mt-3 text-white/65 text-sm max-w-xl">
+          <p className="mt-3 text-white text-sm max-w-xl">
             The heart and hands behind every walk, wash, and check-in.
           </p>
         </div>
@@ -58,7 +66,7 @@ export default function AboutPage() {
           </div>
           <div>
             <h2 className="font-display text-2xl font-bold text-white">Meihana</h2>
-            <p className="text-sm text-white/50 mb-4">Founder & Lead Walker · 2 Little Leashes Rotorua</p>
+            <p className="text-sm text-mint mb-4">Founder & Lead Walker · 2 Little Leashes Rotorua</p>
             <p className="text-sm text-white/75 leading-relaxed">
               Based in Rotorua, I started 2 Little Leashes to give local dog owners genuine peace of mind. Every walk is personally supervised by me — no subcontractors, no shortcuts. I believe every dog deserves to feel safe, properly exercised, and loved on every walk.
             </p>

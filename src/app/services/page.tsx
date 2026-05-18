@@ -1,5 +1,6 @@
 // src/app/services/page.tsx
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Sparkles, Plus } from 'lucide-react'
 import Navbar from '@/components/Navbar'
@@ -31,13 +32,22 @@ export default function ServicesPage() {
       <Navbar />
 
       {/* Header */}
-      <section className="bg-forest-700 px-4 py-14 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl">
+      <section className="relative overflow-hidden bg-forest-700 px-4 py-14 min-h-72 sm:px-6 lg:px-8">
+        <Image
+          src="/images/services-hero.jpg"
+          alt="2 Little Leashes dog walking services Rotorua"
+          fill
+          className="object-cover"
+          style={{ objectPosition: 'center center' }}
+          priority
+        />
+        <div className="absolute inset-0 bg-forest-700/80" />
+        <div className="relative z-10 mx-auto max-w-5xl">
           <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">Services & Pricing</p>
           <h1 className="font-display mt-1 text-4xl font-bold text-white">
             Transparent pricing, no surprises
           </h1>
-          <p className="mt-3 text-white/65 text-sm max-w-xl">
+          <p className="mt-3 text-white text-sm max-w-xl">
             Every service includes free pick-up and drop-off. New clients get their first walk free. Weekend bookings carry a +$20 surcharge.
           </p>
         </div>
@@ -69,7 +79,7 @@ export default function ServicesPage() {
                   )}
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="font-display text-3xl font-bold text-amber-500">${svc.pricing.base}</p>
+                  <p className="font-display text-3xl font-bold text-forest-700">${svc.pricing.base}</p>
                   <p className="text-xs text-forest-600">{svc.pricing.baseLabel}</p>
                   {'multiWalk' in svc.pricing && (
                     <p className="mt-1 text-xs font-semibold text-forest-600">
