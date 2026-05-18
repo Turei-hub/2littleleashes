@@ -201,9 +201,10 @@ Migrations live in `supabase/migrations/` and must be run manually in the Supaba
 
 ```bash
 npm run dev       # Start dev server (localhost:3000)
-npm run build     # Production build
 npx tsc --noEmit  # Type check only
 ```
+
+> **Rule:** Never run `npm run build` during development. Use `npx tsc --noEmit` for type checking and `npm run dev` for local development. Production builds are handled by Vercel on push.
 
 Images live in `public/images/`. Dog photos are named `dog-photo-1.jpg` through `dog-photo-N.jpg`.
 
