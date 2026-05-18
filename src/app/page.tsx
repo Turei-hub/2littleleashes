@@ -1,8 +1,27 @@
 // src/app/page.tsx
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Heart, Shield, Smile, DollarSign, Sparkles, Zap, Camera, Car, MapPin, PawPrint } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: '2 Little Leashes Dog Walkers | Rotorua, NZ',
+  description: 'Professional dog walking, washing, home check-ins and Sunday endurance runs in Rotorua, NZ. GPS-tracked, photo update every session. First walk FREE for new clients.',
+  alternates: { canonical: 'https://2littleleashes.co.nz' },
+  openGraph: {
+    title: '2 Little Leashes Dog Walkers | Rotorua, NZ',
+    description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE for new clients.',
+    url: 'https://2littleleashes.co.nz',
+    images: [{ url: '/images/dog-walk-rotorua.jpg', width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '2 Little Leashes Dog Walkers | Rotorua, NZ',
+    description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE.',
+    images: ['/images/dog-walk-rotorua.jpg'],
+  },
+}
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ServiceCard from '@/components/ServiceCard'

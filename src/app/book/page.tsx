@@ -5,7 +5,20 @@ import BookingFlowClient from '@/components/BookingFlowClient'
 
 export const metadata: Metadata = {
   title: 'Book a Walk | 2 Little Leashes Rotorua',
-  description: 'Book dog walking, washing, home check-ins or endurance runs in Rotorua. First walk FREE for new customers.',
+  description: 'Book dog walking, washing, home check-ins or Sunday endurance runs in Rotorua. New clients get their first walk FREE. Easy online booking.',
+  alternates: { canonical: 'https://2littleleashes.co.nz/book' },
+  openGraph: {
+    title: 'Book a Walk | 2 Little Leashes Rotorua',
+    description: 'Book dog walking, washing, home check-ins or Sunday endurance runs in Rotorua. New clients get their first walk FREE.',
+    url: 'https://2littleleashes.co.nz/book',
+    images: [{ url: '/images/dog-walk-rotorua.jpg', width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Book a Walk | 2 Little Leashes Rotorua',
+    description: 'Book dog walking, washing, home check-ins or Sunday endurance runs in Rotorua. First walk FREE.',
+    images: ['/images/dog-walk-rotorua.jpg'],
+  },
 }
 
 export default function BookPage() {

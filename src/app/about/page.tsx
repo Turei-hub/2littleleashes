@@ -8,8 +8,21 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'About Meihana | 2 Little Leashes Rotorua',
-  description: 'Meet Meihana, the founder and sole walker behind 2 Little Leashes Dog Walkers in Rotorua, NZ.',
+  title: 'About Meihana | 2 Little Leashes Dog Walkers Rotorua',
+  description: 'Meet Meihana, the Rotorua-based founder of 2 Little Leashes. Local family business, always supervised, GPS-tracked walks with a photo update every session.',
+  alternates: { canonical: 'https://2littleleashes.co.nz/about' },
+  openGraph: {
+    title: 'About Meihana | 2 Little Leashes Dog Walkers Rotorua',
+    description: 'Meet Meihana, the Rotorua-based founder of 2 Little Leashes. Local family business, always supervised, GPS-tracked walks with a photo update every session.',
+    url: 'https://2littleleashes.co.nz/about',
+    images: [{ url: '/images/meihana-bulldogs-truck.jpg', width: 1200, height: 630, alt: 'Meihana with dogs — 2 Little Leashes Rotorua' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Meihana | 2 Little Leashes Dog Walkers Rotorua',
+    description: 'Meet Meihana, the Rotorua-based founder of 2 Little Leashes. Local family business, GPS-tracked walks, photo update every session.',
+    images: ['/images/meihana-bulldogs-truck.jpg'],
+  },
 }
 
 const WHY_US: { icon: LucideIcon; title: string; body: string }[] = [

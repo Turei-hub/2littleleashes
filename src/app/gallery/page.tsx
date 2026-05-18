@@ -5,8 +5,21 @@ import Footer from '@/components/Footer'
 import GalleryCarousel from '@/components/GalleryCarousel'
 
 export const metadata: Metadata = {
-  title: 'Gallery | 2 Little Leashes Rotorua',
-  description: 'Photos from walks and visits with 2 Little Leashes dog walkers in Rotorua, NZ.',
+  title: 'Gallery | 2 Little Leashes Dog Walkers Rotorua',
+  description: 'See photos from walks, washes and adventures with happy dogs around Rotorua. Real photos from real walks — updated regularly.',
+  alternates: { canonical: 'https://2littleleashes.co.nz/gallery' },
+  openGraph: {
+    title: 'Gallery | 2 Little Leashes Dog Walkers Rotorua',
+    description: 'See photos from walks, washes and adventures with happy dogs around Rotorua. Real photos from real walks.',
+    url: 'https://2littleleashes.co.nz/gallery',
+    images: [{ url: '/images/dog-walk-rotorua.jpg', width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Gallery | 2 Little Leashes Dog Walkers Rotorua',
+    description: 'See photos from walks, washes and adventures with happy dogs around Rotorua.',
+    images: ['/images/dog-walk-rotorua.jpg'],
+  },
 }
 
 export default function GalleryPage() {
