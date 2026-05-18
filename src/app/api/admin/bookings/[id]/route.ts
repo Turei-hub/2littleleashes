@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, createSessionClient } from '@/lib/supabase-server'
-import { sendBookingConfirmed } from '@/lib/email'
+import { sendBookingConfirmed, sendWalkReminder, sendReviewRequest } from '@/lib/email'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,6 +41,51 @@ export async function PATCH(
           preferredDate: booking.preferred_date,
         })
       } catch {}
+    }
+
+    return NextResponse.json({ success: true })
+  }
+
+  if (body.action === 'send-reminder') {
+    const { data: booking } = await supabase
+      .from('bookings')
+      .select('owner_name, email, dog_name, preferred_date')
+      .eq('id', params.id)
+      .single()
+
+    if (!booking) return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
+
+    try {
+      await sendWalkReminder({
+        ownerEmail: booking.email,
+        ownerName:  booking.owner_name,
+        dogName:    booking.dog_name,
+        walkTime:   booking.preferred_date || 'your scheduled time',
+      })
+    } catch {
+      return NextResponse.json({ error: 'Failed to send reminder' }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true })
+  }
+
+  if (body.action === 'request-review') {
+    const { data: booking } = await supabase
+      .from('bookings')
+      .select('owner_name, email, dog_name')
+      .eq('id', params.id)
+      .single()
+
+    if (!booking) return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
+
+    try {
+      await sendReviewRequest({
+        ownerEmail: booking.email,
+        ownerName:  booking.owner_name,
+        dogName:    booking.dog_name,
+      })
+    } catch {
+      return NextResponse.json({ error: 'Failed to send review request' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true })
