@@ -41,10 +41,11 @@ export default function AboutPage() {
 
       <section className="relative overflow-hidden bg-forest-700 px-4 py-14 sm:px-6 lg:px-8">
         <Image
-          src="/images/meihana-bulldogs-truck.jpg"
+          src="/images/about-hero.jpg"
           alt="Meihana with dogs — 2 Little Leashes Rotorua"
           fill
-          className="object-cover object-center"
+          className="object-cover"
+          style={{ objectPosition: 'center center' }}
           priority
         />
         <div className="absolute inset-0 bg-forest-700/80" />
