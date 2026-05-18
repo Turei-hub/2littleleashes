@@ -131,67 +131,101 @@ export default async function AdminPage() {
             No bookings yet.
           </div>
         ) : (
-          <div className="overflow-hidden rounded-xl border border-forest-700/10 bg-white shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-forest-700/10 bg-forest-50 text-left text-xs font-semibold uppercase tracking-wide text-forest-600/50">
-                    <th className="px-4 py-3">Received</th>
-                    <th className="px-4 py-3">Owner</th>
-                    <th className="px-4 py-3">Dog</th>
-                    <th className="px-4 py-3">Service</th>
-                    <th className="px-4 py-3">Preferred date</th>
-                    <th className="px-4 py-3">Notes</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Payment</th>
-                    <th className="px-4 py-3">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-forest-700/8">
-                  {all.map(b => (
-                    <tr key={b.id} className="hover:bg-forest-50/50 transition-colors">
-                      <td className="whitespace-nowrap px-4 py-3 text-xs text-forest-600/60">
-                        {new Date(b.created_at).toLocaleDateString('en-NZ', {
-                          day: 'numeric', month: 'short', year: '2-digit',
-                        })}
-                      </td>
-                      <td className="px-4 py-3">
-                        <p className="font-medium text-forest-700">{b.owner_name}</p>
-                        <p className="text-xs text-forest-600/60">{b.email}</p>
-                        {b.phone && <p className="text-xs text-forest-600/60">{b.phone}</p>}
-                        {b.suburb && <p className="text-xs text-forest-600/50">{b.suburb}</p>}
-                      </td>
-                      <td className="px-4 py-3">
-                        <p className="font-medium text-forest-700">{b.dog_name}</p>
-                        {b.breed && <p className="text-xs text-forest-600/60">{b.breed}</p>}
-                      </td>
-                      <td className="px-4 py-3 text-forest-700">{b.service}</td>
-                      <td className="px-4 py-3 text-xs text-forest-600/70">{b.preferred_date || '—'}</td>
-                      <td className="max-w-[180px] px-4 py-3 text-xs text-forest-600/70">
-                        {b.notes ? (
-                          <span title={b.notes} className="line-clamp-2">{b.notes}</span>
-                        ) : '—'}
-                      </td>
-                      <td className="px-4 py-3">
-                        <StatusBadge status={b.status ?? 'pending'} />
-                      </td>
-                      <td className="px-4 py-3">
-                        <PaymentBadge status={b.payment_status ?? 'none'} url={b.payment_screenshot_url} />
-                      </td>
-                      <td className="px-4 py-3">
-                        <BookingActions
-                          id={b.id}
-                          currentStatus={b.status ?? 'pending'}
-                          paymentStatus={b.payment_status ?? 'none'}
-                          screenshotUrl={b.payment_screenshot_url}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <>
+            {/* ── Mobile card layout (< md) ───────────────────────────────────── */}
+            <div className="space-y-3 md:hidden">
+              {all.map(b => (
+                <div key={b.id} className="rounded-xl border border-forest-700/10 bg-white p-4 shadow-sm">
+                  <div className="mb-2 flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-forest-700 truncate">{b.owner_name}</p>
+                      <p className="text-xs text-forest-600/60 truncate">{b.email}</p>
+                    </div>
+                    <StatusBadge status={b.status ?? 'pending'} />
+                  </div>
+                  <div className="mb-3 space-y-1 text-sm">
+                    <p className="text-forest-700">
+                      <span className="text-xs text-forest-600/50">Dog: </span>
+                      {b.dog_name}{b.breed ? ` (${b.breed})` : ''}
+                    </p>
+                    <p className="text-forest-600 line-clamp-1">
+                      <span className="text-xs text-forest-600/50">Service: </span>
+                      {b.service}
+                    </p>
+                  </div>
+                  <BookingActions
+                    id={b.id}
+                    currentStatus={b.status ?? 'pending'}
+                    paymentStatus={b.payment_status ?? 'none'}
+                    screenshotUrl={b.payment_screenshot_url}
+                  />
+                </div>
+              ))}
             </div>
-          </div>
+
+            {/* ── Desktop table layout (≥ md) ─────────────────────────────────── */}
+            <div className="hidden overflow-hidden rounded-xl border border-forest-700/10 bg-white shadow-sm md:block">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-forest-700/10 bg-forest-50 text-left text-xs font-semibold uppercase tracking-wide text-forest-600/50">
+                      <th className="px-4 py-3">Received</th>
+                      <th className="px-4 py-3">Owner</th>
+                      <th className="px-4 py-3">Dog</th>
+                      <th className="px-4 py-3">Service</th>
+                      <th className="px-4 py-3">Preferred date</th>
+                      <th className="px-4 py-3">Notes</th>
+                      <th className="px-4 py-3">Status</th>
+                      <th className="px-4 py-3">Payment</th>
+                      <th className="px-4 py-3">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-forest-700/8">
+                    {all.map(b => (
+                      <tr key={b.id} className="hover:bg-forest-50/50 transition-colors">
+                        <td className="whitespace-nowrap px-4 py-3 text-xs text-forest-600/60">
+                          {new Date(b.created_at).toLocaleDateString('en-NZ', {
+                            day: 'numeric', month: 'short', year: '2-digit',
+                          })}
+                        </td>
+                        <td className="px-4 py-3">
+                          <p className="font-medium text-forest-700">{b.owner_name}</p>
+                          <p className="text-xs text-forest-600/60">{b.email}</p>
+                          {b.phone && <p className="text-xs text-forest-600/60">{b.phone}</p>}
+                          {b.suburb && <p className="text-xs text-forest-600/50">{b.suburb}</p>}
+                        </td>
+                        <td className="px-4 py-3">
+                          <p className="font-medium text-forest-700">{b.dog_name}</p>
+                          {b.breed && <p className="text-xs text-forest-600/60">{b.breed}</p>}
+                        </td>
+                        <td className="px-4 py-3 text-forest-700">{b.service}</td>
+                        <td className="px-4 py-3 text-xs text-forest-600/70">{b.preferred_date || '—'}</td>
+                        <td className="max-w-[180px] px-4 py-3 text-xs text-forest-600/70">
+                          {b.notes ? (
+                            <span title={b.notes} className="line-clamp-2">{b.notes}</span>
+                          ) : '—'}
+                        </td>
+                        <td className="px-4 py-3">
+                          <StatusBadge status={b.status ?? 'pending'} />
+                        </td>
+                        <td className="px-4 py-3">
+                          <PaymentBadge status={b.payment_status ?? 'none'} url={b.payment_screenshot_url} />
+                        </td>
+                        <td className="px-4 py-3">
+                          <BookingActions
+                            id={b.id}
+                            currentStatus={b.status ?? 'pending'}
+                            paymentStatus={b.payment_status ?? 'none'}
+                            screenshotUrl={b.payment_screenshot_url}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
         )}
 
         {/* ── PENDING PHOTOS ──────────────────────────────────────────────────── */}
