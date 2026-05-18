@@ -315,7 +315,7 @@ export default function BookingForm({
           <div className="space-y-1.5 text-sm">
             <div className="flex justify-between">
               <span className="text-teal-700">Bank account</span>
-              <span className="font-semibold text-teal-900">12-3456-7890123-00</span>
+              <span className="font-semibold text-teal-900">{process.env.NEXT_PUBLIC_BANK_ACCOUNT}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-teal-700">Account name</span>

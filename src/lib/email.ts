@@ -143,13 +143,13 @@ export async function sendCustomerConfirmation(data: BookingData) {
         ` : `
         <div class="callout-teal">
           <p class="ct-title">Payment Details</p>
-          <div class="ct-row"><span class="ctl">Bank account</span><span class="ctv">12-3456-7890123-00</span></div>
+          <div class="ct-row"><span class="ctl">Bank account</span><span class="ctv">${process.env.BANK_ACCOUNT}</span></div>
           <div class="ct-row"><span class="ctl">Account name</span><span class="ctv">2 Little Leashes</span></div>
           <div class="ct-row"><span class="ctl">Your reference</span><span class="ct-ref">${data.paymentRef}</span></div>
           <p class="ct-note">Please make your bank transfer using the reference above, then reply with a screenshot. ✓</p>
         </div>
         <p class="steps-title">What happens next:</p>
-        <div class="step"><div class="step-num">1</div><div class="step-text">Make your bank transfer to 12-3456-7890123-00 using reference <strong>${data.paymentRef}</strong>.</div></div>
+        <div class="step"><div class="step-num">1</div><div class="step-text">Make your bank transfer to ${process.env.BANK_ACCOUNT} using reference <strong>${data.paymentRef}</strong>.</div></div>
         <div class="step"><div class="step-num">2</div><div class="step-text">Reply to this email with a screenshot of your transfer so Meihana can verify it.</div></div>
         <div class="step"><div class="step-num">3</div><div class="step-text">Meihana will confirm your booking and be in touch with pickup details. 🌿</div></div>
         `}

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase-server'
+import { createAdminClient, createSessionClient } from '@/lib/supabase-server'
 import { sendBookingConfirmed } from '@/lib/email'
 
 export const dynamic = 'force-dynamic'
@@ -8,13 +8,12 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const supabase = createAdminClient()
-
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { session } } = await createSessionClient().auth.getSession()
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const supabase = createAdminClient()
   const body = await req.json()
 
   if (body.action === 'verify-payment') {

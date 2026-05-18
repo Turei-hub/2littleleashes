@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { createAdminClient } from '@/lib/supabase-server'
+import { createAdminClient, createSessionClient } from '@/lib/supabase-server'
 import BookingActions from './BookingActions'
 import LogoutButton from './LogoutButton'
 
@@ -61,12 +61,12 @@ function PaymentBadge({ status, url }: { status: string; url: string | null }) {
 }
 
 export default async function AdminPage() {
-  const supabase = createAdminClient()
-
-  const { data: { session } } = await supabase.auth.getSession()
+  const sessionClient = createSessionClient()
+  const { data: { session } } = await sessionClient.auth.getSession()
   if (!session) redirect('/admin/login')
 
-  const { data: bookings } = await supabase
+  const adminClient = createAdminClient()
+  const { data: bookings } = await adminClient
     .from('bookings')
     .select('*')
     .order('created_at', { ascending: false })
