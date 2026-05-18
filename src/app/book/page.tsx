@@ -27,12 +27,13 @@ export default function BookPage() {
     <>
       <Navbar />
 
-      <section className="relative overflow-hidden bg-forest-700 px-4 py-14 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-forest-700 px-4 py-14 min-h-96 sm:px-6 lg:px-8">
         <Image
           src="/images/dog-walk-rotorua.jpg"
           alt="Dog walk in Rotorua"
           fill
-          className="object-cover object-center"
+          className="object-cover"
+          style={{ objectPosition: 'center 35%' }}
           priority
         />
         <div className="absolute inset-0 bg-forest-700/80" />
