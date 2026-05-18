@@ -16,13 +16,13 @@ export const metadata: Metadata = {
     title: 'Services & Pricing | 2 Little Leashes Rotorua',
     description: 'Dog walking from $30, dog wash $20, home check-ins $20, Sunday endurance runs $50. First walk FREE. Free pick-up and drop-off in Rotorua, NZ.',
     url: 'https://2littleleashes.co.nz/services',
-    images: [{ url: '/images/pack-walk-truck.jpg', width: 1200, height: 630, alt: '2 Little Leashes pack walk Rotorua' }],
+    images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/pack-walk-truck.jpg`, width: 1200, height: 630, alt: '2 Little Leashes pack walk Rotorua' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Services & Pricing | 2 Little Leashes Rotorua',
     description: 'Dog walking from $30, dog wash $20, home check-ins $20, Sunday endurance runs $50. First walk FREE in Rotorua.',
-    images: ['/images/pack-walk-truck.jpg'],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/pack-walk-truck.jpg`],
   },
 }
 

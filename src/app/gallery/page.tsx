@@ -17,13 +17,13 @@ export const metadata: Metadata = {
     title: 'Gallery | 2 Little Leashes Dog Walkers Rotorua',
     description: 'See photos from walks, washes and adventures with happy dogs around Rotorua. Real photos from real walks.',
     url: 'https://2littleleashes.co.nz/gallery',
-    images: [{ url: '/images/dog-walk-rotorua.jpg', width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
+    images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/dog-walk-rotorua.jpg`, width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Gallery | 2 Little Leashes Dog Walkers Rotorua',
     description: 'See photos from walks, washes and adventures with happy dogs around Rotorua.',
-    images: ['/images/dog-walk-rotorua.jpg'],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/dog-walk-rotorua.jpg`],
   },
 }
 

@@ -12,13 +12,13 @@ export const metadata: Metadata = {
     title: 'Book a Walk | 2 Little Leashes Rotorua',
     description: 'Book dog walking, washing, home check-ins or Sunday endurance runs in Rotorua. New clients get their first walk FREE.',
     url: 'https://2littleleashes.co.nz/book',
-    images: [{ url: '/images/dog-walk-rotorua.jpg', width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
+    images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/dog-walk-rotorua.jpg`, width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Book a Walk | 2 Little Leashes Rotorua',
     description: 'Book dog walking, washing, home check-ins or Sunday endurance runs in Rotorua. First walk FREE.',
-    images: ['/images/dog-walk-rotorua.jpg'],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/dog-walk-rotorua.jpg`],
   },
 }
 

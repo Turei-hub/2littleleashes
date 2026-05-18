@@ -13,13 +13,13 @@ export const metadata: Metadata = {
     title: '2 Little Leashes Dog Walkers | Rotorua, NZ',
     description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE for new clients.',
     url: 'https://2littleleashes.co.nz',
-    images: [{ url: '/images/dog-walk-rotorua.jpg', width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
+    images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/dog-walk-rotorua.jpg`, width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '2 Little Leashes Dog Walkers | Rotorua, NZ',
     description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE.',
-    images: ['/images/dog-walk-rotorua.jpg'],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/dog-walk-rotorua.jpg`],
   },
 }
 import Navbar from '@/components/Navbar'
