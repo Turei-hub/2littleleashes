@@ -2,10 +2,46 @@
 // Single source of truth for all services, pricing, and policies.
 // Edit here and every page/component updates automatically.
 
-export const SERVICES = [
+import { PawPrint, Droplets, Home, Zap, Handshake, Clock, Car, CalendarDays, MapPin, Camera } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+
+export type ServiceId = 'dog-walking' | 'dog-wash' | 'home-checkins' | 'endurance-walk'
+
+type ServicePricing = {
+  base: number
+  baseLabel: string
+  multiWalk?: number
+  multiWalkLabel?: string
+  extraDog?: number
+  extraDogLabel?: string
+  addon?: string
+}
+
+type Service = {
+  id: ServiceId
+  icon: LucideIcon
+  title: string
+  tagline: string
+  pricing: ServicePricing
+  features: readonly string[]
+  badge: string | null
+  highlight: boolean
+  specialNote: string | null
+  schedule?: string
+  duration?: string
+  targetBreeds?: readonly string[]
+}
+
+type Policy = {
+  icon: LucideIcon
+  title: string
+  body: string
+}
+
+export const SERVICES: Service[] = [
   {
     id: 'dog-walking',
-    icon: '🦮',
+    icon: PawPrint,
     title: 'Dog Walking',
     tagline: 'On-lead adventures across Rotorua',
     pricing: {
@@ -30,7 +66,7 @@ export const SERVICES = [
   },
   {
     id: 'dog-wash',
-    icon: '🛁',
+    icon: Droplets,
     title: 'Dog Wash',
     tagline: 'Professional wash at a local pet store',
     pricing: {
@@ -50,9 +86,9 @@ export const SERVICES = [
   },
   {
     id: 'home-checkins',
-    icon: '🍽️',
+    icon: Home,
     title: 'Home Check-Ins',
-    tagline: 'Care and security while you\'re away',
+    tagline: "Care and security while you're away",
     pricing: {
       base: 20,
       baseLabel: '$20 per visit',
@@ -70,7 +106,7 @@ export const SERVICES = [
   },
   {
     id: 'endurance-walk',
-    icon: '🏃',
+    icon: Zap,
     title: 'Endurance Walk / Run',
     tagline: 'Epic Sunday missions for high-drive dogs',
     pricing: {
@@ -80,7 +116,7 @@ export const SERVICES = [
     schedule: 'Sundays at 8:00 AM',
     duration: '10km+ · Up to 3 Hours',
     features: [
-      'All-terrain adventures through Rotorua\'s forests, lakes, and bush tracks',
+      "All-terrain adventures through Rotorua's forests, lakes, and bush tracks",
       'Operates rain or shine',
       'Rest stops + water breaks included',
       'Ideal for high-energy working breeds',
@@ -93,42 +129,40 @@ export const SERVICES = [
     highlight: false,
     specialNote: null,
   },
-] as const
+]
 
-export const POLICIES = [
+export const POLICIES: Policy[] = [
   {
-    icon: '🤝',
+    icon: Handshake,
     title: 'Meet & Greet First',
     body: 'Mandatory for all new clients. We come to you, meet your dog, go over personality, habits, and any medical instructions.',
   },
   {
-    icon: '🕖',
+    icon: Clock,
     title: 'Operating Hours (Winter)',
     body: '7:00 AM – 2:00 PM during daylight savings.',
   },
   {
-    icon: '🚗',
+    icon: Car,
     title: 'Free Pick-up & Drop-off',
     body: 'Included with all walks and washes. Safe transport, personally supervised by Meihana.',
   },
   {
-    icon: '📅',
+    icon: CalendarDays,
     title: 'Weekend Surcharge',
     body: '+$20 flat per walk on Saturdays and Sundays.',
   },
   {
-    icon: '📍',
+    icon: MapPin,
     title: 'GPS Every Walk',
     body: 'Every walk is GPS tracked so you always know the route your dog explored.',
   },
   {
-    icon: '📸',
+    icon: Camera,
     title: 'Photo Updates',
     body: 'A photo sent after every session — your dog having the time of their life.',
   },
-] as const
-
-export type ServiceId = typeof SERVICES[number]['id']
+]
 
 // Booking form options
 export const SERVICE_OPTIONS = [

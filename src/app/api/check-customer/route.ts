@@ -15,7 +15,6 @@ export async function POST(req: NextRequest) {
       .from('bookings')
       .select('id', { count: 'exact', head: true })
       .eq('email', email.trim().toLowerCase())
-      .eq('status', 'confirmed')
 
     return NextResponse.json({ isReturning: (count ?? 0) > 0 })
   } catch {

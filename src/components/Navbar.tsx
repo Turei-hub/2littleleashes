@@ -21,7 +21,6 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <>
     <header className="sticky top-0 z-50 bg-forest-700 shadow-md">
       <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
 
@@ -105,8 +104,7 @@ export default function Navbar() {
           </Link>
         </div>
       )}
+      <MarqueeBanner />
     </header>
-    <MarqueeBanner />
-    </>
   )
 }

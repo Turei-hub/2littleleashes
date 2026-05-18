@@ -31,104 +31,135 @@ function createTransport() {
   })
 }
 
+// ─── Shared design system ─────────────────────────────────────────────────────
+
+const SHARED_CSS = `
+  body{margin:0;padding:0;background:#faf8f4;font-family:'Helvetica Neue',Arial,sans-serif;color:#1c2b22;-webkit-text-size-adjust:100%;}
+  img{border:0;display:block;outline:none;}
+  .wrapper{padding:32px 16px;}
+  .card{background:#ffffff;border-radius:14px;max-width:560px;margin:0 auto;overflow:hidden;border:1px solid #e0ddd6;box-shadow:0 2px 16px rgba(26,58,42,0.07);}
+  .logo-section{background:#ffffff;padding:26px 32px 20px;text-align:center;border-bottom:2px solid #1a3a2a;}
+  .logo-section img{width:80px;height:80px;border-radius:50%;margin:0 auto 10px;border:3px solid #e8f2ec;object-fit:cover;}
+  .brand-name{font-size:18px;font-weight:700;color:#1a3a2a;letter-spacing:0.2px;text-decoration:none;display:block;margin-bottom:3px;}
+  .brand-sub{font-size:11px;color:#a0b0a5;letter-spacing:1.3px;text-transform:uppercase;margin:0;}
+  .email-header{padding:24px 32px;}
+  .email-header h1{margin:0 0 4px;font-size:21px;color:#ffffff;line-height:1.25;}
+  .email-header p{margin:0;font-size:13px;color:rgba(255,255,255,0.65);}
+  .body{padding:28px 32px;}
+  .greeting{font-size:16px;font-weight:600;color:#1a3a2a;margin:0 0 10px;}
+  .intro{font-size:14px;color:#5a7060;line-height:1.65;margin:0 0 20px;}
+  .detail-box{background:#f3f8f5;border:1px solid #cfe4d7;border-radius:10px;padding:18px 22px;margin:20px 0;}
+  .detail-box-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7a9080;margin:0 0 14px;}
+  .detail-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;font-size:13px;border-bottom:1px solid rgba(26,58,42,0.07);}
+  .detail-row:last-child{border-bottom:none;}
+  .dl{color:#7a9080;}
+  .dv{font-weight:600;color:#1a3a2a;}
+  .steps-title{font-size:13px;font-weight:700;color:#1a3a2a;margin:24px 0 12px;}
+  .step{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start;}
+  .step-num{background:#1a3a2a;color:#fff;min-width:26px;width:26px;height:26px;border-radius:50%;text-align:center;line-height:26px;font-size:12px;font-weight:700;flex-shrink:0;}
+  .step-text{font-size:13px;color:#5a7060;line-height:1.55;padding-top:4px;}
+  .callout-amber{background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #d97706;border-radius:8px;padding:14px 18px;margin:20px 0;font-size:13px;color:#92400e;line-height:1.6;}
+  .callout-teal{background:#e8f8f4;border:1px solid #a7dece;border-left:4px solid #1D9E75;border-radius:10px;padding:18px 22px;margin:20px 0;}
+  .ct-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#1D9E75;margin:0 0 14px;}
+  .ct-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(29,158,117,0.12);}
+  .ct-row:last-child{border-bottom:none;}
+  .ctl{color:#2d8a6a;}
+  .ctv{font-weight:700;color:#145a40;}
+  .ct-ref{font-weight:700;font-size:15px;color:#145a40;letter-spacing:1px;}
+  .ct-note{font-size:12px;color:#2d8a6a;margin:10px 0 0;}
+  .footer{background:#f0ede6;border-top:1px solid #e0ddd6;padding:20px 32px;text-align:center;font-size:12px;color:#93a89a;line-height:1.8;}
+  .footer a{color:#1a3a2a;font-weight:700;text-decoration:none;}
+  .btn{display:inline-block;padding:13px 30px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;}
+  .btn-amber{background:#d97706;color:#ffffff;}
+  .btn-forest{background:#1a3a2a;color:#ffffff;}
+  @media(max-width:600px){.wrapper{padding:12px 8px;}.logo-section,.email-header,.body,.footer{padding-left:20px;padding-right:20px;}}
+`
+
+function logoSection(): string {
+  const url = process.env.NEXT_PUBLIC_SITE_URL || ''
+  return `
+    <div class="logo-section">
+      <a href="${url}" style="text-decoration:none;">
+        <img src="${url}/images/logo.jpg" alt="2 Little Leashes" width="80" height="80" />
+        <span class="brand-name">2 Little Leashes</span>
+      </a>
+      <p class="brand-sub">Rotorua · New Zealand</p>
+    </div>`
+}
+
+function emailFooter(): string {
+  const url = process.env.NEXT_PUBLIC_SITE_URL || ''
+  return `
+    <div class="footer">
+      <p style="margin:0 0 5px;">Questions? Reply to this email or call/text Meihana directly.</p>
+      <p style="margin:0;"><a href="${url}">2littleleashes.co.nz</a> &nbsp;·&nbsp; 2 Little Leashes &nbsp;·&nbsp; Rotorua, New Zealand</p>
+    </div>`
+}
+
 // ─── 1. Customer confirmation email ──────────────────────────────────────────
 export async function sendCustomerConfirmation(data: BookingData) {
   const transporter = createTransport()
 
-  const html = `
-<!DOCTYPE html>
-<html>
+  const html = `<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #faf8f4; margin: 0; padding: 20px; color: #1c2b22; }
-    .card { background: #fff; border-radius: 12px; max-width: 540px; margin: 0 auto; overflow: hidden; border: 1px solid #e0ddd6; }
-    .header { background: #1a3a2a; padding: 28px 32px; }
-    .header h1 { color: #fff; font-size: 22px; margin: 0 0 4px; }
-    .header p { color: rgba(255,255,255,0.6); margin: 0; font-size: 13px; }
-    .body { padding: 28px 32px; }
-    .greeting { font-size: 16px; margin-bottom: 16px; }
-    .detail-box { background: #e8f2ec; border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
-    .detail-box h3 { color: #1a3a2a; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px; }
-    .detail-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; border-bottom: 1px solid rgba(26,58,42,0.1); }
-    .detail-row:last-child { border-bottom: none; }
-    .detail-label { color: #5a7060; }
-    .detail-value { font-weight: 600; color: #1a3a2a; }
-    .highlight { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 14px 18px; margin: 20px 0; font-size: 13px; color: #92400e; }
-    .steps { margin: 20px 0; }
-    .step { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
-    .step-num { background: #1a3a2a; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-    .step-text { font-size: 13px; color: #5a7060; padding-top: 3px; }
-    .footer { background: #f0ede6; padding: 20px 32px; font-size: 12px; color: #93a89a; text-align: center; }
-    .footer a { color: #1a3a2a; text-decoration: none; font-weight: 600; }
-    @media (max-width: 600px) { .body, .header, .footer { padding: 20px; } }
-  </style>
+  <style>${SHARED_CSS}</style>
 </head>
 <body>
-  <div class="card">
-    <div class="header">
-      <h1>🐾 Booking Received!</h1>
-      <p>2 Little Leashes Dog Walkers · Rotorua</p>
-    </div>
-    <div class="body">
-      <p class="greeting">Kia ora ${data.ownerName}! 👋</p>
-      <p style="font-size:14px;color:#5a7060;line-height:1.6;">
-        We've received your booking request for <strong>${data.dogName}</strong>. 
-        Meihana will be in touch within 24 hours to arrange your free meet &amp; greet.
-      </p>
+  <div class="wrapper">
+    <div class="card">
+      ${logoSection()}
 
-      <div class="detail-box">
-        <h3>Booking Summary</h3>
-        <div class="detail-row"><span class="detail-label">Dog</span><span class="detail-value">${data.dogName}${data.breed ? ` (${data.breed})` : ''}</span></div>
-        <div class="detail-row"><span class="detail-label">Service</span><span class="detail-value">${data.service}</span></div>
-        ${data.preferredDate ? `<div class="detail-row"><span class="detail-label">Preferred start</span><span class="detail-value">${data.preferredDate}</span></div>` : ''}
-        <div class="detail-row"><span class="detail-label">Meet &amp; greet</span><span class="detail-value">${data.meetGreetPref}</span></div>
+      <div class="email-header" style="background:#1a3a2a;">
+        <h1>🐾 Booking Received!</h1>
+        <p>We'll be in touch within 24 hours</p>
       </div>
 
-      ${data.bookingType === 'free' ? `
-      <div class="highlight">
-        🎉 <strong>Reminder: your first walk is FREE!</strong> This gives ${data.dogName} a chance to get comfortable with Meihana before the regular sessions begin.
-      </div>
-      <div class="steps">
-        <p style="font-size:13px;font-weight:600;color:#1a3a2a;margin-bottom:12px;">What happens next:</p>
+      <div class="body">
+        <p class="greeting">Kia ora ${data.ownerName}! 👋</p>
+        <p class="intro">
+          We've received your booking request for <strong>${data.dogName}</strong>.
+          Meihana will be in touch within 24 hours to arrange your free meet &amp; greet.
+        </p>
+
+        <div class="detail-box">
+          <p class="detail-box-title">Booking Summary</p>
+          <div class="detail-row"><span class="dl">Dog</span><span class="dv">${data.dogName}${data.breed ? ` (${data.breed})` : ''}</span></div>
+          <div class="detail-row"><span class="dl">Service</span><span class="dv">${data.service}</span></div>
+          ${data.preferredDate ? `<div class="detail-row"><span class="dl">Preferred start</span><span class="dv">${data.preferredDate}</span></div>` : ''}
+          <div class="detail-row"><span class="dl">Meet &amp; greet</span><span class="dv">${data.meetGreetPref}</span></div>
+        </div>
+
+        ${data.bookingType === 'free' ? `
+        <div class="callout-amber">
+          🎉 <strong>Your first walk is FREE!</strong> This gives ${data.dogName} a chance to get comfortable with Meihana before the regular sessions begin.
+        </div>
+        <p class="steps-title">What happens next:</p>
         <div class="step"><div class="step-num">1</div><div class="step-text">Meihana will contact you within 24 hours to schedule your free meet &amp; greet at your home.</div></div>
         <div class="step"><div class="step-num">2</div><div class="step-text">At the meet &amp; greet we go over ${data.dogName}'s personality, habits, and any medical needs.</div></div>
         <div class="step"><div class="step-num">3</div><div class="step-text">Your first free walk is booked — and the adventures begin! 🌿</div></div>
-      </div>
-      ` : `
-      <div style="background:#e0f2f1;border:1px solid #4db6ac;border-radius:8px;padding:16px 20px;margin:20px 0;">
-        <h3 style="color:#00695c;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin:0 0 12px;">Payment details</h3>
-        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid rgba(0,105,92,0.15);">
-          <span style="color:#00897b;">Bank account</span>
-          <span style="font-weight:700;color:#00695c;">12-3456-7890123-00</span>
+        ` : `
+        <div class="callout-teal">
+          <p class="ct-title">Payment Details</p>
+          <div class="ct-row"><span class="ctl">Bank account</span><span class="ctv">12-3456-7890123-00</span></div>
+          <div class="ct-row"><span class="ctl">Account name</span><span class="ctv">2 Little Leashes</span></div>
+          <div class="ct-row"><span class="ctl">Your reference</span><span class="ct-ref">${data.paymentRef}</span></div>
+          <p class="ct-note">Please make your bank transfer using the reference above, then reply with a screenshot. ✓</p>
         </div>
-        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid rgba(0,105,92,0.15);">
-          <span style="color:#00897b;">Account name</span>
-          <span style="font-weight:600;color:#00695c;">2 Little Leashes</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;">
-          <span style="color:#00897b;">Your reference</span>
-          <span style="font-weight:700;font-size:15px;color:#00695c;letter-spacing:1px;">${data.paymentRef}</span>
-        </div>
-        <p style="font-size:12px;color:#00695c;margin:10px 0 0;">Please make your bank transfer using the reference above, then reply with a screenshot. ✓</p>
-      </div>
-      <div class="steps">
-        <p style="font-size:13px;font-weight:600;color:#1a3a2a;margin-bottom:12px;">What happens next:</p>
+        <p class="steps-title">What happens next:</p>
         <div class="step"><div class="step-num">1</div><div class="step-text">Make your bank transfer to 12-3456-7890123-00 using reference <strong>${data.paymentRef}</strong>.</div></div>
         <div class="step"><div class="step-num">2</div><div class="step-text">Reply to this email with a screenshot of your transfer so Meihana can verify it.</div></div>
         <div class="step"><div class="step-num">3</div><div class="step-text">Meihana will confirm your booking and be in touch with pickup details. 🌿</div></div>
+        `}
       </div>
-      `}
-    </div>
-    <div class="footer">
-      <p>Questions? Reply to this email or call/text Meihana directly.</p>
-      <p style="margin-top:8px;"><a href="${process.env.NEXT_PUBLIC_SITE_URL}">2littleleashes.co.nz</a> · Rotorua, New Zealand</p>
+
+      ${emailFooter()}
     </div>
   </div>
 </body>
-</html>
-`
+</html>`
 
   await transporter.sendMail({
     from:    process.env.FROM_EMAIL,
@@ -142,42 +173,65 @@ export async function sendCustomerConfirmation(data: BookingData) {
 export async function sendOwnerAlert(data: BookingData) {
   const transporter = createTransport()
 
-  const html = `
-<!DOCTYPE html>
-<html>
+  const html = `<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
-    .card { background: #fff; border-radius: 10px; max-width: 500px; margin: 0 auto; padding: 24px; border: 1px solid #e0e0e0; }
-    h2 { color: #1a3a2a; margin-top: 0; }
-    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-    td { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-    td:first-child { color: #666; width: 40%; }
-    td:last-child { font-weight: 600; color: #1c2b22; }
-    .notes { background: #f9f9f9; border-radius: 6px; padding: 12px; margin-top: 16px; font-size: 13px; color: #444; }
+    ${SHARED_CSS}
+    table{width:100%;border-collapse:collapse;margin-top:4px;}
+    td{padding:9px 12px;border-bottom:1px solid #f0ede6;font-size:13px;vertical-align:top;}
+    td:first-child{color:#7a9080;width:38%;white-space:nowrap;}
+    td:last-child{font-weight:600;color:#1a3a2a;}
+    .badge-free{display:inline-block;background:#fef3c7;border:1px solid #fcd34d;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:700;color:#92400e;margin-left:8px;}
+    .badge-paid{display:inline-block;background:#e0f2f1;border:1px solid #4db6ac;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:700;color:#00695c;margin-left:8px;}
+    .notes-box{background:#f3f8f5;border:1px solid #cfe4d7;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:13px;color:#5a7060;line-height:1.55;}
+    .notes-box strong{color:#1a3a2a;display:block;margin-bottom:6px;}
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>🔔 New Booking Request</h2>
-    <p style="color:#666;font-size:14px;">A new booking has been submitted on the website.</p>
-    <table>
-      <tr><td>Owner</td><td>${data.ownerName}</td></tr>
-      <tr><td>Email</td><td><a href="mailto:${data.email}">${data.email}</a></td></tr>
-      <tr><td>Phone</td><td>${data.phone || '—'}</td></tr>
-      <tr><td>Suburb</td><td>${data.suburb || '—'}</td></tr>
-      <tr><td>Dog</td><td>${data.dogName}</td></tr>
-      <tr><td>Breed &amp; age</td><td>${data.breed || '—'}</td></tr>
-      <tr><td>Service</td><td>${data.service}</td></tr>
-      <tr><td>Preferred start</td><td>${data.preferredDate || '—'}</td></tr>
-      <tr><td>Meet &amp; greet pref</td><td>${data.meetGreetPref}</td></tr>
-    </table>
-    ${data.notes ? `<div class="notes"><strong>Notes:</strong><br>${data.notes}</div>` : ''}
+  <div class="wrapper">
+    <div class="card">
+      ${logoSection()}
+
+      <div class="email-header" style="background:#92400e;">
+        <h1>🔔 New Booking Request</h1>
+        <p>Submitted via the 2 Little Leashes website</p>
+      </div>
+
+      <div class="body">
+        <p class="intro" style="margin-bottom:4px;">
+          A new booking has come in — details below.
+          ${data.bookingType === 'free'
+            ? `<span class="badge-free">Free first walk</span>`
+            : `<span class="badge-paid">Paid booking</span>`}
+        </p>
+
+        <div class="detail-box">
+          <p class="detail-box-title">Owner &amp; Dog</p>
+          <table>
+            <tr><td>Owner</td><td>${data.ownerName}</td></tr>
+            <tr><td>Email</td><td><a href="mailto:${data.email}" style="color:#1a3a2a;">${data.email}</a></td></tr>
+            <tr><td>Phone</td><td>${data.phone || '—'}</td></tr>
+            <tr><td>Suburb</td><td>${data.suburb || '—'}</td></tr>
+            <tr><td>Dog</td><td>${data.dogName}</td></tr>
+            <tr><td>Breed &amp; age</td><td>${data.breed || '—'}</td></tr>
+            <tr><td>Service</td><td>${data.service}</td></tr>
+            <tr><td>Preferred start</td><td>${data.preferredDate || '—'}</td></tr>
+            <tr><td>Meet &amp; greet</td><td>${data.meetGreetPref}</td></tr>
+            ${data.bookingType === 'paid' ? `<tr><td>Payment ref</td><td style="font-family:monospace;letter-spacing:1px;">${data.paymentRef}</td></tr>` : ''}
+          </table>
+        </div>
+
+        ${data.notes ? `<div class="notes-box"><strong>Customer notes:</strong>${data.notes}</div>` : ''}
+      </div>
+
+      ${emailFooter()}
+    </div>
   </div>
 </body>
-</html>
-`
+</html>`
 
   await transporter.sendMail({
     from:    process.env.FROM_EMAIL,
@@ -197,42 +251,46 @@ export async function sendWalkReminder(data: {
 }) {
   const transporter = createTransport()
 
-  const html = `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8">
-<style>
-  body{font-family:'Helvetica Neue',Arial,sans-serif;background:#faf8f4;padding:20px}
-  .card{background:#fff;border-radius:12px;max-width:500px;margin:0 auto;overflow:hidden;border:1px solid #e0ddd6}
-  .header{background:#d97706;padding:24px 28px}
-  .header h1{color:#fff;margin:0;font-size:20px}
-  .body{padding:24px 28px;font-size:14px;color:#1c2b22;line-height:1.6}
-  .checklist{background:#e8f2ec;border-radius:8px;padding:14px 18px;margin:16px 0}
-  .checklist h3{color:#1a3a2a;font-size:12px;text-transform:uppercase;letter-spacing:.5px;margin:0 0 10px}
-  .checklist li{font-size:13px;color:#2d5a3d;margin-bottom:6px}
-</style>
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>${SHARED_CSS}</style>
 </head>
 <body>
-  <div class="card">
-    <div class="header"><h1>⏰ Walk reminder for ${data.dogName} — tomorrow!</h1></div>
-    <div class="body">
-      <p>Kia ora ${data.ownerName}!</p>
-      <p>Just a reminder that <strong>${data.dogName}'s walk is tomorrow at ${data.walkTime}</strong>. Meihana will be there to pick them up. 🐾</p>
-      <div class="checklist">
-        <h3>Before the walk</h3>
-        <ul>
-          <li>Collar and ID tag on</li>
-          <li>Gate or front door unlocked for pick-up</li>
-          <li>Water bowl accessible on return</li>
-          <li>Let us know of any changes via text</li>
-        </ul>
+  <div class="wrapper">
+    <div class="card">
+      ${logoSection()}
+
+      <div class="email-header" style="background:#d97706;">
+        <h1>⏰ Walk reminder for ${data.dogName}!</h1>
+        <p>Tomorrow at ${data.walkTime}</p>
       </div>
-      <p style="color:#666;font-size:13px;">See you tomorrow! 🌿</p>
+
+      <div class="body">
+        <p class="greeting">Kia ora ${data.ownerName}!</p>
+        <p class="intro">
+          Just a friendly reminder that <strong>${data.dogName}'s walk is tomorrow at ${data.walkTime}</strong>.
+          Meihana will be there to pick them up — looking forward to it! 🐾
+        </p>
+
+        <div class="detail-box">
+          <p class="detail-box-title">Before the walk — quick checklist</p>
+          <div class="detail-row"><span class="dl">✓</span><span class="dv" style="font-weight:400;color:#1c2b22;">Collar and ID tag on</span></div>
+          <div class="detail-row"><span class="dl">✓</span><span class="dv" style="font-weight:400;color:#1c2b22;">Gate or front door unlocked for pick-up</span></div>
+          <div class="detail-row"><span class="dl">✓</span><span class="dv" style="font-weight:400;color:#1c2b22;">Water bowl accessible on return</span></div>
+          <div class="detail-row"><span class="dl">✓</span><span class="dv" style="font-weight:400;color:#1c2b22;">Let us know of any changes via text</span></div>
+        </div>
+
+        <p style="font-size:13px;color:#5a7060;margin:20px 0 0;">See you tomorrow — ${data.dogName} is going to have a blast! 🌿</p>
+      </div>
+
+      ${emailFooter()}
     </div>
   </div>
 </body>
-</html>
-`
+</html>`
 
   await transporter.sendMail({
     from:    process.env.FROM_EMAIL,
@@ -252,34 +310,42 @@ export async function sendReviewRequest(data: {
   const transporter = createTransport()
   const reviewUrl = data.googleReviewUrl || 'https://g.page/r/YOUR_GOOGLE_PLACE_ID/review'
 
-  const html = `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8">
-<style>
-  body{font-family:'Helvetica Neue',Arial,sans-serif;background:#faf8f4;padding:20px}
-  .card{background:#fff;border-radius:12px;max-width:500px;margin:0 auto;overflow:hidden;border:1px solid #e0ddd6}
-  .header{background:#1a3a2a;padding:24px 28px}
-  .header h1{color:#fff;margin:0;font-size:20px}
-  .body{padding:24px 28px;font-size:14px;color:#1c2b22;line-height:1.6;text-align:center}
-  .stars{font-size:28px;margin:16px 0}
-  .btn{display:inline-block;background:#d97706;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;margin-top:12px}
-</style>
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>${SHARED_CSS}</style>
 </head>
 <body>
-  <div class="card">
-    <div class="header"><h1>🐾 How was ${data.dogName}'s walk?</h1></div>
-    <div class="body">
-      <p>Kia ora ${data.ownerName}! Hope ${data.dogName} came home happy and tired. 😄</p>
-      <p>If you have 30 seconds, a Google review makes a huge difference for a small local business like ours.</p>
-      <div class="stars">⭐⭐⭐⭐⭐</div>
-      <a href="${reviewUrl}" class="btn">Leave a quick review →</a>
-      <p style="font-size:12px;color:#999;margin-top:20px;">No worries if not — see you on the next walk!</p>
+  <div class="wrapper">
+    <div class="card">
+      ${logoSection()}
+
+      <div class="email-header" style="background:#1a3a2a;">
+        <h1>🐾 How was ${data.dogName}'s walk?</h1>
+        <p>We'd love to hear from you</p>
+      </div>
+
+      <div class="body" style="text-align:center;">
+        <p class="greeting" style="text-align:center;">Kia ora ${data.ownerName}!</p>
+        <p class="intro" style="text-align:center;">
+          Hope ${data.dogName} came home happy and tired! 😄<br>
+          If you have 30 seconds, a Google review makes a huge difference for a small local business like ours.
+        </p>
+
+        <div style="font-size:30px;margin:20px 0;">⭐⭐⭐⭐⭐</div>
+
+        <a href="${reviewUrl}" class="btn btn-amber">Leave a quick review →</a>
+
+        <p style="font-size:12px;color:#a0b0a5;margin:24px 0 0;">No worries if not — we'll see you on the next walk! 🌿</p>
+      </div>
+
+      ${emailFooter()}
     </div>
   </div>
 </body>
-</html>
-`
+</html>`
 
   await transporter.sendMail({
     from:    process.env.FROM_EMAIL,
@@ -298,44 +364,60 @@ export async function sendWinBackEmail(data: {
 }) {
   const transporter = createTransport()
 
-  const html = `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8">
-<style>
-  body{font-family:'Helvetica Neue',Arial,sans-serif;background:#faf8f4;padding:20px}
-  .card{background:#fff;border-radius:12px;max-width:500px;margin:0 auto;overflow:hidden;border:1px solid #e0ddd6}
-  .header{background:#1a3a2a;padding:24px 28px}
-  .header h1{color:#fff;margin:0;font-size:20px}
-  .body{padding:24px 28px;font-size:14px;color:#1c2b22;line-height:1.6}
-  .coupon{background:#fef3c7;border:2px dashed #f59e0b;border-radius:10px;padding:16px;text-align:center;margin:20px 0}
-  .coupon-code{font-size:22px;font-weight:800;color:#1a3a2a;letter-spacing:2px;margin:6px 0}
-  .btn{display:inline-block;background:#d97706;color:#fff;text-decoration:none;padding:11px 24px;border-radius:8px;font-weight:700;font-size:14px;margin-top:8px}
-</style>
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    ${SHARED_CSS}
+    .coupon{background:#fffbeb;border:2px dashed #f59e0b;border-radius:10px;padding:20px;text-align:center;margin:20px 0;}
+    .coupon-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#92400e;margin:0 0 8px;}
+    .coupon-code{font-size:24px;font-weight:800;color:#1a3a2a;letter-spacing:3px;margin:6px 0;}
+    .coupon-note{font-size:12px;color:#92400e;margin:6px 0 0;}
+  </style>
 </head>
 <body>
-  <div class="card">
-    <div class="header"><h1>🐾 We miss ${data.dogName}!</h1></div>
-    <div class="body">
-      <p>Kia ora ${data.ownerName}!</p>
-      <p>It's been a little while since ${data.dogName} was out on the trails with us, and we've been thinking about them. 🌿</p>
-      <p>If life got busy, we totally get it — we'd love to have ${data.dogName} back on a walk when you're ready.</p>
-      ${data.discountCode ? `
-      <div class="coupon">
-        <p style="font-size:12px;color:#92400e;margin:0;text-transform:uppercase;letter-spacing:.5px;">Welcome back discount</p>
-        <div class="coupon-code">${data.discountCode}</div>
-        <p style="font-size:12px;color:#92400e;margin:4px 0 0;">10% off your next walk — just mention this code</p>
+  <div class="wrapper">
+    <div class="card">
+      ${logoSection()}
+
+      <div class="email-header" style="background:#1a3a2a;">
+        <h1>🐾 We miss ${data.dogName}!</h1>
+        <p>It's been a while — come back for a walk</p>
       </div>
-      ` : ''}
-      <div style="text-align:center">
-        <a href="${process.env.NEXT_PUBLIC_SITE_URL}/book" class="btn">Book a walk for ${data.dogName} →</a>
+
+      <div class="body">
+        <p class="greeting">Kia ora ${data.ownerName}!</p>
+        <p class="intro">
+          It's been a little while since ${data.dogName} was out on the trails with us, and we've been thinking about them. 🌿
+        </p>
+        <p style="font-size:14px;color:#5a7060;line-height:1.65;margin:0 0 20px;">
+          If life got busy, we totally get it — we'd love to have ${data.dogName} back on a walk whenever you're ready.
+        </p>
+
+        ${data.discountCode ? `
+        <div class="coupon">
+          <p class="coupon-label">Welcome back discount</p>
+          <div class="coupon-code">${data.discountCode}</div>
+          <p class="coupon-note">10% off your next walk — just mention this code when booking</p>
+        </div>
+        ` : ''}
+
+        <div style="text-align:center;margin-top:24px;">
+          <a href="${process.env.NEXT_PUBLIC_SITE_URL}/book" class="btn btn-amber">Book a walk for ${data.dogName} →</a>
+        </div>
+
+        <p style="font-size:12px;color:#a0b0a5;margin:24px 0 0;text-align:center;">
+          Miss you both! — Meihana &amp; the 2 Little Leashes team 🐾
+        </p>
       </div>
-      <p style="font-size:12px;color:#999;margin-top:20px;">Miss you both! — Meihana &amp; the 2 Little Leashes team 🐾</p>
+
+      ${emailFooter()}
     </div>
   </div>
 </body>
-</html>
-`
+</html>`
 
   await transporter.sendMail({
     from:    process.env.FROM_EMAIL,
@@ -354,56 +436,50 @@ export async function sendBookingConfirmed(data: {
 }) {
   const transporter = createTransport()
 
-  const html = `
-<!DOCTYPE html>
-<html>
+  const html = `<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #faf8f4; margin: 0; padding: 20px; color: #1c2b22; }
-    .card { background: #fff; border-radius: 12px; max-width: 540px; margin: 0 auto; overflow: hidden; border: 1px solid #e0ddd6; }
-    .header { background: #00897b; padding: 28px 32px; }
-    .header h1 { color: #fff; font-size: 22px; margin: 0 0 4px; }
-    .header p { color: rgba(255,255,255,0.7); margin: 0; font-size: 13px; }
-    .body { padding: 28px 32px; }
-    .badge { display: inline-block; background: #e0f2f1; border: 1px solid #4db6ac; border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 700; color: #00695c; letter-spacing: .5px; margin-bottom: 20px; }
-    .greeting { font-size: 16px; margin-bottom: 16px; }
-    .message { font-size: 14px; color: #5a7060; line-height: 1.7; background: #e0f2f1; border-radius: 8px; padding: 18px 20px; margin: 16px 0; }
-    .footer { background: #f0ede6; padding: 20px 32px; font-size: 12px; color: #93a89a; text-align: center; }
-    .footer a { color: #00695c; text-decoration: none; font-weight: 600; }
-    @media (max-width: 600px) { .body, .header, .footer { padding: 20px; } }
+    ${SHARED_CSS}
+    .verified-badge{display:inline-block;background:#e0f2f1;border:1px solid #4db6ac;border-radius:20px;padding:6px 18px;font-size:13px;font-weight:700;color:#00695c;letter-spacing:.5px;margin-bottom:18px;}
+    .confirm-box{background:#e8f8f4;border:1px solid #a7dece;border-radius:10px;padding:20px 22px;margin:16px 0;font-size:14px;color:#1c2b22;line-height:1.7;}
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="header">
-      <h1>✅ Booking Confirmed!</h1>
-      <p>2 Little Leashes Dog Walkers · Rotorua</p>
-    </div>
-    <div class="body">
-      <div class="badge">✓ Payment verified</div>
-      <p class="greeting">Kia ora ${data.ownerName}! 🎉</p>
-      <div class="message">
-        <p style="margin:0 0 10px;">Your booking for <strong>${data.dogName}</strong> is confirmed!</p>
-        ${data.preferredDate ? `<p style="margin:0 0 10px;">We'll see you on <strong>${data.preferredDate}</strong>.</p>` : ''}
-        <p style="margin:0;">Meihana will be in touch with pickup details. 🐾</p>
+  <div class="wrapper">
+    <div class="card">
+      ${logoSection()}
+
+      <div class="email-header" style="background:#1D9E75;">
+        <h1>✅ Booking Confirmed!</h1>
+        <p>2 Little Leashes Dog Walkers · Rotorua</p>
       </div>
-      <p style="font-size:13px;color:#5a7060;margin-top:20px;">
-        If you have any questions, just reply to this email. We can't wait to take ${data.dogName} out on an adventure!
-      </p>
-      <p style="font-size:13px;color:#5a7060;margin-top:16px;">
-        Ngā mihi nui — Meihana &amp; the 2 Little Leashes team 🐾
-      </p>
-    </div>
-    <div class="footer">
-      <p>Questions? Reply to this email or call/text Meihana directly.</p>
-      <p style="margin-top:8px;"><a href="${process.env.NEXT_PUBLIC_SITE_URL}">2littleleashes.co.nz</a> · Rotorua, New Zealand</p>
+
+      <div class="body">
+        <div class="verified-badge">✓ Payment verified</div>
+        <p class="greeting">Kia ora ${data.ownerName}! 🎉</p>
+
+        <div class="confirm-box">
+          <p style="margin:0 0 10px;">Your booking for <strong>${data.dogName}</strong> is confirmed!</p>
+          ${data.preferredDate ? `<p style="margin:0 0 10px;">We'll see you on <strong>${data.preferredDate}</strong>.</p>` : ''}
+          <p style="margin:0;">Meihana will be in touch with pickup details. 🐾</p>
+        </div>
+
+        <p style="font-size:13px;color:#5a7060;margin:20px 0 0;line-height:1.65;">
+          If you have any questions, just reply to this email. We can't wait to take ${data.dogName} out on an adventure!
+        </p>
+        <p style="font-size:13px;color:#5a7060;margin:12px 0 0;">
+          Ngā mihi nui — Meihana &amp; the 2 Little Leashes team 🐾
+        </p>
+      </div>
+
+      ${emailFooter()}
     </div>
   </div>
 </body>
-</html>
-`
+</html>`
 
   await transporter.sendMail({
     from:    process.env.FROM_EMAIL,

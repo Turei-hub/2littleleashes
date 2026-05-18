@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
       meetGreetPref,
       notes,
       bookingType,
+      screenshotUrl,
     } = body
 
     // Basic server-side validation
@@ -42,6 +43,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 })
     }
 
+    // Server-side guard: treat as returning if any prior booking exists for this email,
+    // regardless of what the client sent. Prevents direct API bypass.
+    let resolvedBookingType: 'free' | 'paid' = bookingType === 'paid' ? 'paid' : 'free'
+    if (resolvedBookingType === 'free') {
+      const { count } = await supabase
+        .from('bookings')
+        .select('id', { count: 'exact', head: true })
+        .eq('email', email.trim().toLowerCase())
+      if ((count ?? 0) > 0) resolvedBookingType = 'paid'
+    }
+
     const bookingData = {
       ownerName:     ownerName.trim(),
       email:         email.trim().toLowerCase(),
@@ -54,7 +66,7 @@ export async function POST(req: NextRequest) {
       meetGreetPref: meetGreetPref.trim(),
       notes:         notes?.trim()        || '',
       paymentRef:    buildPaymentRef(dogName.trim(), ownerName.trim()),
-      bookingType:   (bookingType === 'paid' ? 'paid' : 'free') as 'free' | 'paid',
+      bookingType:   resolvedBookingType,
     }
 
     // 1. Save to Supabase (required — fail fast if this errors)
@@ -69,8 +81,9 @@ export async function POST(req: NextRequest) {
       preferred_date:    bookingData.preferredDate,
       meet_greet_pref:   bookingData.meetGreetPref,
       notes:             bookingData.notes,
-      payment_status:    'none',
-      payment_reference: bookingData.paymentRef,
+      payment_status:         screenshotUrl ? 'uploaded' : 'none',
+      payment_screenshot_url: screenshotUrl || null,
+      payment_reference:      bookingData.paymentRef,
     })
 
     if (dbError) {

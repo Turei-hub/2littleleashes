@@ -1,16 +1,26 @@
 // src/app/page.tsx
 import Link from 'next/link'
 import Image from 'next/image'
+import { Heart, Shield, Smile, DollarSign, Sparkles, Zap, Camera, Car, MapPin, PawPrint } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ServiceCard from '@/components/ServiceCard'
 import { SERVICES, POLICIES } from '@/lib/data'
 
-const WHY_CHOOSE = [
-  { icon: '🐾', title: 'Local Family Business', body: 'Safe, friendly & full of care' },
-  { icon: '🐶', title: 'Always Supervised by Dad', body: 'Owner and main point of contact' },
-  { icon: '🦴', title: 'Love, Laughs & Happy Tails', body: 'Every walk comes with genuine fun and care' },
-  { icon: '💌', title: 'Flexible & Affordable', body: 'For every whānau' },
+const WHY_CHOOSE: { icon: LucideIcon; title: string; body: string }[] = [
+  { icon: Heart,      title: 'Local Family Business',      body: 'Safe, friendly & full of care' },
+  { icon: Shield,     title: 'Always Supervised by Dad',   body: 'Owner and main point of contact' },
+  { icon: Smile,      title: 'Love, Laughs & Happy Tails', body: 'Every walk comes with genuine fun and care' },
+  { icon: DollarSign, title: 'Flexible & Affordable',      body: 'For every whānau' },
+]
+
+const HERO_PILLS: { icon: LucideIcon; text: string }[] = [
+  { icon: Sparkles, text: 'First walk FREE' },
+  { icon: Zap,      text: 'Sunday 10km endurance run' },
+  { icon: Camera,   text: 'Photo update every session' },
+  { icon: Car,      text: 'Free pick-up & drop-off' },
+  { icon: MapPin,   text: 'GPS every walk' },
 ]
 
 const REVIEWS = [
@@ -64,7 +74,8 @@ export default function HomePage() {
         <div className="relative z-10 mx-auto max-w-5xl">
           <div className="max-w-2xl animate-fade-up">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/75">
-              📍 Rotorua, New Zealand · Est. 2022
+              <MapPin size={12} />
+              Rotorua, New Zealand · Est. 2022
             </div>
 
             <h1 className="font-display text-4xl font-bold leading-tight text-white sm:text-5xl">
@@ -86,18 +97,13 @@ export default function HomePage() {
 
             {/* Pills */}
             <div className="mt-8 flex flex-wrap gap-2">
-              {[
-                '🎉 First walk FREE',
-                '🏃 Sunday 10km endurance run',
-                '📸 Photo update every session',
-                '🚗 Free pick-up & drop-off',
-                '📍 GPS every walk',
-              ].map(pill => (
+              {HERO_PILLS.map(({ icon: PillIcon, text }) => (
                 <span
-                  key={pill}
-                  className="rounded-full border border-white/15 bg-white/8 px-3 py-1 text-xs text-white/70"
+                  key={text}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/8 px-3 py-1 text-xs text-white/70"
                 >
-                  {pill}
+                  <PillIcon size={11} />
+                  {text}
                 </span>
               ))}
             </div>
@@ -155,7 +161,9 @@ export default function HomePage() {
       {/* ── FREE FIRST WALK BANNER ────────────────────────────────────────────── */}
       <section className="bg-amber-50 border-y border-amber-200 px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl flex flex-col items-center text-center sm:flex-row sm:text-left sm:gap-8">
-          <div className="text-5xl mb-4 sm:mb-0">🎉</div>
+          <div className="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-forest-700 sm:mb-0">
+            <Sparkles className="h-7 w-7 text-amber-400" />
+          </div>
           <div className="flex-1">
             <h2 className="font-display text-2xl font-bold text-amber-900">Your first walk is FREE</h2>
             <p className="mt-1 text-sm text-amber-800">
@@ -173,15 +181,20 @@ export default function HomePage() {
         <p className="text-xs font-semibold uppercase tracking-wider text-forest-600/60">Why choose us</p>
         <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">We&apos;re different — here&apos;s why</h2>
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
-          {WHY_CHOOSE.map(item => (
-            <div key={item.title} className="flex gap-4 rounded-xl border border-forest-700/10 bg-forest-50 p-5">
-              <div className="text-3xl shrink-0">{item.icon}</div>
-              <div>
-                <h3 className="font-semibold text-forest-700">{item.title}</h3>
-                <p className="mt-1 text-sm text-forest-600/80">{item.body}</p>
+          {WHY_CHOOSE.map(item => {
+            const Icon = item.icon
+            return (
+              <div key={item.title} className="flex gap-4 rounded-xl border border-forest-700/10 bg-forest-50 p-5">
+                <div className="shrink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-forest-700">
+                  <Icon className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-forest-700">{item.title}</h3>
+                  <p className="mt-1 text-sm text-forest-600/80">{item.body}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </section>
 
@@ -222,20 +235,27 @@ export default function HomePage() {
         <p className="mt-2 text-sm text-forest-600">Simple policies, no surprises.</p>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {POLICIES.map(p => (
-            <div key={p.title} className="rounded-xl bg-forest-50 border border-forest-700/10 p-5">
-              <div className="mb-2 text-2xl">{p.icon}</div>
-              <h3 className="font-semibold text-forest-700 text-sm">{p.title}</h3>
-              <p className="mt-1 text-xs text-forest-600 leading-relaxed">{p.body}</p>
-            </div>
-          ))}
+          {POLICIES.map(p => {
+            const PIcon = p.icon
+            return (
+              <div key={p.title} className="rounded-xl bg-forest-50 border border-forest-700/10 p-5">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-forest-700">
+                  <PIcon className="h-5 w-5 text-white" />
+                </div>
+                <h3 className="font-semibold text-forest-700 text-sm">{p.title}</h3>
+                <p className="mt-1 text-xs text-forest-600 leading-relaxed">{p.body}</p>
+              </div>
+            )
+          })}
         </div>
       </section>
 
       {/* ── FINAL CTA ────────────────────────────────────────────────────────── */}
       <section className="bg-forest-700 px-4 py-16 sm:px-6 lg:px-8 text-center">
         <div className="mx-auto max-w-xl">
-          <p className="text-4xl mb-4">🐾</p>
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-amber-500">
+            <PawPrint className="h-7 w-7 text-white" />
+          </div>
           <h2 className="font-display text-3xl font-bold text-white">Ready to get started?</h2>
           <p className="mt-3 text-white/65 text-sm">
             Fill out the booking form and Meihana will be in touch within 24 hours to arrange your free meet &amp; greet.

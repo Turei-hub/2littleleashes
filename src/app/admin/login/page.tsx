@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
+import { PawPrint } from 'lucide-react'
 
 const supabase = createBrowserClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -38,7 +39,9 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         <div className="rounded-2xl border border-forest-700/10 bg-white p-8 shadow-sm">
           <div className="mb-6 text-center">
-            <p className="mb-1 text-2xl">🐾</p>
+            <div className="mx-auto mb-1 flex h-12 w-12 items-center justify-center rounded-xl bg-forest-700">
+              <PawPrint className="h-6 w-6 text-white" />
+            </div>
             <h1 className="text-xl font-bold text-forest-700">Admin Login</h1>
             <p className="mt-1 text-xs text-forest-600/60">2 Little Leashes</p>
           </div>

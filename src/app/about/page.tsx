@@ -1,6 +1,9 @@
 // src/app/about/page.tsx
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
+import { Camera, MapPin, Compass, Car, Pill, Handshake, PawPrint } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
@@ -9,13 +12,13 @@ export const metadata: Metadata = {
   description: 'Meet Meihana, the founder and sole walker behind 2 Little Leashes Dog Walkers in Rotorua, NZ.',
 }
 
-const WHY_US = [
-  { icon: '📸', title: 'Photo after every session', body: 'We send a photo update after every walk or visit so you can see your dog having the time of their life.' },
-  { icon: '📍', title: 'GPS-tracked walks',          body: 'Every walk is GPS tracked so you know exactly which Rotorua trails your dog explored.' },
-  { icon: '🌿', title: 'Rotorua&apos;s best locations',   body: 'Forests, lake tracks, bush paths — we mix up locations so walks stay exciting and stimulating.' },
-  { icon: '🚗', title: 'Free pick-up & drop-off',    body: 'We come to you. Your dog is collected and returned safely from your home.' },
-  { icon: '💊', title: 'Medical care welcome',        body: 'Medication administration and dogs with special needs are welcome — just let us know at booking.' },
-  { icon: '🤝', title: 'Meet & greet first',          body: 'Before any walk we visit your home, meet your dog, and understand their needs. No surprises.' },
+const WHY_US: { icon: LucideIcon; title: string; body: string }[] = [
+  { icon: Camera,    title: 'Photo after every session',   body: 'We send a photo update after every walk or visit so you can see your dog having the time of their life.' },
+  { icon: MapPin,    title: 'GPS-tracked walks',           body: 'Every walk is GPS tracked so you know exactly which Rotorua trails your dog explored.' },
+  { icon: Compass,   title: "Rotorua's best locations",    body: 'Forests, lake tracks, bush paths — we mix up locations so walks stay exciting and stimulating.' },
+  { icon: Car,       title: 'Free pick-up & drop-off',     body: 'We come to you. Your dog is collected and returned safely from your home.' },
+  { icon: Pill,      title: 'Medical care welcome',        body: 'Medication administration and dogs with special needs are welcome — just let us know at booking.' },
+  { icon: Handshake, title: 'Meet & greet first',          body: 'Before any walk we visit your home, meet your dog, and understand their needs. No surprises.' },
 ]
 
 export default function AboutPage() {
@@ -37,8 +40,8 @@ export default function AboutPage() {
 
         {/* Bio card */}
         <div className="rounded-xl bg-forest-700 p-8 flex flex-col sm:flex-row gap-6 items-start">
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-amber-500 text-4xl">
-            👨
+          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full">
+            <Image src="/images/meihana.jpg" alt="Meihana" fill className="object-cover" />
           </div>
           <div>
             <h2 className="font-display text-2xl font-bold text-white">Meihana</h2>
@@ -56,19 +59,26 @@ export default function AboutPage() {
         <div>
           <h2 className="font-display text-2xl font-bold text-forest-700 mb-6">Why clients choose us</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {WHY_US.map(w => (
-              <div key={w.title} className="rounded-xl bg-forest-50 border border-forest-700/10 p-5">
-                <div className="mb-2 text-2xl">{w.icon}</div>
-                <h3 className="font-semibold text-forest-700 text-sm">{w.title}</h3>
-                <p className="mt-1 text-xs text-forest-600 leading-relaxed">{w.body}</p>
-              </div>
-            ))}
+            {WHY_US.map(w => {
+              const WIcon = w.icon
+              return (
+                <div key={w.title} className="rounded-xl bg-forest-50 border border-forest-700/10 p-5">
+                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-forest-700">
+                    <WIcon className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-forest-700 text-sm">{w.title}</h3>
+                  <p className="mt-1 text-xs text-forest-600 leading-relaxed">{w.body}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
 
         {/* CTA */}
         <div className="rounded-xl bg-amber-50 border border-amber-200 p-8 text-center">
-          <p className="text-3xl mb-3">🐾</p>
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500">
+            <PawPrint className="h-6 w-6 text-white" />
+          </div>
           <h2 className="font-display text-2xl font-bold text-amber-900 mb-2">Ready to meet us?</h2>
           <p className="text-sm text-amber-800 mb-5">Book online and we'll arrange a free meet &amp; greet at your home. First walk is on us.</p>
           <Link href="/book" className="btn-primary px-6 py-3">Book your free first walk →</Link>

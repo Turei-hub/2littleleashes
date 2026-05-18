@@ -1,5 +1,13 @@
 // src/components/Footer.tsx
 import Link from 'next/link'
+import { PawPrint, Clock, CalendarDays, MapPin, Car } from 'lucide-react'
+
+const HOURS_INFO = [
+  { icon: Clock,        text: 'Mon–Fri: 7:00 AM – 2:00 PM' },
+  { icon: CalendarDays, text: 'Weekend: +$20 surcharge' },
+  { icon: MapPin,       text: 'Based in Rotorua, NZ' },
+  { icon: Car,          text: 'Free pick-up & drop-off' },
+]
 
 export default function Footer() {
   return (
@@ -9,7 +17,9 @@ export default function Footer() {
 
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-lg">🐾</div>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500">
+                <PawPrint className="h-4 w-4 text-white" />
+              </div>
               <span className="font-display text-sm font-semibold text-white">2 Little Leashes</span>
             </div>
             <p className="text-xs leading-relaxed">
@@ -36,10 +46,12 @@ export default function Footer() {
           <div>
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/40">Hours & info</h3>
             <ul className="space-y-1.5 text-xs">
-              <li>🕖 Mon–Fri: 7:00 AM – 2:00 PM</li>
-              <li>📅 Weekend: +$20 surcharge</li>
-              <li>📍 Based in Rotorua, NZ</li>
-              <li>🚗 Free pick-up & drop-off</li>
+              {HOURS_INFO.map(({ icon: InfoIcon, text }) => (
+                <li key={text} className="flex items-center gap-1.5">
+                  <InfoIcon size={11} className="shrink-0 text-white/40" />
+                  {text}
+                </li>
+              ))}
             </ul>
           </div>
         </div>

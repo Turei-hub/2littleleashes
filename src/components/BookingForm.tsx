@@ -2,8 +2,9 @@
 
 import { useState, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { CheckCircle, AlertCircle, Loader } from 'lucide-react'
+import { CheckCircle, AlertCircle, Loader, Upload, Sparkles, Handshake, CreditCard, Zap } from 'lucide-react'
 import { SERVICE_OPTIONS, MEET_GREET_OPTIONS } from '@/lib/data'
+import { supabase } from '@/lib/supabase'
 
 interface FormValues {
   ownerName:    string
@@ -44,8 +45,9 @@ export default function BookingForm({
   initialEmail: string
   onReset: () => void
 }) {
-  const [status,  setStatus]  = useState<Status>('idle')
-  const [message, setMessage] = useState('')
+  const [status,         setStatus]         = useState<Status>('idle')
+  const [message,        setMessage]        = useState('')
+  const [screenshotFile, setScreenshotFile] = useState<File | null>(null)
 
   const {
     register,
@@ -55,8 +57,8 @@ export default function BookingForm({
     watch,
   } = useForm<FormValues>({
     defaultValues: {
-      email:        initialEmail,
-      service:      SERVICE_OPTIONS[0].value,
+      email:         initialEmail,
+      service:       SERVICE_OPTIONS[0].value,
       meetGreetPref: MEET_GREET_OPTIONS[0],
     },
   })
@@ -73,16 +75,34 @@ export default function BookingForm({
   const onSubmit = async (data: FormValues) => {
     setStatus('loading')
     try {
+      let screenshotUrl: string | null = null
+      if (flow === 'paid' && screenshotFile) {
+        const ext      = screenshotFile.name.split('.').pop()?.toLowerCase() || 'jpg'
+        const safeName = data.dogName.trim().toLowerCase().replace(/[^a-z0-9]/g, '-')
+        const path     = `${safeName}-${Date.now()}.${ext}`
+
+        const { data: upload, error: uploadError } = await supabase.storage
+          .from('payment-screenshots')
+          .upload(path, screenshotFile, { contentType: screenshotFile.type })
+
+        if (uploadError) throw new Error('Could not upload screenshot. Please try again.')
+
+        screenshotUrl = supabase.storage
+          .from('payment-screenshots')
+          .getPublicUrl(upload.path).data.publicUrl
+      }
+
       const res  = await fetch('/api/book', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ ...data, bookingType: flow }),
+        body:    JSON.stringify({ ...data, bookingType: flow, screenshotUrl }),
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Unknown error')
       setStatus('success')
       setMessage(json.message)
       reset()
+      setScreenshotFile(null)
     } catch (err: unknown) {
       setStatus('error')
       setMessage(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
@@ -118,7 +138,9 @@ export default function BookingForm({
       {flow === 'free' ? (
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
           <div className="flex items-start gap-3">
-            <span className="text-2xl shrink-0">🎉</span>
+            <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg bg-forest-700">
+              <Sparkles className="h-4 w-4 text-white" />
+            </div>
             <div>
               <p className="font-semibold text-amber-900">Your first walk is FREE</p>
               <p className="mt-0.5 text-sm text-amber-800">
@@ -139,7 +161,7 @@ export default function BookingForm({
           <div className="rounded-xl border border-teal-200 bg-teal-50 p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-semibold text-teal-900">👋 Welcome back!</p>
+                <p className="font-semibold text-teal-900">Welcome back!</p>
                 <p className="mt-0.5 text-sm text-teal-800">Returning customer · {initialEmail}</p>
               </div>
               <button
@@ -171,7 +193,9 @@ export default function BookingForm({
       {/* Meet & Greet notice — free flow only */}
       {flow === 'free' && (
         <div className="flex gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4">
-          <span className="text-xl shrink-0">🤝</span>
+          <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg bg-forest-700">
+            <Handshake className="h-4 w-4 text-white" />
+          </div>
           <p className="text-sm text-amber-800">
             <strong>Meet &amp; greet required for new clients.</strong> Once you submit, Meihana will reach out to schedule a free visit at your home before your first walk.
           </p>
@@ -281,11 +305,12 @@ export default function BookingForm({
         />
       </div>
 
-      {/* Payment reference — paid flow only, shown when ref is computable */}
+      {/* Payment reference — paid flow only */}
       {flow === 'paid' && paymentRef && (
         <div className="rounded-lg border border-teal-300 bg-teal-50 p-4">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-teal-700">
-            💳 Your payment details
+          <p className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-teal-700">
+            <CreditCard size={13} className="shrink-0" />
+            Your payment details
           </p>
           <div className="space-y-1.5 text-sm">
             <div className="flex justify-between">
@@ -309,6 +334,36 @@ export default function BookingForm({
         </div>
       )}
 
+      {/* Screenshot upload — paid flow only */}
+      {flow === 'paid' && (
+        <div className="field">
+          <label htmlFor="screenshot">
+            Payment screenshot
+            <span className="ml-1 text-xs font-normal text-forest-600/50">
+              — or reply to your confirmation email
+            </span>
+          </label>
+          <label
+            htmlFor="screenshot"
+            className="flex cursor-pointer items-center gap-3 rounded-lg border border-dashed border-forest-700/20 bg-forest-50 px-4 py-3 text-sm text-forest-600/60 transition hover:border-teal-400 hover:bg-teal-50 hover:text-teal-700"
+          >
+            <Upload size={15} className="shrink-0" />
+            {screenshotFile ? (
+              <span className="font-medium text-teal-700 truncate">{screenshotFile.name}</span>
+            ) : (
+              <span>Tap to upload screenshot of your bank transfer</span>
+            )}
+            <input
+              id="screenshot"
+              type="file"
+              accept="image/*"
+              className="sr-only"
+              onChange={e => setScreenshotFile(e.target.files?.[0] ?? null)}
+            />
+          </label>
+        </div>
+      )}
+
       {/* Error banner */}
       {status === 'error' && (
         <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
@@ -321,7 +376,8 @@ export default function BookingForm({
       <div className="flex items-center justify-between flex-wrap gap-3">
         <p className="flex items-center gap-2 text-xs text-forest-600/60">
           <span className="inline-flex items-center gap-1 rounded-full bg-forest-50 px-2 py-0.5 text-[10px] font-semibold text-forest-700">
-            ⚡ Instant email
+            <Zap size={10} />
+            Instant email
           </span>
           {flow === 'free' ? 'Confirmation sent straight to your inbox' : 'Payment details sent to your inbox'}
         </p>

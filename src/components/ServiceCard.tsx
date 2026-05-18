@@ -1,9 +1,10 @@
 // src/components/ServiceCard.tsx
 import Link from 'next/link'
 import clsx from 'clsx'
+import type { LucideIcon } from 'lucide-react'
 
 interface ServiceCardProps {
-  icon:       string
+  icon:       LucideIcon
   title:      string
   tagline:    string
   priceLabel: string
@@ -14,7 +15,7 @@ interface ServiceCardProps {
 }
 
 export default function ServiceCard({
-  icon,
+  icon: Icon,
   title,
   tagline,
   priceLabel,
@@ -32,7 +33,9 @@ export default function ServiceCard({
           : 'border-forest-700/10 bg-white hover:border-forest-700/25 hover:shadow-sm'
       )}
     >
-      <div className="mb-3 text-3xl">{icon}</div>
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-forest-700">
+        <Icon className="h-5 w-5 text-white" />
+      </div>
       {badge && (
         <span className="mb-2 inline-block rounded-full bg-amber-500 px-2.5 py-0.5 text-[10px] font-bold tracking-wide text-white">
           {badge}

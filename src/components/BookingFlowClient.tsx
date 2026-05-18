@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Loader, Mail } from 'lucide-react'
+import { Loader, Mail, PawPrint, Sparkles } from 'lucide-react'
 import BookingForm from '@/components/BookingForm'
 
 type Step = 'email' | 'free' | 'paid'
@@ -29,7 +29,8 @@ export default function BookingFlowClient() {
       const { isReturning } = await res.json()
       setStep(isReturning ? 'paid' : 'free')
     } catch {
-      setStep('free')
+      // Default to paid on failure — safer than giving everyone a free walk
+      setStep('paid')
     } finally {
       setChecking(false)
     }
@@ -40,8 +41,8 @@ export default function BookingFlowClient() {
       <div className="mx-auto max-w-md">
         <div className="rounded-xl border border-forest-700/10 bg-white p-8 shadow-sm">
           <div className="mb-6 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-2xl">
-              🐾
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-forest-700">
+              <PawPrint className="h-7 w-7 text-white" />
             </div>
             <h2 className="font-display text-xl font-bold text-forest-700">Let's get you booked</h2>
             <p className="mt-1 text-sm text-forest-600/70">
@@ -79,7 +80,10 @@ export default function BookingFlowClient() {
           </form>
 
           <div className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-center text-xs text-amber-800">
-            🎉 <strong>First time?</strong> Your first walk is completely FREE — no payment needed!
+            <span className="inline-flex items-center gap-1.5">
+              <Sparkles size={12} className="text-amber-600" />
+              <strong>First time?</strong>
+            </span>{' '}Your first walk is completely FREE — no payment needed!
           </div>
         </div>
       </div>

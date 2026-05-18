@@ -1,21 +1,26 @@
 // src/components/MarqueeBanner.tsx
+import { PawPrint, MapPin, Camera, Car, Zap, DollarSign, Shield } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
-const ITEMS = [
-  '🐾 First walk FREE for new clients',
-  '🦮 GPS tracked every walk',
-  '📸 Photo update every session',
-  '🚗 Free pick-up & drop-off',
-  '🏃 Sunday endurance runs 10km+',
-  '💌 Flexible & affordable for every whānau',
-  '🐶 Supervised by Dad — always',
+const ITEMS: { icon: LucideIcon; text: string }[] = [
+  { icon: PawPrint,   text: 'First walk FREE for new clients' },
+  { icon: MapPin,     text: 'GPS tracked every walk' },
+  { icon: Camera,     text: 'Photo update every session' },
+  { icon: Car,        text: 'Free pick-up & drop-off' },
+  { icon: Zap,        text: 'Sunday endurance runs 10km+' },
+  { icon: DollarSign, text: 'Flexible & affordable for every whānau' },
+  { icon: Shield,     text: 'Supervised by Dad — always' },
 ]
 
 function BannerContent() {
   return (
     <>
-      {ITEMS.map((item, i) => (
-        <span key={i} className="inline-flex items-center shrink-0">
-          <span>{item}</span>
+      {ITEMS.map(({ icon: Icon, text }) => (
+        <span key={text} className="inline-flex items-center shrink-0">
+          <span className="inline-flex items-center gap-1.5">
+            <Icon size={13} />
+            {text}
+          </span>
           <span className="mx-8 opacity-40">·</span>
         </span>
       ))}
