@@ -89,6 +89,8 @@ export default function BookingsSection({
 
   return (
     <>
+      <h2 className="mb-3 text-base font-semibold text-forest-700">Bookings</h2>
+
       {/* Filter bar */}
       <div className="mb-4 flex flex-wrap gap-2">
         {FILTERS.map(f => (
