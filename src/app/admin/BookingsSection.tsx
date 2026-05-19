@@ -171,7 +171,7 @@ export default function BookingsSection({ bookings }: { bookings: Booking[] }) {
                       <td className="px-4 py-3">
                         <p className="font-medium text-forest-700">{b.owner_name}</p>
                         <p className="text-xs text-forest-600/60">{b.email}</p>
-                        {b.phone && <p className="text-xs text-forest-600/60">{b.phone}</p>}
+                        {b.phone && <a href={`tel:${b.phone.replace(/\s/g, '')}`} className="text-xs text-forest-600/60 hover:text-forest-700 hover:underline">{b.phone}</a>}
                         {b.suburb && <p className="text-xs text-forest-600/50">{b.suburb}</p>}
                       </td>
                       <td className="px-4 py-3">

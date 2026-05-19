@@ -1,8 +1,10 @@
 // src/components/Footer.tsx
+import type { LucideIcon } from 'lucide-react'
 import Link from 'next/link'
-import { PawPrint, Clock, CalendarDays, MapPin, Car } from 'lucide-react'
+import { PawPrint, Clock, CalendarDays, MapPin, Car, Phone } from 'lucide-react'
 
-const HOURS_INFO = [
+const HOURS_INFO: { icon: LucideIcon; text: string; href?: string }[] = [
+  { icon: Phone,        text: '021 156 5571',              href: 'tel:+64211565571' },
   { icon: Clock,        text: 'Mon–Fri: 7:00 AM – 2:00 PM' },
   { icon: CalendarDays, text: 'Weekend: +$20 surcharge' },
   { icon: MapPin,       text: 'Based in Rotorua, NZ' },
@@ -46,10 +48,12 @@ export default function Footer() {
           <div>
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/40">Hours & info</h3>
             <ul className="space-y-1.5 text-xs">
-              {HOURS_INFO.map(({ icon: InfoIcon, text }) => (
+              {HOURS_INFO.map(({ icon: InfoIcon, text, href }) => (
                 <li key={text} className="flex items-center gap-1.5">
                   <InfoIcon size={11} className="shrink-0 text-white/40" />
-                  {text}
+                  {href
+                    ? <a href={href} className="transition hover:text-white">{text}</a>
+                    : text}
                 </li>
               ))}
             </ul>
