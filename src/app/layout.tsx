@@ -56,7 +56,7 @@ const jsonLd = {
   url: 'https://2littleleashes.co.nz',
   email: 'milner.turei@gmail.com',
   image: 'https://2littleleashes.co.nz/images/dog-walk-rotorua.jpg',
-  logo: 'https://2littleleashes.co.nz/images/logo.jpg',
+  logo: 'https://2littleleashes.co.nz/images/logo.png',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Rotorua',
