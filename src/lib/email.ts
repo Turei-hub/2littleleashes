@@ -80,7 +80,7 @@ function logoSection(): string {
   return `
     <div class="logo-section">
       <a href="${url}" style="text-decoration:none;">
-        <img src="${url}/images/logo.png" alt="2 Little Leashes" width="80" height="80" />
+        <img src="https://2littleleashes.vercel.app/images/logo.png" alt="2 Little Leashes" width="80" height="80" />
         <span class="brand-name">2 Little Leashes</span>
       </a>
       <p class="brand-sub">Rotorua · New Zealand</p>
