@@ -8,11 +8,11 @@ import type { LucideIcon } from 'lucide-react'
 export const metadata: Metadata = {
   title: '2 Little Leashes Dog Walkers | Rotorua, NZ',
   description: 'Professional dog walking, washing, home check-ins and Sunday endurance runs in Rotorua, NZ. GPS-tracked, photo update every session. First walk FREE for new clients.',
-  alternates: { canonical: 'https://2littleleashes.co.nz' },
+  alternates: { canonical: 'https://www.2littleleashes.co.nz' },
   openGraph: {
     title: '2 Little Leashes Dog Walkers | Rotorua, NZ',
     description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE for new clients.',
-    url: 'https://2littleleashes.co.nz',
+    url: 'https://www.2littleleashes.co.nz',
     images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/dog-walk-rotorua.jpg`, width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
   },
   twitter: {

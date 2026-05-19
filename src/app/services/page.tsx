@@ -11,11 +11,11 @@ import { SERVICES, POLICIES } from '@/lib/data'
 export const metadata: Metadata = {
   title: 'Services & Pricing | 2 Little Leashes Rotorua',
   description: 'Dog walking from $30, dog wash $20, home check-ins $20, Sunday endurance runs $50. First walk FREE. Free pick-up and drop-off in Rotorua, NZ.',
-  alternates: { canonical: 'https://2littleleashes.co.nz/services' },
+  alternates: { canonical: 'https://www.2littleleashes.co.nz/services' },
   openGraph: {
     title: 'Services & Pricing | 2 Little Leashes Rotorua',
     description: 'Dog walking from $30, dog wash $20, home check-ins $20, Sunday endurance runs $50. First walk FREE. Free pick-up and drop-off in Rotorua, NZ.',
-    url: 'https://2littleleashes.co.nz/services',
+    url: 'https://www.2littleleashes.co.nz/services',
     images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/pack-walk-truck.jpg`, width: 1200, height: 630, alt: '2 Little Leashes pack walk Rotorua' }],
   },
   twitter: {

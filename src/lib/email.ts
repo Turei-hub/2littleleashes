@@ -92,7 +92,7 @@ function emailFooter(): string {
   return `
     <div class="footer">
       <p style="margin:0 0 5px;">Questions? Reply to this email or call/text Meihana directly.</p>
-      <p style="margin:0;"><a href="${url}">2littleleashes.co.nz</a> &nbsp;·&nbsp; 2 Little Leashes &nbsp;·&nbsp; Rotorua, New Zealand</p>
+      <p style="margin:0;"><a href="${url}">www.2littleleashes.co.nz</a> &nbsp;·&nbsp; 2 Little Leashes &nbsp;·&nbsp; Rotorua, New Zealand</p>
     </div>`
 }
 

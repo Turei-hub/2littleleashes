@@ -12,11 +12,11 @@ import { createAdminClient } from '@/lib/supabase-server'
 export const metadata: Metadata = {
   title: 'Gallery | 2 Little Leashes Dog Walkers Rotorua',
   description: 'See photos from walks, washes and adventures with happy dogs around Rotorua. Real photos from real walks — updated regularly.',
-  alternates: { canonical: 'https://2littleleashes.co.nz/gallery' },
+  alternates: { canonical: 'https://www.2littleleashes.co.nz/gallery' },
   openGraph: {
     title: 'Gallery | 2 Little Leashes Dog Walkers Rotorua',
     description: 'See photos from walks, washes and adventures with happy dogs around Rotorua. Real photos from real walks.',
-    url: 'https://2littleleashes.co.nz/gallery',
+    url: 'https://www.2littleleashes.co.nz/gallery',
     images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/dog-walk-rotorua.jpg`, width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
   },
   twitter: {

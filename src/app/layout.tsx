@@ -18,7 +18,7 @@ const dmSans = DM_Sans({
   weight:   ['300', '400', '500', '600'],
 })
 
-const SITE_URL = 'https://2littleleashes.co.nz'
+const SITE_URL = 'https://www.2littleleashes.co.nz'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -53,10 +53,10 @@ const jsonLd = {
   '@type': 'LocalBusiness',
   name: '2 Little Leashes',
   description: 'Professional dog walking, washing, home check-ins and Sunday endurance runs in Rotorua, New Zealand.',
-  url: 'https://2littleleashes.co.nz',
+  url: 'https://www.2littleleashes.co.nz',
   email: 'milner.turei@gmail.com',
-  image: 'https://2littleleashes.co.nz/images/dog-walk-rotorua.jpg',
-  logo: 'https://2littleleashes.co.nz/images/logo.png',
+  image: 'https://www.2littleleashes.co.nz/images/dog-walk-rotorua.jpg',
+  logo: 'https://www.2littleleashes.co.nz/images/logo.png',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Rotorua',
