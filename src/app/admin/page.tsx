@@ -5,23 +5,61 @@ import BookingsSection, { type Booking } from './BookingsSection'
 import GallerySubmissionActions from './GallerySubmissionActions'
 import LogoutButton from './LogoutButton'
 
-export default async function AdminPage() {
+export const dynamic = 'force-dynamic'
+
+const PAGE_SIZE = 20
+type StatusFilter = 'all' | 'pending' | 'confirmed' | 'cancelled'
+const VALID_STATUSES: StatusFilter[] = ['pending', 'confirmed', 'cancelled']
+
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: { page?: string; status?: string }
+}) {
   const sessionClient = createSessionClient()
   const { data: { session } } = await sessionClient.auth.getSession()
   if (!session) redirect('/admin/login')
 
+  const activeStatus: StatusFilter = VALID_STATUSES.includes(searchParams.status as StatusFilter)
+    ? (searchParams.status as StatusFilter)
+    : 'all'
+  const page = Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1)
+  const from = (page - 1) * PAGE_SIZE
+  const to = from + PAGE_SIZE - 1
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+
   const adminClient = createAdminClient()
-  const [{ data: bookings }, { data: pendingPhotos }, { data: approvedPhotos }] = await Promise.all([
-    adminClient.from('bookings').select('*').order('created_at', { ascending: false }),
+
+  const bookingsQuery = activeStatus === 'all'
+    ? adminClient.from('bookings').select('*', { count: 'exact' }).order('created_at', { ascending: false }).range(from, to)
+    : adminClient.from('bookings').select('*', { count: 'exact' }).eq('status', activeStatus).order('created_at', { ascending: false }).range(from, to)
+
+  const [
+    { count: totalCount },
+    { count: pendingCount },
+    { count: confirmedCount },
+    { count: cancelledCount },
+    { count: thisWeekCount },
+    { data: bookings, count: filteredCount },
+    { data: pendingPhotos },
+    { data: approvedPhotos },
+  ] = await Promise.all([
+    adminClient.from('bookings').select('*', { count: 'exact', head: true }),
+    adminClient.from('bookings').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    adminClient.from('bookings').select('*', { count: 'exact', head: true }).eq('status', 'confirmed'),
+    adminClient.from('bookings').select('*', { count: 'exact', head: true }).eq('status', 'cancelled'),
+    adminClient.from('bookings').select('*', { count: 'exact', head: true }).gte('created_at', weekAgo),
+    bookingsQuery,
     adminClient.from('gallery_submissions').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
     adminClient.from('gallery_submissions').select('*').eq('status', 'approved').order('created_at', { ascending: false }),
   ])
 
-  const all       = (bookings ?? []) as Booking[]
-  const pending   = all.filter(b => (b.status ?? 'pending') === 'pending').length
-  const confirmed = all.filter(b => b.status === 'confirmed').length
-  const weekAgo   = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-  const thisWeek  = all.filter(b => new Date(b.created_at) > weekAgo).length
+  const statusCounts: Record<StatusFilter, number> = {
+    all:       totalCount ?? 0,
+    pending:   pendingCount ?? 0,
+    confirmed: confirmedCount ?? 0,
+    cancelled: cancelledCount ?? 0,
+  }
 
   return (
     <div className="min-h-screen bg-forest-50">
@@ -50,10 +88,10 @@ export default async function AdminPage() {
         {/* Stats */}
         <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
           {[
-            { label: 'Total bookings', value: all.length, highlight: false },
-            { label: 'Pending',        value: pending,    highlight: pending > 0 },
-            { label: 'Confirmed',      value: confirmed,  highlight: false },
-            { label: 'This week',      value: thisWeek,   highlight: false },
+            { label: 'Total bookings', value: totalCount ?? 0,     highlight: false },
+            { label: 'Pending',        value: pendingCount ?? 0,   highlight: (pendingCount ?? 0) > 0 },
+            { label: 'Confirmed',      value: confirmedCount ?? 0, highlight: false },
+            { label: 'This week',      value: thisWeekCount ?? 0,  highlight: false },
           ].map(s => (
             <div
               key={s.label}
@@ -69,8 +107,15 @@ export default async function AdminPage() {
           ))}
         </div>
 
-        {/* Bookings table with filter */}
-        <BookingsSection bookings={all} />
+        {/* Bookings table with filter + pagination */}
+        <BookingsSection
+          bookings={(bookings ?? []) as Booking[]}
+          activeStatus={activeStatus}
+          page={page}
+          pageSize={PAGE_SIZE}
+          filteredCount={filteredCount ?? 0}
+          statusCounts={statusCounts}
+        />
 
         {/* ── PENDING PHOTOS ──────────────────────────────────────────────────── */}
         <div className="mt-10">

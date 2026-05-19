@@ -1,6 +1,4 @@
-'use client'
-
-import { useState } from 'react'
+import Link from 'next/link'
 import BookingActions from './BookingActions'
 
 export type Booking = {
@@ -22,9 +20,9 @@ export type Booking = {
   payment_reference: string | null
 }
 
-type Filter = 'all' | 'pending' | 'confirmed' | 'cancelled'
+type StatusFilter = 'all' | 'pending' | 'confirmed' | 'cancelled'
 
-const FILTERS: { value: Filter; label: string; activeClass: string }[] = [
+const FILTERS: { value: StatusFilter; label: string; activeClass: string }[] = [
   { value: 'all',       label: 'All',       activeClass: 'bg-forest-700 text-white' },
   { value: 'pending',   label: 'Pending',   activeClass: 'bg-amber-500 text-white' },
   { value: 'confirmed', label: 'Confirmed', activeClass: 'bg-green-600 text-white' },
@@ -68,53 +66,60 @@ function PaymentBadge({ status, url }: { status: string; url: string | null }) {
   return <span className="text-xs text-forest-600/40">No payment</span>
 }
 
-export default function BookingsSection({ bookings }: { bookings: Booking[] }) {
-  const [filter, setFilter] = useState<Filter>('all')
+type Props = {
+  bookings: Booking[]
+  activeStatus: StatusFilter
+  page: number
+  pageSize: number
+  filteredCount: number
+  statusCounts: Record<StatusFilter, number>
+}
 
-  const counts: Record<Filter, number> = {
-    all:       bookings.length,
-    pending:   bookings.filter(b => (b.status ?? 'pending') === 'pending').length,
-    confirmed: bookings.filter(b => b.status === 'confirmed').length,
-    cancelled: bookings.filter(b => b.status === 'cancelled').length,
-  }
-
-  const filtered = filter === 'all'
-    ? bookings
-    : bookings.filter(b => (b.status ?? 'pending') === filter)
+export default function BookingsSection({
+  bookings,
+  activeStatus,
+  page,
+  pageSize,
+  filteredCount,
+  statusCounts,
+}: Props) {
+  const totalPages = Math.ceil(filteredCount / pageSize)
+  const rangeFrom = (page - 1) * pageSize + 1
+  const rangeTo = Math.min(page * pageSize, filteredCount)
 
   return (
     <>
       {/* Filter bar */}
       <div className="mb-4 flex flex-wrap gap-2">
         {FILTERS.map(f => (
-          <button
+          <Link
             key={f.value}
-            onClick={() => setFilter(f.value)}
+            href={`/admin?status=${f.value}&page=1`}
             className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition ${
-              filter === f.value
+              activeStatus === f.value
                 ? f.activeClass
                 : 'bg-white border border-forest-700/15 text-forest-600 hover:border-forest-700/30 hover:text-forest-700'
             }`}
           >
             {f.label}
             <span className={`rounded-full px-1.5 py-0.5 text-xs font-semibold ${
-              filter === f.value ? 'bg-white/25 text-white' : 'bg-forest-50 text-forest-600'
+              activeStatus === f.value ? 'bg-white/25 text-white' : 'bg-forest-50 text-forest-600'
             }`}>
-              {counts[f.value]}
+              {statusCounts[f.value]}
             </span>
-          </button>
+          </Link>
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {bookings.length === 0 ? (
         <div className="rounded-xl border border-forest-700/10 bg-white p-16 text-center text-sm text-forest-600/50">
-          No {filter === 'all' ? '' : filter} bookings.
+          No {activeStatus === 'all' ? '' : activeStatus} bookings.
         </div>
       ) : (
         <>
           {/* ── Mobile card layout (< md) ─────────────────────────────────────── */}
           <div className="space-y-3 md:hidden">
-            {filtered.map(b => (
+            {bookings.map(b => (
               <div key={b.id} className="rounded-xl border border-forest-700/10 bg-white p-4 shadow-sm">
                 <div className="mb-2 flex items-start justify-between gap-2">
                   <div className="min-w-0">
@@ -161,7 +166,7 @@ export default function BookingsSection({ bookings }: { bookings: Booking[] }) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-forest-700/8">
-                  {filtered.map(b => (
+                  {bookings.map(b => (
                     <tr key={b.id} className="hover:bg-forest-50/50 transition-colors">
                       <td className="whitespace-nowrap px-4 py-3 text-xs text-forest-600/60">
                         {new Date(b.created_at).toLocaleDateString('en-NZ', {
@@ -205,6 +210,44 @@ export default function BookingsSection({ bookings }: { bookings: Booking[] }) {
               </table>
             </div>
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-4 flex items-center justify-between">
+              <p className="text-xs text-forest-600/50">
+                {filteredCount > 0 ? `Showing ${rangeFrom}–${rangeTo} of ${filteredCount}` : ''}
+              </p>
+              <div className="flex items-center gap-2">
+                {page > 1 ? (
+                  <Link
+                    href={`/admin?status=${activeStatus}&page=${page - 1}`}
+                    className="rounded-lg border border-forest-700/15 bg-white px-3 py-1.5 text-sm font-medium text-forest-600 transition hover:border-forest-700/30 hover:text-forest-700"
+                  >
+                    ← Previous
+                  </Link>
+                ) : (
+                  <span className="rounded-lg border border-forest-700/10 bg-white px-3 py-1.5 text-sm font-medium text-forest-600/30 cursor-not-allowed">
+                    ← Previous
+                  </span>
+                )}
+                <span className="px-2 text-xs text-forest-600/50">
+                  Page {page} of {totalPages}
+                </span>
+                {page < totalPages ? (
+                  <Link
+                    href={`/admin?status=${activeStatus}&page=${page + 1}`}
+                    className="rounded-lg border border-forest-700/15 bg-white px-3 py-1.5 text-sm font-medium text-forest-600 transition hover:border-forest-700/30 hover:text-forest-700"
+                  >
+                    Next →
+                  </Link>
+                ) : (
+                  <span className="rounded-lg border border-forest-700/10 bg-white px-3 py-1.5 text-sm font-medium text-forest-600/30 cursor-not-allowed">
+                    Next →
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
         </>
       )}
     </>
