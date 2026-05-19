@@ -141,14 +141,9 @@ export async function sendCustomerConfirmation(data: BookingData) {
         <div class="step"><div class="step-num">2</div><div class="step-text">At the meet &amp; greet we go over ${data.dogName}'s personality, habits, and any medical needs.</div></div>
         <div class="step"><div class="step-num">3</div><div class="step-text">Your first free walk is booked — and the adventures begin! 🌿</div></div>
         ` : `
-        <div class="callout-teal">
-          <p class="ct-title">Payment Details</p>
-          <div class="ct-row"><span class="ctl">Your reference</span><span class="ct-ref">${data.paymentRef}</span></div>
-          <p class="ct-note">Meihana will be in touch with the bank account details. Use this reference when making your transfer, then reply with a screenshot. ✓</p>
-        </div>
         <p class="steps-title">What happens next:</p>
-        <div class="step"><div class="step-num">1</div><div class="step-text">Make your bank transfer using the reference above: <strong>${data.paymentRef}</strong>. Meihana will be in touch with the full account details.</div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-text">Reply to this email with a screenshot of your transfer so Meihana can verify it.</div></div>
+        <div class="step"><div class="step-num">1</div><div class="step-text">Meihana will contact you within 24 hours with payment details for your session.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Once you've made your transfer, reply to this email with a screenshot so Meihana can verify it.</div></div>
         <div class="step"><div class="step-num">3</div><div class="step-text">Meihana will confirm your booking and be in touch with pickup details. 🌿</div></div>
         `}
       </div>

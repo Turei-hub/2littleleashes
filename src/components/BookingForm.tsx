@@ -121,7 +121,7 @@ export default function BookingForm({
           </div>
         ) : (
           <div className="rounded-lg bg-teal-50 border border-teal-200 p-4 text-sm text-teal-800 mb-6">
-            <strong>Check your inbox</strong> — we&apos;ve sent your payment details and bank reference. Meihana will confirm once payment is received.
+            <strong>Booking received!</strong> — Meihana will be in touch with payment details. Upload or reply with your transfer screenshot once payment is made.
           </div>
         )}
         <button onClick={onReset} className="btn-outline text-sm">
@@ -304,35 +304,6 @@ export default function BookingForm({
           {...register('notes')}
         />
       </div>
-
-      {/* Payment reference — paid flow only */}
-      {flow === 'paid' && paymentRef && (
-        <div className="rounded-lg border border-teal-300 bg-teal-50 p-4">
-          <p className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-teal-700">
-            <CreditCard size={13} className="shrink-0" />
-            Your payment details
-          </p>
-          <div className="space-y-1.5 text-sm">
-            <div className="flex justify-between">
-              <span className="text-teal-700">Bank account</span>
-              <span className="font-semibold text-teal-900">{process.env.NEXT_PUBLIC_BANK_ACCOUNT}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-teal-700">Account name</span>
-              <span className="font-semibold text-teal-900">2 Little Leashes</span>
-            </div>
-            <div className="flex justify-between items-center border-t border-teal-200 pt-2 mt-2">
-              <span className="text-teal-700">Your reference</span>
-              <span className="rounded-md bg-teal-100 px-2.5 py-1 font-mono font-bold tracking-widest text-teal-800">
-                {paymentRef}
-              </span>
-            </div>
-          </div>
-          <p className="mt-3 text-xs text-teal-600">
-            These details will also be in your confirmation email. Reply to that email with your transfer screenshot.
-          </p>
-        </div>
-      )}
 
       {/* Screenshot upload — paid flow only */}
       {flow === 'paid' && (
