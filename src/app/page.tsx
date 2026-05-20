@@ -127,21 +127,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── STAT BAR ──────────────────────────────────────────────────────────── */}
-      <div className="bg-amber-200">
-        <div className="mx-auto grid max-w-5xl grid-cols-2 divide-x divide-forest-700/20">
-          {[
-            { n: '$30',   l: 'From / walk' },
-            { n: '7 AM',  l: 'Start time' },
-          ].map(s => (
-            <div key={s.n} className="py-4 text-center">
-              <p className="font-display text-xl font-bold text-forest-700">{s.n}</p>
-              <p className="text-xs text-forest-700">{s.l}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* ── SERVICES ──────────────────────────────────────────────────────────── */}
       <section className="section">
         <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">What we offer</p>
