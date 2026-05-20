@@ -226,9 +226,13 @@ export async function sendOwnerAlert(data: BookingData) {
 </body>
 </html>`
 
+  const ownerRecipients = [process.env.OWNER_EMAIL, process.env.OWNER_EMAIL_2]
+    .filter(Boolean)
+    .join(', ')
+
   await transporter.sendMail({
     from:    process.env.FROM_EMAIL,
-    to:      process.env.OWNER_EMAIL,
+    to:      ownerRecipients,
     subject: `🐕 New booking: ${data.dogName} (${data.ownerName}) — ${data.service}`,
     html,
   })

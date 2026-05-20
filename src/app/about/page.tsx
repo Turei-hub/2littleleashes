@@ -58,10 +58,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8 space-y-12">
-
-        {/* Bio card */}
-        <div className="rounded-xl bg-forest-700 p-8 flex flex-col sm:flex-row gap-6 items-start">
+      {/* Bio card — full width */}
+      <div className="bg-forest-700 px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl flex flex-col sm:flex-row gap-6 items-start">
           <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full">
             <Image src="/images/meihana.jpg" alt="Meihana" fill className="object-cover" />
           </div>
@@ -82,9 +81,11 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
+      </div>
 
-        {/* Why us */}
-        <div>
+      {/* Why us — full width */}
+      <div className="px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl">
           <h2 className="font-display text-2xl font-bold text-forest-700 mb-6">Why clients choose us</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {WHY_US.map(w => {
@@ -101,19 +102,23 @@ export default function AboutPage() {
             })}
           </div>
         </div>
+      </div>
 
-        {/* CTA */}
-        <div className="rounded-xl bg-amber-50 border border-amber-200 p-8 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500">
-            <PawPrint className="h-6 w-6 text-white" />
+      {/* CTA */}
+      <div className="px-4 pb-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl">
+          <div className="rounded-xl bg-amber-50 border border-amber-200 p-8 text-center">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500">
+              <PawPrint className="h-6 w-6 text-white" />
+            </div>
+            <h2 className="font-display text-2xl font-bold text-amber-900 mb-2">Ready to meet us?</h2>
+            <p className="text-sm text-amber-800 mb-5">Book online and we'll arrange a free meet &amp; greet at your home. First walk is on us.</p>
+            <Link href="/book" className="btn-primary px-6 py-3">Book your free first walk →</Link>
+            <p className="mt-4 text-sm text-amber-700">
+              Or call / text Meihana:{' '}
+              <a href="tel:+64211565571" className="font-semibold hover:underline">021 156 5571</a>
+            </p>
           </div>
-          <h2 className="font-display text-2xl font-bold text-amber-900 mb-2">Ready to meet us?</h2>
-          <p className="text-sm text-amber-800 mb-5">Book online and we'll arrange a free meet &amp; greet at your home. First walk is on us.</p>
-          <Link href="/book" className="btn-primary px-6 py-3">Book your free first walk →</Link>
-          <p className="mt-4 text-sm text-amber-700">
-            Or call / text Meihana:{' '}
-            <a href="tel:+64211565571" className="font-semibold hover:underline">021 156 5571</a>
-          </p>
         </div>
       </div>
 
