@@ -1,13 +1,10 @@
 // src/components/MarqueeBanner.tsx
-import { PawPrint, MapPin, Camera, Car, Zap, DollarSign, Shield } from 'lucide-react'
+import { Camera, Car, DollarSign, Shield } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 const ITEMS: { icon: LucideIcon; text: string }[] = [
-  { icon: PawPrint,   text: 'First walk FREE for new clients' },
-  { icon: MapPin,     text: 'GPS tracked every walk' },
   { icon: Camera,     text: 'Photo update every session' },
   { icon: Car,        text: 'Free pick-up & drop-off' },
-  { icon: Zap,        text: 'Sunday endurance runs 10km+' },
   { icon: DollarSign, text: 'Flexible & affordable for every whānau' },
   { icon: Shield,     text: 'Supervised by Dad — always' },
 ]

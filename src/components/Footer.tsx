@@ -25,7 +25,7 @@ export default function Footer() {
               <span className="font-display text-sm font-semibold text-white">2 Little Leashes</span>
             </div>
             <p className="text-xs leading-relaxed">
-              Professional dog walking and caring in Rotorua, New Zealand. GPS-tracked, photo updates every session.
+              Professional dog walking and caring in Rotorua, New Zealand. Photo updates every session.
             </p>
           </div>
 

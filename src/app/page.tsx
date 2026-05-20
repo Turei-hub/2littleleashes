@@ -2,23 +2,23 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Heart, Shield, Smile, DollarSign, Sparkles, Zap, Camera, Car, MapPin, PawPrint } from 'lucide-react'
+import { Heart, Shield, Smile, DollarSign, Camera, Car, MapPin, PawPrint } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: '2 Little Leashes Dog Walkers | Rotorua, NZ',
-  description: 'Professional dog walking, washing, home check-ins and Sunday endurance runs in Rotorua, NZ. GPS-tracked, photo update every session. First walk FREE for new clients.',
+  description: 'Professional dog walking, washing, and home check-ins in Rotorua, NZ. Photo update every session.',
   alternates: { canonical: 'https://www.2littleleashes.co.nz' },
   openGraph: {
     title: '2 Little Leashes Dog Walkers | Rotorua, NZ',
-    description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE for new clients.',
+    description: 'Professional dog walking and caring in Rotorua. Photo update every session.',
     url: 'https://www.2littleleashes.co.nz',
     images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/dog-walk-rotorua.jpg`, width: 1200, height: 630, alt: '2 Little Leashes dog walk in Rotorua' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '2 Little Leashes Dog Walkers | Rotorua, NZ',
-    description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE.',
+    description: 'Professional dog walking and caring in Rotorua. Photo update every session.',
     images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/dog-walk-rotorua.jpg`],
   },
 }
@@ -35,11 +35,8 @@ const WHY_CHOOSE: { icon: LucideIcon; title: string; body: string }[] = [
 ]
 
 const HERO_PILLS: { icon: LucideIcon; text: string }[] = [
-  { icon: Sparkles, text: 'First walk FREE' },
-  { icon: Zap,      text: 'Sunday 10km endurance run' },
-  { icon: Camera,   text: 'Photo update every session' },
-  { icon: Car,      text: 'Free pick-up & drop-off' },
-  { icon: MapPin,   text: 'GPS every walk' },
+  { icon: Camera, text: 'Photo update every session' },
+  { icon: Car,    text: 'Free pick-up & drop-off' },
 ]
 
 const REVIEWS = [
@@ -132,12 +129,10 @@ export default function HomePage() {
 
       {/* ── STAT BAR ──────────────────────────────────────────────────────────── */}
       <div className="bg-amber-200">
-        <div className="mx-auto grid max-w-5xl grid-cols-2 divide-x divide-forest-700/20 sm:grid-cols-4">
+        <div className="mx-auto grid max-w-5xl grid-cols-2 divide-x divide-forest-700/20">
           {[
             { n: '$30',   l: 'From / walk' },
-            { n: 'FREE',  l: 'First walk' },
             { n: '7 AM',  l: 'Start time' },
-            { n: 'GPS',   l: 'Every walk' },
           ].map(s => (
             <div key={s.n} className="py-4 text-center">
               <p className="font-display text-xl font-bold text-forest-700">{s.n}</p>
@@ -150,12 +145,12 @@ export default function HomePage() {
       {/* ── SERVICES ──────────────────────────────────────────────────────────── */}
       <section className="section">
         <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">What we offer</p>
-        <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">Four services, one team</h2>
+        <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">Three services, one team</h2>
         <p className="mt-2 text-sm text-forest-600">
           All services are personally supervised by Meihana. A meet &amp; greet at your home is required before your first booking.
         </p>
 
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map(svc => (
             <ServiceCard
               key={svc.id}
@@ -173,24 +168,6 @@ export default function HomePage() {
         <div className="mt-6 text-center">
           <Link href="/services" className="btn-outline">
             View full pricing & details →
-          </Link>
-        </div>
-      </section>
-
-      {/* ── FREE FIRST WALK BANNER ────────────────────────────────────────────── */}
-      <section className="bg-amber-50 border-y border-amber-200 px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl flex flex-col items-center text-center sm:flex-row sm:text-left sm:gap-8">
-          <div className="mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-forest-700 sm:mb-0">
-            <Sparkles className="h-7 w-7 text-amber-400" />
-          </div>
-          <div className="flex-1">
-            <h2 className="font-display text-2xl font-bold text-amber-900">Your first walk is FREE</h2>
-            <p className="mt-1 text-sm text-amber-800">
-              New clients get their first walk on us — so your dog can meet Meihana, get comfortable, and make sure it's a great fit before you commit to anything.
-            </p>
-          </div>
-          <Link href="/book" className="mt-4 shrink-0 btn-primary sm:mt-0">
-            Claim free walk →
           </Link>
         </div>
       </section>
@@ -281,7 +258,7 @@ export default function HomePage() {
           </p>
           <div className="mt-6 flex justify-center gap-3 flex-wrap">
             <Link href="/book" className="btn-primary px-6 py-3">
-              Book now — first walk free →
+              Book a walk →
             </Link>
             <Link href="/services" className="btn-secondary px-6 py-3">
               See pricing

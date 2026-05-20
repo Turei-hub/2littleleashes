@@ -134,12 +134,12 @@ export async function sendCustomerConfirmation(data: BookingData) {
 
         ${data.bookingType === 'free' ? `
         <div class="callout-amber">
-          🎉 <strong>Your first walk is FREE!</strong> This gives ${data.dogName} a chance to get comfortable with Meihana before the regular sessions begin.
+          🐾 New customer booking for ${data.dogName}. Meihana will be in touch to arrange your meet &amp; greet.
         </div>
         <p class="steps-title">What happens next:</p>
         <div class="step"><div class="step-num">1</div><div class="step-text">Meihana will contact you within 24 hours to schedule your free meet &amp; greet at your home.</div></div>
         <div class="step"><div class="step-num">2</div><div class="step-text">At the meet &amp; greet we go over ${data.dogName}'s personality, habits, and any medical needs.</div></div>
-        <div class="step"><div class="step-num">3</div><div class="step-text">Your first free walk is booked — and the adventures begin! 🌿</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Your walk is confirmed — the adventures begin! 🌿</div></div>
         ` : `
         <p class="steps-title">What happens next:</p>
         <div class="step"><div class="step-num">1</div><div class="step-text">Meihana will contact you within 24 hours with payment details for your session.</div></div>
@@ -197,7 +197,7 @@ export async function sendOwnerAlert(data: BookingData) {
         <p class="intro" style="margin-bottom:4px;">
           A new booking has come in — details below.
           ${data.bookingType === 'free'
-            ? `<span class="badge-free">Free first walk</span>`
+            ? `<span class="badge-free">New customer</span>`
             : `<span class="badge-paid">Paid booking</span>`}
         </p>
 

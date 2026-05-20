@@ -10,18 +10,18 @@ import { SERVICES, POLICIES } from '@/lib/data'
 
 export const metadata: Metadata = {
   title: 'Services & Pricing | 2 Little Leashes Rotorua',
-  description: 'Dog walking from $30, dog wash $20, home check-ins $20, Sunday endurance runs $50. First walk FREE. Free pick-up and drop-off in Rotorua, NZ.',
+  description: 'Dog walking from $30, dog wash $20, home check-ins $20. Free pick-up and drop-off in Rotorua, NZ.',
   alternates: { canonical: 'https://www.2littleleashes.co.nz/services' },
   openGraph: {
     title: 'Services & Pricing | 2 Little Leashes Rotorua',
-    description: 'Dog walking from $30, dog wash $20, home check-ins $20, Sunday endurance runs $50. First walk FREE. Free pick-up and drop-off in Rotorua, NZ.',
+    description: 'Dog walking from $30, dog wash $20, home check-ins $20. Free pick-up and drop-off in Rotorua, NZ.',
     url: 'https://www.2littleleashes.co.nz/services',
     images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/pack-walk-truck.jpg`, width: 1200, height: 630, alt: '2 Little Leashes pack walk Rotorua' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Services & Pricing | 2 Little Leashes Rotorua',
-    description: 'Dog walking from $30, dog wash $20, home check-ins $20, Sunday endurance runs $50. First walk FREE in Rotorua.',
+    description: 'Dog walking from $30, dog wash $20, home check-ins $20. Free pick-up and drop-off in Rotorua.',
     images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/pack-walk-truck.jpg`],
   },
 }
@@ -48,7 +48,7 @@ export default function ServicesPage() {
             Transparent pricing, no surprises
           </h1>
           <p className="mt-3 text-white text-sm max-w-xl">
-            Every service includes free pick-up and drop-off. New clients get their first walk free. Weekend bookings carry a +$20 surcharge.
+            Every service includes free pick-up and drop-off. Weekend bookings carry a +$20 surcharge.
           </p>
         </div>
       </section>
@@ -168,7 +168,7 @@ export default function ServicesPage() {
         {/* CTA */}
         <div className="rounded-xl bg-forest-700 p-8 text-center">
           <h2 className="font-display text-2xl font-bold text-white mb-2">Ready to book?</h2>
-          <p className="text-white/65 text-sm mb-5">First walk is free for all new clients. No lock-in, no contracts.</p>
+          <p className="text-white/65 text-sm mb-5">No lock-in, no contracts. Free pick-up and drop-off included.</p>
           <Link href="/book" className="btn-primary px-6 py-3">Book now →</Link>
         </div>
       </div>

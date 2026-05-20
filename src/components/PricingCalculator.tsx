@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-type ServiceKey = 'walk-1x' | 'walk-multi' | 'wash' | 'checkin' | 'checkin-walk' | 'endurance'
+type ServiceKey = 'walk-1x' | 'walk-multi' | 'wash' | 'checkin' | 'checkin-walk'
 
 interface ServiceOption {
   label:     string
@@ -20,7 +20,6 @@ const SERVICES: Record<ServiceKey, ServiceOption> = {
   'wash':         { label: 'Dog wash',                  base: 20, perVisit: false, weekly: false, supportsExtraDogs: false },
   'checkin':      { label: 'Home check-in',             base: 20, perVisit: true,  weekly: true,  supportsExtraDogs: false },
   'checkin-walk': { label: 'Home check-in + walk',      base: 45, perVisit: true,  weekly: true,  supportsExtraDogs: true },
-  'endurance':    { label: 'Endurance run (Sundays)',   base: 50, perVisit: false, weekly: false, supportsExtraDogs: false },
 }
 
 export default function PricingCalculator() {
@@ -113,7 +112,7 @@ export default function PricingCalculator() {
       </div>
 
       <p className="mt-3 text-xs text-forest-600/60">
-        * First walk is FREE for new clients. Weekend surcharge (+$20) applies to Saturday & Sunday bookings.
+        * Weekend surcharge (+$20) applies to Saturday & Sunday bookings.
       </p>
 
       <Link href="/book" className="btn-primary mt-4 w-full justify-center">

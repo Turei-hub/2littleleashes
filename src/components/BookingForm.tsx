@@ -27,7 +27,6 @@ const PRICING_SUMMARY = [
   { label: 'Dog Wash',            price: '$20 flat' },
   { label: 'Home Check-In',       price: '$20 / visit' },
   { label: 'Check-In + Walk',     price: '$40–50' },
-  { label: 'Endurance Run',       price: '$50' },
 ]
 
 function buildRef(dogName: string, ownerName: string) {
@@ -117,7 +116,7 @@ export default function BookingForm({
         <p className="text-sm text-forest-600 mb-4">{message}</p>
         {flow === 'free' ? (
           <div className="rounded-lg bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800 mb-6">
-            <strong>What&apos;s next:</strong> Meihana will contact you within 24 hours to arrange your free meet &amp; greet. Remember — your first walk is FREE!
+            <strong>What&apos;s next:</strong> Meihana will contact you within 24 hours to arrange your meet &amp; greet.
           </div>
         ) : (
           <div className="rounded-lg bg-teal-50 border border-teal-200 p-4 text-sm text-teal-800 mb-6">
@@ -142,7 +141,7 @@ export default function BookingForm({
               <Sparkles className="h-4 w-4 text-white" />
             </div>
             <div>
-              <p className="font-semibold text-amber-900">Your first walk is FREE</p>
+              <p className="font-semibold text-amber-900">New customer booking</p>
               <p className="mt-0.5 text-sm text-amber-800">
                 New customer booking · {initialEmail}
               </p>
@@ -360,7 +359,7 @@ export default function BookingForm({
           {status === 'loading' ? (
             <><Loader size={14} className="animate-spin" /> Sending…</>
           ) : flow === 'free' ? (
-            'Request free walk →'
+            'Request a walk →'
           ) : (
             'Send booking request →'
           )}

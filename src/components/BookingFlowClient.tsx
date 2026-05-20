@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Loader, Mail, PawPrint, Sparkles } from 'lucide-react'
+import { Loader, Mail, PawPrint } from 'lucide-react'
 import BookingForm from '@/components/BookingForm'
 
 type Step = 'email' | 'free' | 'paid'
@@ -79,12 +79,6 @@ export default function BookingFlowClient() {
             </button>
           </form>
 
-          <div className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-center text-xs text-amber-800">
-            <span className="inline-flex items-center gap-1.5">
-              <Sparkles size={12} className="text-amber-600" />
-              <strong>First time?</strong>
-            </span>{' '}Your first walk is completely FREE — no payment needed!
-          </div>
         </div>
       </div>
     )

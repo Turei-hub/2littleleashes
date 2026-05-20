@@ -9,25 +9,25 @@ import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
   title: 'About Meihana | 2 Little Leashes Dog Walkers Rotorua',
-  description: 'Meet Meihana, the Rotorua-based founder of 2 Little Leashes. Local family business, always supervised, GPS-tracked walks with a photo update every session.',
+  description: 'Meet Meihana, the Rotorua-based founder of 2 Little Leashes. Local family business, always supervised, with a photo update every session.',
   alternates: { canonical: 'https://www.2littleleashes.co.nz/about' },
   openGraph: {
     title: 'About Meihana | 2 Little Leashes Dog Walkers Rotorua',
-    description: 'Meet Meihana, the Rotorua-based founder of 2 Little Leashes. Local family business, always supervised, GPS-tracked walks with a photo update every session.',
+    description: 'Meet Meihana, the Rotorua-based founder of 2 Little Leashes. Local family business, always supervised, with a photo update every session.',
     url: 'https://www.2littleleashes.co.nz/about',
     images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/meihana-bulldogs-truck.jpg`, width: 1200, height: 630, alt: 'Meihana with dogs — 2 Little Leashes Rotorua' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'About Meihana | 2 Little Leashes Dog Walkers Rotorua',
-    description: 'Meet Meihana, the Rotorua-based founder of 2 Little Leashes. Local family business, GPS-tracked walks, photo update every session.',
+    description: 'Meet Meihana, the Rotorua-based founder of 2 Little Leashes. Local family business, photo update every session.',
     images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/meihana-bulldogs-truck.jpg`],
   },
 }
 
 const WHY_US: { icon: LucideIcon; title: string; body: string }[] = [
   { icon: Camera,    title: 'Photo after every session',   body: 'We send a photo update after every walk or visit so you can see your dog having the time of their life.' },
-  { icon: MapPin,    title: 'GPS-tracked walks',           body: 'Every walk is GPS tracked so you know exactly which Rotorua trails your dog explored.' },
+  { icon: MapPin,    title: 'Rotorua\'s best locations',    body: 'Forests, lake tracks, and bush paths — we mix up locations so walks stay exciting and stimulating.' },
   { icon: Compass,   title: "Rotorua's best locations",    body: 'Forests, lake tracks, bush paths — we mix up locations so walks stay exciting and stimulating.' },
   { icon: Car,       title: 'Free pick-up & drop-off',     body: 'We come to you. Your dog is collected and returned safely from your home.' },
   { icon: Pill,      title: 'Medical care welcome',        body: 'Medication administration and dogs with special needs are welcome — just let us know at booking.' },
@@ -112,8 +112,8 @@ export default function AboutPage() {
               <PawPrint className="h-6 w-6 text-white" />
             </div>
             <h2 className="font-display text-2xl font-bold text-amber-900 mb-2">Ready to meet us?</h2>
-            <p className="text-sm text-amber-800 mb-5">Book online and we'll arrange a free meet &amp; greet at your home. First walk is on us.</p>
-            <Link href="/book" className="btn-primary px-6 py-3">Book your free first walk →</Link>
+            <p className="text-sm text-amber-800 mb-5">Book online and we'll arrange a meet &amp; greet at your home before your first session.</p>
+            <Link href="/book" className="btn-primary px-6 py-3">Book a walk →</Link>
             <p className="mt-4 text-sm text-amber-700">
               Or call / text Meihana:{' '}
               <a href="tel:+64211565571" className="font-semibold hover:underline">021 156 5571</a>

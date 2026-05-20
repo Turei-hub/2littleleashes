@@ -2,10 +2,10 @@
 // Single source of truth for all services, pricing, and policies.
 // Edit here and every page/component updates automatically.
 
-import { PawPrint, Droplets, Home, Zap, Handshake, Clock, Car, CalendarDays, MapPin, Camera } from 'lucide-react'
+import { PawPrint, Droplets, Home, Handshake, Clock, Car, CalendarDays, Camera } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-export type ServiceId = 'dog-walking' | 'dog-wash' | 'home-checkins' | 'endurance-walk'
+export type ServiceId = 'dog-walking' | 'dog-wash' | 'home-checkins'
 
 type ServicePricing = {
   base: number
@@ -60,9 +60,9 @@ export const SERVICES: Service[] = [
       '100% supervised by Meihana',
       'Free pick-up & drop-off from your street',
     ],
-    badge: '🎉 First walk FREE',
+    badge: null,
     highlight: true,
-    specialNote: 'Your first walk is FREE — so your dog can get to know us before joining the fun.',
+    specialNote: null,
   },
   {
     id: 'dog-wash',
@@ -104,31 +104,6 @@ export const SERVICES: Service[] = [
     highlight: false,
     specialNote: 'Add a dog walk to combine care and exercise — $40 or $50 total.',
   },
-  {
-    id: 'endurance-walk',
-    icon: Zap,
-    title: 'Endurance Walk / Run',
-    tagline: 'Epic Sunday missions for high-drive dogs',
-    pricing: {
-      base: 50,
-      baseLabel: '$50 per session',
-    },
-    schedule: 'Sundays at 8:00 AM',
-    duration: '10km+ · Up to 3 Hours',
-    features: [
-      "All-terrain adventures through Rotorua's forests, lakes, and bush tracks",
-      'Operates rain or shine',
-      'Rest stops + water breaks included',
-      'Ideal for high-energy working breeds',
-    ],
-    targetBreeds: [
-      'Border Collies', 'German Shepherds', 'Huntaways',
-      'Malinois', 'Labs', 'Kelpies', 'Pointers', 'Vizslas',
-    ],
-    badge: '10km · 3hrs · Sundays',
-    highlight: false,
-    specialNote: null,
-  },
 ]
 
 export const POLICIES: Policy[] = [
@@ -153,11 +128,6 @@ export const POLICIES: Policy[] = [
     body: '+$20 flat per walk on Saturdays and Sundays.',
   },
   {
-    icon: MapPin,
-    title: 'GPS Every Walk',
-    body: 'Every walk is GPS tracked so you always know the route your dog explored.',
-  },
-  {
     icon: Camera,
     title: 'Photo Updates',
     body: 'A photo sent after every session — your dog having the time of their life.',
@@ -171,7 +141,6 @@ export const SERVICE_OPTIONS = [
   { value: 'dog-wash',          label: 'Dog Wash ($20 flat)' },
   { value: 'home-checkin',      label: 'Home Check-In ($20/visit)' },
   { value: 'checkin-walk',      label: 'Home Check-In + Walk ($40–$50)' },
-  { value: 'endurance-run',     label: 'Endurance Run — Sundays ($50)' },
 ] as const
 
 export const MEET_GREET_OPTIONS = [

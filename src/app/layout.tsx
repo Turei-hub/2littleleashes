@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     default:  '2 Little Leashes Dog Walkers | Rotorua, NZ',
     template: '%s | 2 Little Leashes Rotorua',
   },
-  description: 'Professional dog walking, washing, home check-ins and Sunday endurance runs in Rotorua, New Zealand. GPS-tracked, photo update every session. First walk FREE for new clients.',
+  description: 'Professional dog walking, washing, and home check-ins in Rotorua, New Zealand. Photo update every session.',
   keywords: ['dog walking Rotorua', 'dog walker Rotorua NZ', 'pet care Rotorua', 'dog wash Rotorua', '2 little leashes', 'Meihana dog walker'],
   openGraph: {
     siteName:    '2 Little Leashes',
@@ -34,13 +34,13 @@ export const metadata: Metadata = {
     locale:      'en_NZ',
     url:         SITE_URL,
     title:       '2 Little Leashes Dog Walkers | Rotorua, NZ',
-    description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE.',
+    description: 'Professional dog walking and caring in Rotorua. Photo update every session.',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: '2 Little Leashes dog walkers Rotorua' }],
   },
   twitter: {
     card:        'summary_large_image',
     title:       '2 Little Leashes Dog Walkers | Rotorua, NZ',
-    description: 'Professional dog walking and caring in Rotorua. GPS-tracked, photo update every session. First walk FREE.',
+    description: 'Professional dog walking and caring in Rotorua. Photo update every session.',
     images:      ['/og-image.jpg'],
   },
   alternates: {
@@ -52,7 +52,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   name: '2 Little Leashes',
-  description: 'Professional dog walking, washing, home check-ins and Sunday endurance runs in Rotorua, New Zealand.',
+  description: 'Professional dog walking, washing, and home check-ins in Rotorua, New Zealand.',
   url: 'https://www.2littleleashes.co.nz',
   email: 'milner.turei@gmail.com',
   image: 'https://www.2littleleashes.co.nz/images/dog-walk-rotorua.jpg',
@@ -82,10 +82,9 @@ const jsonLd = {
     '@type': 'OfferCatalog',
     name: 'Dog Care Services',
     itemListElement: [
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dog Walking', description: 'Group walks from $30. First walk FREE for new clients.' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dog Walking', description: 'Group walks from $30. Free pick-up and drop-off.' } },
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dog Wash', description: 'Wash and dry from $20.' } },
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Home Check-ins', description: 'Home visits from $20.' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Sunday Endurance Run', description: '10 km+ trail run from $50.' } },
     ],
   },
 }
