@@ -114,11 +114,7 @@ export default function AboutPage() {
             <h2 className="font-display text-2xl font-bold text-amber-900 mb-2">Ready to meet us?</h2>
             <p className="text-sm text-amber-800 mb-5">Book online and we'll arrange a meet &amp; greet at your home before your first session.</p>
             <Link href="/book" className="btn-primary px-6 py-3">Book a walk →</Link>
-            <p className="mt-4 text-sm text-amber-700">
-              Or call / text Meihana:{' '}
-              <a href="tel:+64211565571" className="font-semibold hover:underline">021 156 5571</a>
-            </p>
-          </div>
+            </div>
         </div>
       </div>
 

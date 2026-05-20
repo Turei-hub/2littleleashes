@@ -1,10 +1,9 @@
 // src/components/Footer.tsx
 import type { LucideIcon } from 'lucide-react'
 import Link from 'next/link'
-import { PawPrint, Clock, CalendarDays, MapPin, Car, Phone } from 'lucide-react'
+import { PawPrint, Clock, CalendarDays, MapPin, Car } from 'lucide-react'
 
 const HOURS_INFO: { icon: LucideIcon; text: string; href?: string }[] = [
-  { icon: Phone,        text: '021 156 5571',              href: 'tel:+64211565571' },
   { icon: Clock,        text: 'Mon–Fri: 7:00 AM – 2:00 PM' },
   { icon: CalendarDays, text: 'Weekend: +$20 surcharge' },
   { icon: MapPin,       text: 'Based in Rotorua, NZ' },

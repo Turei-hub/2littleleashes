@@ -230,10 +230,6 @@ export default function BookingForm({
             {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
           </div>
           <div className="field">
-            <label htmlFor="phone">Phone number</label>
-            <input id="phone" type="tel" placeholder="021 000 0000" {...register('phone')} />
-          </div>
-          <div className="field">
             <label htmlFor="suburb">Suburb / area</label>
             <input id="suburb" placeholder="Ngongotahā, Rotorua" {...register('suburb')} />
           </div>
