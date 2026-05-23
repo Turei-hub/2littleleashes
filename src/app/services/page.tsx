@@ -87,7 +87,7 @@ export default function ServicesPage() {
                     </p>
                   )}
                   {'extraDogLabel' in svc.pricing && (
-                    <p className="text-xs text-forest-600">
+                    <p className="text-xs font-bold text-forest-700">
                       {(svc.pricing as { extraDogLabel: string }).extraDogLabel}
                     </p>
                   )}

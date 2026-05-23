@@ -103,7 +103,12 @@ export default function PricingCalculator() {
         {/* Breakdown */}
         <div className="mt-3 space-y-1 border-t border-white/10 pt-3 text-xs text-white/75">
           <div className="flex justify-between"><span>Base ({svc.label})</span><span>${svc.base}</span></div>
-          {extraDogs > 0 && <div className="flex justify-between"><span>Extra dogs ({dogs - 1} × $10)</span><span>${extraDogs}</span></div>}
+          {extraDogs > 0 && (
+            <>
+              <div className="flex justify-between"><span>Extra dogs ({dogs - 1} × $10)</span><span>${extraDogs}</span></div>
+              <div className="text-white/50 text-[10px]">First dog ${svc.base} · each additional dog $10</div>
+            </>
+          )}
           {wkndFee   > 0 && <div className="flex justify-between"><span>Weekend surcharge</span><span>${wkndFee}</span></div>}
           {service === 'walk-multi' && frequency > 1 && (
             <div className="flex justify-between text-amber-300"><span>Multi-walk discount applied ✓</span><span>–</span></div>

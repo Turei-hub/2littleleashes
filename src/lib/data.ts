@@ -50,7 +50,7 @@ export const SERVICES: Service[] = [
       multiWalk: 20,
       multiWalkLabel: '$20 / walk (2+ per week)',
       extraDog: 10,
-      extraDogLabel: '+$10 per additional dog',
+      extraDogLabel: '$20 first dog · +$10 each extra dog (2 dogs = $30, 3 dogs = $40, 4 dogs = $50)',
     },
     features: [
       'On-lead walks in varied Rotorua locations — mix it up every time',
