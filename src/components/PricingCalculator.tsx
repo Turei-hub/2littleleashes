@@ -35,7 +35,7 @@ export default function PricingCalculator() {
   const weeklyTotal = svc.weekly ? perVisit * frequency : perVisit
 
   return (
-    <div className="rounded-xl border border-forest-700/10 bg-white p-6 shadow-sm">
+    <div className="rounded-xl border border-forest-700/10 bg-white p-4 shadow-sm sm:p-6">
       <h3 className="font-display text-lg font-semibold text-forest-700 mb-4">
         Estimate your cost
       </h3>

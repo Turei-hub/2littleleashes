@@ -176,7 +176,7 @@ export default function BookingForm({
           {/* Pricing grid */}
           <div className="rounded-xl border border-forest-700/10 bg-forest-50 p-4">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-forest-600/60">Pricing</p>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {PRICING_SUMMARY.map(p => (
                 <div key={p.label} className="rounded-lg border border-forest-700/8 bg-white px-3 py-2">
                   <p className="text-xs text-forest-600/70">{p.label}</p>

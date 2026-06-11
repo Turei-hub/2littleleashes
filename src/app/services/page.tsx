@@ -32,7 +32,7 @@ export default function ServicesPage() {
       <Navbar />
 
       {/* Header */}
-      <section className="relative overflow-hidden bg-forest-700 px-4 py-14 min-h-72 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-forest-700 px-4 py-10 min-h-72 sm:py-14 sm:px-6 lg:px-8">
         <Image
           src="/images/services-hero.jpg"
           alt="2 Little Leashes dog walking services Rotorua"
@@ -44,7 +44,7 @@ export default function ServicesPage() {
         <div className="absolute inset-0 bg-forest-700/80" />
         <div className="relative z-10 mx-auto max-w-5xl">
           <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">Services & Pricing</p>
-          <h1 className="font-display mt-1 text-4xl font-bold text-white">
+          <h1 className="font-display mt-1 text-2xl font-bold text-white sm:text-4xl">
             Transparent pricing, no surprises
           </h1>
           <p className="mt-3 text-white text-sm max-w-xl">
@@ -60,7 +60,7 @@ export default function ServicesPage() {
           const SvcIcon = svc.icon
           return (
             <div key={svc.id} className="rounded-xl border border-forest-700/10 bg-white shadow-sm overflow-hidden">
-              <div className="flex items-start justify-between gap-4 p-6 flex-wrap">
+              <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-start sm:justify-between sm:p-6">
                 <div>
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-forest-700">
                     <SvcIcon className="h-5 w-5 text-white" />
@@ -78,8 +78,8 @@ export default function ServicesPage() {
                     </div>
                   )}
                 </div>
-                <div className="text-right shrink-0">
-                  <p className="font-display text-3xl font-bold text-forest-700">${svc.pricing.base}</p>
+                <div className="sm:text-right sm:shrink-0">
+                  <p className="font-display text-2xl font-bold text-forest-700 sm:text-3xl">${svc.pricing.base}</p>
                   <p className="text-xs text-forest-600">{svc.pricing.baseLabel}</p>
                   {'multiWalk' in svc.pricing && (
                     <p className="mt-1 text-xs font-semibold text-forest-600">

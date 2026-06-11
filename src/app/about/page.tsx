@@ -51,7 +51,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-forest-700/80" />
         <div className="relative z-10 mx-auto max-w-5xl">
           <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">About us</p>
-          <h1 className="font-display mt-1 text-4xl font-bold text-white">Our Whānau, Our Business</h1>
+          <h1 className="font-display mt-1 text-2xl font-bold text-white sm:text-4xl">Our Whānau, Our Business</h1>
           <p className="mt-3 text-white text-sm max-w-xl">
             A family dog walking and care business, built with love — right here in Rotorua.
           </p>

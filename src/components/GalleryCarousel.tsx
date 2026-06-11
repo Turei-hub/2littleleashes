@@ -70,7 +70,7 @@ export default function GalleryCarousel({ extra = [] }: { extra?: GalleryImage[]
     <>
       {/* ── FEATURED AUTO-CYCLING PHOTO ──────────────────────────────────────── */}
       <div
-        className="group relative h-[400px] w-full cursor-pointer overflow-hidden bg-forest-900"
+        className="group relative h-[260px] w-full cursor-pointer overflow-hidden bg-forest-900 sm:h-[400px]"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onClick={() => setLightbox(featured)}
