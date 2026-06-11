@@ -22,6 +22,49 @@ const SERVICES: Record<ServiceKey, ServiceOption> = {
   'checkin-walk': { label: 'Home check-in + walk',      base: 50, perVisit: true,  weekly: true,  supportsExtraDogs: true },
 }
 
+function Counter({
+  label,
+  value,
+  min,
+  max,
+  onChange,
+}: {
+  label: string
+  value: number
+  min: number
+  max: number
+  onChange: (v: number) => void
+}) {
+  return (
+    <div className="field">
+      <label>{label}</label>
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => onChange(Math.max(min, value - 1))}
+          disabled={value <= min}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-forest-700/20 bg-forest-50 text-lg font-bold text-forest-700 transition hover:bg-forest-100 disabled:opacity-30 disabled:cursor-not-allowed"
+          aria-label={`Decrease ${label}`}
+        >
+          −
+        </button>
+        <span className="flex-1 rounded-lg border border-forest-700/20 bg-white py-2 text-center text-base font-semibold text-forest-700">
+          {value}
+        </span>
+        <button
+          type="button"
+          onClick={() => onChange(Math.min(max, value + 1))}
+          disabled={value >= max}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-forest-700/20 bg-forest-50 text-lg font-bold text-forest-700 transition hover:bg-forest-100 disabled:opacity-30 disabled:cursor-not-allowed"
+          aria-label={`Increase ${label}`}
+        >
+          +
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export default function PricingCalculator() {
   const [service,   setService]   = useState<ServiceKey>('walk-1x')
   const [dogs,      setDogs]      = useState(1)
@@ -42,7 +85,7 @@ export default function PricingCalculator() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         {/* Service */}
-        <div className="field">
+        <div className="field sm:col-span-2">
           <label>Service type</label>
           <select value={service} onChange={e => setService(e.target.value as ServiceKey)}>
             {(Object.entries(SERVICES) as [ServiceKey, ServiceOption][]).map(([key, s]) => (
@@ -52,36 +95,40 @@ export default function PricingCalculator() {
         </div>
 
         {/* Dogs */}
-        <div className="field">
-          <label>Number of dogs</label>
-          <input
-            type="number"
-            min={1} max={5}
-            value={dogs}
-            onChange={e => setDogs(Math.max(1, parseInt(e.target.value) || 1))}
-          />
-        </div>
+        <Counter label="Number of dogs" value={dogs} min={1} max={5} onChange={setDogs} />
 
         {/* Frequency — only relevant for weekly services */}
         {svc.weekly && (
-          <div className="field">
-            <label>Walks per week</label>
-            <input
-              type="number"
-              min={1} max={7}
-              value={frequency}
-              onChange={e => setFrequency(Math.max(1, parseInt(e.target.value) || 1))}
-            />
-          </div>
+          <Counter label="Walks per week" value={frequency} min={1} max={7} onChange={setFrequency} />
         )}
 
-        {/* Weekend */}
-        <div className="field">
+        {/* Weekend toggle */}
+        <div className={`field ${svc.weekly ? 'sm:col-span-2' : ''}`}>
           <label>Weekend visit?</label>
-          <select value={weekend ? 'yes' : 'no'} onChange={e => setWeekend(e.target.value === 'yes')}>
-            <option value="no">No — weekday</option>
-            <option value="yes">Yes — +$20 surcharge</option>
-          </select>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setWeekend(false)}
+              className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${
+                !weekend
+                  ? 'border-forest-700 bg-forest-700 text-white'
+                  : 'border-forest-700/20 bg-forest-50 text-forest-600 hover:bg-forest-100'
+              }`}
+            >
+              Weekday
+            </button>
+            <button
+              type="button"
+              onClick={() => setWeekend(true)}
+              className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${
+                weekend
+                  ? 'border-amber-500 bg-amber-500 text-white'
+                  : 'border-forest-700/20 bg-forest-50 text-forest-600 hover:bg-forest-100'
+              }`}
+            >
+              Weekend +$20
+            </button>
+          </div>
         </div>
       </div>
 
@@ -109,7 +156,7 @@ export default function PricingCalculator() {
               <div className="text-white/50 text-[10px]">First dog ${svc.base} · each additional dog $15</div>
             </>
           )}
-          {wkndFee   > 0 && <div className="flex justify-between"><span>Weekend surcharge</span><span>${wkndFee}</span></div>}
+          {wkndFee > 0 && <div className="flex justify-between"><span>Weekend surcharge</span><span>${wkndFee}</span></div>}
           {service === 'walk-multi' && frequency > 1 && (
             <div className="flex justify-between text-amber-300"><span>Multi-walk discount applied ✓</span><span>–</span></div>
           )}
