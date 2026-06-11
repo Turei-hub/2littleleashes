@@ -67,8 +67,8 @@ function Counter({
 
 export default function PricingCalculator() {
   const [service,   setService]   = useState<ServiceKey>('walk-1x')
-  const [dogs,      setDogs]      = useState(1)
-  const [frequency, setFrequency] = useState(1)
+  const [dogs,      setDogs]      = useState(0)
+  const [frequency, setFrequency] = useState(0)
   const [weekend,   setWeekend]   = useState(false)
 
   const svc        = SERVICES[service]
@@ -95,11 +95,11 @@ export default function PricingCalculator() {
         </div>
 
         {/* Dogs */}
-        <Counter label="Number of dogs" value={dogs} min={1} max={5} onChange={setDogs} />
+        <Counter label="Number of dogs" value={dogs} min={0} max={5} onChange={setDogs} />
 
         {/* Frequency — only relevant for weekly services */}
         {svc.weekly && (
-          <Counter label="Walks per week" value={frequency} min={1} max={7} onChange={setFrequency} />
+          <Counter label="Walks per week" value={frequency} min={0} max={7} onChange={setFrequency} />
         )}
 
         {/* Weekend toggle */}
