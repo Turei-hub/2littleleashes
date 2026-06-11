@@ -213,3 +213,16 @@ Images live in `public/images/`. Dog photos are named `dog-photo-1.jpg` through 
 ## Deployment
 
 Deployed on **Vercel** connected to the GitHub repo. Set all env vars in Vercel dashboard under Project Settings → Environment Variables. `NEXT_PUBLIC_SITE_URL` should be `https://2littleleashes.co.nz` in production.
+
+---
+
+## Mobile Responsiveness
+
+All public pages are mobile-first (375px). Key patterns applied:
+
+- Hero sections: `py-16 sm:py-24 lg:py-28`, headings `text-2xl sm:text-4xl`
+- Service detail cards: `flex-col` on mobile → `sm:flex-row sm:justify-between`; price `sm:text-right`
+- Gallery carousel featured photo: `h-[260px] sm:h-[400px]`
+- Booking form pricing grid: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`
+- CTA buttons: `w-full sm:w-auto` so they stack on small screens
+- Admin dashboard: separate mobile card layout (`md:hidden`) and desktop table (`hidden md:block`) — no changes needed
