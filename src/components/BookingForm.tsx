@@ -23,10 +23,10 @@ type Status = 'idle' | 'loading' | 'success' | 'error'
 
 const PRICING_SUMMARY = [
   { label: 'Dog Walk (1x/week)',  price: '$30 / walk' },
-  { label: 'Dog Walk (2+/week)',  price: '$20 / walk' },
-  { label: 'Dog Wash',            price: '$20 flat' },
-  { label: 'Home Check-In',       price: '$20 / visit' },
-  { label: 'Check-In + Walk',     price: '$40–50' },
+  { label: 'Dog Walk (2+/week)',  price: '$25 / walk' },
+  { label: 'Dog Wash',            price: '$25 per dog' },
+  { label: 'Home Check-In',       price: '$25 / visit' },
+  { label: 'Check-In + Walk',     price: '$50–55' },
 ]
 
 function buildRef(dogName: string, ownerName: string) {
@@ -184,7 +184,7 @@ export default function BookingForm({
                 </div>
               ))}
             </div>
-            <p className="mt-2 text-xs text-forest-600/50">+$20 weekend surcharge · +$10 per extra dog</p>
+            <p className="mt-2 text-xs text-forest-600/50">+$20 weekend surcharge · +$15 per extra dog</p>
           </div>
         </div>
       )}

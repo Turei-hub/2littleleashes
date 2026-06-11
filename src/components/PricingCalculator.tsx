@@ -16,10 +16,10 @@ interface ServiceOption {
 
 const SERVICES: Record<ServiceKey, ServiceOption> = {
   'walk-1x':      { label: 'Dog walk (1x/week)',       base: 30, perVisit: true,  weekly: true,  supportsExtraDogs: true },
-  'walk-multi':   { label: 'Dog walk (2+/week)',        base: 20, perVisit: true,  weekly: true,  supportsExtraDogs: true },
-  'wash':         { label: 'Dog wash',                  base: 20, perVisit: false, weekly: false, supportsExtraDogs: false },
-  'checkin':      { label: 'Home check-in',             base: 20, perVisit: true,  weekly: true,  supportsExtraDogs: false },
-  'checkin-walk': { label: 'Home check-in + walk',      base: 45, perVisit: true,  weekly: true,  supportsExtraDogs: true },
+  'walk-multi':   { label: 'Dog walk (2+/week)',        base: 25, perVisit: true,  weekly: true,  supportsExtraDogs: true },
+  'wash':         { label: 'Dog wash',                  base: 25, perVisit: false, weekly: false, supportsExtraDogs: false },
+  'checkin':      { label: 'Home check-in',             base: 25, perVisit: true,  weekly: true,  supportsExtraDogs: false },
+  'checkin-walk': { label: 'Home check-in + walk',      base: 50, perVisit: true,  weekly: true,  supportsExtraDogs: true },
 }
 
 export default function PricingCalculator() {
@@ -29,7 +29,7 @@ export default function PricingCalculator() {
   const [weekend,   setWeekend]   = useState(false)
 
   const svc        = SERVICES[service]
-  const extraDogs  = svc.supportsExtraDogs ? Math.max(0, dogs - 1) * 10 : 0
+  const extraDogs  = svc.supportsExtraDogs ? Math.max(0, dogs - 1) * 15 : 0
   const wkndFee    = weekend ? 20 : 0
   const perVisit   = svc.base + extraDogs + wkndFee
   const weeklyTotal = svc.weekly ? perVisit * frequency : perVisit
@@ -105,8 +105,8 @@ export default function PricingCalculator() {
           <div className="flex justify-between"><span>Base ({svc.label})</span><span>${svc.base}</span></div>
           {extraDogs > 0 && (
             <>
-              <div className="flex justify-between"><span>Extra dogs ({dogs - 1} × $10)</span><span>${extraDogs}</span></div>
-              <div className="text-white/50 text-[10px]">First dog ${svc.base} · each additional dog $10</div>
+              <div className="flex justify-between"><span>Extra dogs ({dogs - 1} × $15)</span><span>${extraDogs}</span></div>
+              <div className="text-white/50 text-[10px]">First dog ${svc.base} · each additional dog $15</div>
             </>
           )}
           {wkndFee   > 0 && <div className="flex justify-between"><span>Weekend surcharge</span><span>${wkndFee}</span></div>}

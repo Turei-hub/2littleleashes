@@ -47,10 +47,10 @@ export const SERVICES: Service[] = [
     pricing: {
       base: 30,
       baseLabel: '$30 / walk (1x per week)',
-      multiWalk: 20,
-      multiWalkLabel: '$20 / walk (2+ per week)',
-      extraDog: 10,
-      extraDogLabel: '$20 first dog · +$10 each extra dog (2 dogs = $30, 3 dogs = $40, 4 dogs = $50)',
+      multiWalk: 25,
+      multiWalkLabel: '$25 / walk (2+ per week)',
+      extraDog: 15,
+      extraDogLabel: '$25 first dog · +$15 each extra dog (2 dogs = $40, 3 dogs = $55, 4 dogs = $70)',
     },
     features: [
       'On-lead walks in varied Rotorua locations — mix it up every time',
@@ -70,8 +70,8 @@ export const SERVICES: Service[] = [
     title: 'Dog Wash',
     tagline: 'Professional wash at a local pet store',
     pricing: {
-      base: 20,
-      baseLabel: '$20 flat rate',
+      base: 25,
+      baseLabel: '$25 per dog',
     },
     features: [
       'Taken to a local Rotorua pet care store for a full professional wash',
@@ -90,9 +90,9 @@ export const SERVICES: Service[] = [
     title: 'Home Check-Ins',
     tagline: "Care and security while you're away",
     pricing: {
-      base: 20,
-      baseLabel: '$20 per visit',
-      addon: 'Add a walk: $40–$50 total',
+      base: 25,
+      baseLabel: '$25 per visit',
+      addon: 'Add a walk: $50–$55 total',
     },
     features: [
       'Feeding (owner-provided food) + fresh water refill',
@@ -102,7 +102,7 @@ export const SERVICES: Service[] = [
     ],
     badge: null,
     highlight: false,
-    specialNote: 'Add a dog walk to combine care and exercise — $40 or $50 total.',
+    specialNote: 'Add a dog walk to combine care and exercise — $50 or $55 total.',
   },
 ]
 
@@ -137,10 +137,10 @@ export const POLICIES: Policy[] = [
 // Booking form options
 export const SERVICE_OPTIONS = [
   { value: 'dog-walking-1x',    label: 'Dog Walk — 1x per week ($30/walk)' },
-  { value: 'dog-walking-multi', label: 'Dog Walk — 2+ per week ($20/walk)' },
-  { value: 'dog-wash',          label: 'Dog Wash ($20 flat)' },
-  { value: 'home-checkin',      label: 'Home Check-In ($20/visit)' },
-  { value: 'checkin-walk',      label: 'Home Check-In + Walk ($40–$50)' },
+  { value: 'dog-walking-multi', label: 'Dog Walk — 2+ per week ($25/walk)' },
+  { value: 'dog-wash',          label: 'Dog Wash ($25 per dog)' },
+  { value: 'home-checkin',      label: 'Home Check-In ($25/visit)' },
+  { value: 'checkin-walk',      label: 'Home Check-In + Walk ($50–$55)' },
 ] as const
 
 export const MEET_GREET_OPTIONS = [

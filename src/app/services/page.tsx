@@ -10,18 +10,18 @@ import { SERVICES, POLICIES } from '@/lib/data'
 
 export const metadata: Metadata = {
   title: 'Services & Pricing | 2 Little Leashes Rotorua',
-  description: 'Dog walking from $30, dog wash $20, home check-ins $20. Free pick-up and drop-off in Rotorua, NZ.',
+  description: 'Dog walking from $30, dog wash $25, home check-ins $25. Free pick-up and drop-off in Rotorua, NZ.',
   alternates: { canonical: 'https://www.2littleleashes.co.nz/services' },
   openGraph: {
     title: 'Services & Pricing | 2 Little Leashes Rotorua',
-    description: 'Dog walking from $30, dog wash $20, home check-ins $20. Free pick-up and drop-off in Rotorua, NZ.',
+    description: 'Dog walking from $30, dog wash $25, home check-ins $25. Free pick-up and drop-off in Rotorua, NZ.',
     url: 'https://www.2littleleashes.co.nz/services',
     images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/pack-walk-truck.jpg`, width: 1200, height: 630, alt: '2 Little Leashes pack walk Rotorua' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Services & Pricing | 2 Little Leashes Rotorua',
-    description: 'Dog walking from $30, dog wash $20, home check-ins $20. Free pick-up and drop-off in Rotorua.',
+    description: 'Dog walking from $30, dog wash $25, home check-ins $25. Free pick-up and drop-off in Rotorua.',
     images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/pack-walk-truck.jpg`],
   },
 }
