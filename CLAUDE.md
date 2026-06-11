@@ -226,3 +226,9 @@ All public pages are mobile-first (375px). Key patterns applied:
 - Booking form pricing grid: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`
 - CTA buttons: `w-full sm:w-auto` so they stack on small screens
 - Admin dashboard: separate mobile card layout (`md:hidden`) and desktop table (`hidden md:block`) — no changes needed
+
+### PricingCalculator controls
+- Number of dogs and walks per week use custom `Counter` component (`−` / value / `+` buttons) — no native number inputs
+- Weekend visit uses a two-pill toggle (Weekday / Weekend +$20) — no select dropdown
+- Both counters default to `0` and have `min={0}`
+- Service type select spans full width (`sm:col-span-2`)
