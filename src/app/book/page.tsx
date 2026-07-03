@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import BookingFlowClient from '@/components/BookingFlowClient'
+import BookingForm from '@/components/BookingForm'
 
 export const metadata: Metadata = {
   title: 'Book a Walk | 2 Little Leashes Rotorua',
@@ -41,13 +41,13 @@ export default function BookPage() {
           <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">New booking</p>
           <h1 className="font-display mt-1 text-4xl font-bold text-white">Book with 2 Little Leashes</h1>
           <p className="mt-3 max-w-xl text-sm text-white">
-            Enter your email to get started — we'll get you booked in no time.
+            Fill out the form below and we'll get you booked in no time.
           </p>
         </div>
       </section>
 
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-        <BookingFlowClient />
+        <BookingForm />
       </div>
 
       <Footer />

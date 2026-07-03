@@ -6,17 +6,12 @@ import nodemailer from 'nodemailer'
 
 export interface BookingData {
   ownerName: string
+  dogInfo: string
   email: string
   phone: string
-  suburb: string
-  dogName: string
-  breed: string
-  service: string
-  preferredDate: string
-  meetGreetPref: string
+  services: string[]
+  daysPerWeek: string
   notes: string
-  paymentRef: string
-  bookingType: 'free' | 'paid'
 }
 
 function createTransport() {
@@ -120,32 +115,21 @@ export async function sendCustomerConfirmation(data: BookingData) {
       <div class="body">
         <p class="greeting">Kia ora ${data.ownerName}! 👋</p>
         <p class="intro">
-          We've received your booking request for <strong>${data.dogName}</strong>.
-          Meihana will be in touch within 24 hours to arrange your free meet &amp; greet.
+          We've received your booking request for <strong>${data.dogInfo}</strong>.
+          Meihana will be in touch within 24 hours to confirm the details.
         </p>
 
         <div class="detail-box">
           <p class="detail-box-title">Booking Summary</p>
-          <div class="detail-row"><span class="dl">Dog</span><span class="dv">${data.dogName}${data.breed ? ` (${data.breed})` : ''}</span></div>
-          <div class="detail-row"><span class="dl">Service</span><span class="dv">${data.service}</span></div>
-          ${data.preferredDate ? `<div class="detail-row"><span class="dl">Preferred start</span><span class="dv">${data.preferredDate}</span></div>` : ''}
-          <div class="detail-row"><span class="dl">Meet &amp; greet</span><span class="dv">${data.meetGreetPref}</span></div>
+          <div class="detail-row"><span class="dl">Dog</span><span class="dv">${data.dogInfo}</span></div>
+          <div class="detail-row"><span class="dl">Services</span><span class="dv">${data.services.join(', ')}</span></div>
+          <div class="detail-row"><span class="dl">Days per week</span><span class="dv">${data.daysPerWeek}</span></div>
         </div>
 
-        ${data.bookingType === 'free' ? `
-        <div class="callout-amber">
-          🐾 New customer booking for ${data.dogName}. Meihana will be in touch to arrange your meet &amp; greet.
-        </div>
         <p class="steps-title">What happens next:</p>
-        <div class="step"><div class="step-num">1</div><div class="step-text">Meihana will contact you within 24 hours to schedule your free meet &amp; greet at your home.</div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-text">At the meet &amp; greet we go over ${data.dogName}'s personality, habits, and any medical needs.</div></div>
-        <div class="step"><div class="step-num">3</div><div class="step-text">Your walk is confirmed — the adventures begin! 🌿</div></div>
-        ` : `
-        <p class="steps-title">What happens next:</p>
-        <div class="step"><div class="step-num">1</div><div class="step-text">Meihana will contact you within 24 hours with payment details for your session.</div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-text">Once you've made your transfer, reply to this email with a screenshot so Meihana can verify it.</div></div>
-        <div class="step"><div class="step-num">3</div><div class="step-text">Meihana will confirm your booking and be in touch with pickup details. 🌿</div></div>
-        `}
+        <div class="step"><div class="step-num">1</div><div class="step-text">Meihana will contact you within 24 hours to confirm your booking — and arrange a free meet &amp; greet first if you're a new client.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">She'll share payment details for your selected service(s).</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Your walk is booked — the adventures begin! 🌿</div></div>
       </div>
 
       ${emailFooter()}
@@ -157,7 +141,7 @@ export async function sendCustomerConfirmation(data: BookingData) {
   await transporter.sendMail({
     from:    process.env.FROM_EMAIL,
     to:      data.email,
-    subject: `🐾 Booking received for ${data.dogName} — 2 Little Leashes`,
+    subject: `🐾 Booking received for ${data.dogInfo} — 2 Little Leashes`,
     html,
   })
 }
@@ -177,8 +161,6 @@ export async function sendOwnerAlert(data: BookingData) {
     td{padding:9px 12px;border-bottom:1px solid #f0ede6;font-size:13px;vertical-align:top;}
     td:first-child{color:#7a9080;width:38%;white-space:nowrap;}
     td:last-child{font-weight:600;color:#1a3a2a;}
-    .badge-free{display:inline-block;background:#fef3c7;border:1px solid #fcd34d;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:700;color:#92400e;margin-left:8px;}
-    .badge-paid{display:inline-block;background:#e0f2f1;border:1px solid #4db6ac;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:700;color:#00695c;margin-left:8px;}
     .notes-box{background:#f3f8f5;border:1px solid #cfe4d7;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:13px;color:#5a7060;line-height:1.55;}
     .notes-box strong{color:#1a3a2a;display:block;margin-bottom:6px;}
   </style>
@@ -196,9 +178,6 @@ export async function sendOwnerAlert(data: BookingData) {
       <div class="body">
         <p class="intro" style="margin-bottom:4px;">
           A new booking has come in — details below.
-          ${data.bookingType === 'free'
-            ? `<span class="badge-free">New customer</span>`
-            : `<span class="badge-paid">Paid booking</span>`}
         </p>
 
         <div class="detail-box">
@@ -207,13 +186,9 @@ export async function sendOwnerAlert(data: BookingData) {
             <tr><td>Owner</td><td>${data.ownerName}</td></tr>
             <tr><td>Email</td><td><a href="mailto:${data.email}" style="color:#1a3a2a;">${data.email}</a></td></tr>
             <tr><td>Phone</td><td>${data.phone || '—'}</td></tr>
-            <tr><td>Suburb</td><td>${data.suburb || '—'}</td></tr>
-            <tr><td>Dog</td><td>${data.dogName}</td></tr>
-            <tr><td>Breed &amp; age</td><td>${data.breed || '—'}</td></tr>
-            <tr><td>Service</td><td>${data.service}</td></tr>
-            <tr><td>Preferred start</td><td>${data.preferredDate || '—'}</td></tr>
-            <tr><td>Meet &amp; greet</td><td>${data.meetGreetPref}</td></tr>
-            ${data.bookingType === 'paid' ? `<tr><td>Payment ref</td><td style="font-family:monospace;letter-spacing:1px;">${data.paymentRef}</td></tr>` : ''}
+            <tr><td>Dog</td><td>${data.dogInfo}</td></tr>
+            <tr><td>Services</td><td>${data.services.join(', ')}</td></tr>
+            <tr><td>Days per week</td><td>${data.daysPerWeek}</td></tr>
           </table>
         </div>
 
@@ -233,7 +208,7 @@ export async function sendOwnerAlert(data: BookingData) {
   await transporter.sendMail({
     from:    process.env.FROM_EMAIL,
     to:      ownerRecipients,
-    subject: `🐕 New booking: ${data.dogName} (${data.ownerName}) — ${data.service}`,
+    subject: `🐕 New booking: ${data.dogInfo} (${data.ownerName}) — ${data.services.join(', ')}`,
     html,
   })
 }

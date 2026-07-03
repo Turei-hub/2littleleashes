@@ -48,7 +48,7 @@ src/
 │   ├── services/page.tsx         # Services & pricing
 │   ├── gallery/page.tsx          # Photo gallery
 │   ├── about/page.tsx            # About Meihana
-│   ├── book/page.tsx             # Booking page (uses BookingFlowClient)
+│   ├── book/page.tsx             # Booking page (renders BookingForm directly)
 │   ├── admin/
 │   │   ├── page.tsx              # Admin dashboard (protected)
 │   │   ├── login/page.tsx        # Admin login
@@ -56,13 +56,11 @@ src/
 │   │   └── LogoutButton.tsx
 │   └── api/
 │       ├── book/route.ts         # POST — save booking + send emails
-│       ├── check-customer/route.ts # POST — email lookup for flow routing
 │       └── admin/bookings/[id]/route.ts  # PATCH — update status / verify payment
 ├── components/
 │   ├── Navbar.tsx                # Sticky nav with Book Now CTA
 │   ├── Footer.tsx                # Footer with subtle Admin link
-│   ├── BookingFlowClient.tsx     # Email check → routes to correct form
-│   ├── BookingForm.tsx           # Shared form (free + paid flows)
+│   ├── BookingForm.tsx           # Single-page booking form (mirrors the owner's Google Form)
 │   ├── AdminFloatingButton.tsx   # Teal float — visible only when logged in
 │   ├── BackToTop.tsx             # Fixed scroll-to-top button
 │   ├── GalleryCarousel.tsx       # Dog photo carousel/lightbox
@@ -87,12 +85,10 @@ src/
 - **About** — Meihana's story
 - **Book** — dual booking flow (see below)
 
-### Dual Booking Flow (`/book`)
-1. Customer enters email → `POST /api/check-customer` queries Supabase for a confirmed booking
-2. **New customer** (no confirmed booking) → Free first walk form (amber theme, no payment)
-3. **Returning customer** (has confirmed booking) → Paid service form (teal theme, pricing grid, live payment reference)
+### Booking Flow (`/book`)
+Single-page form — no email-lookup gate, no free/paid branching. Rebuilt 2026-07-04 to mirror the owner's existing Google Form after customers struggled with the old two-step (email check → routed form) flow.
 
-Payment reference format: `DOGNAME-SURN` (dog name + first 4 chars of surname). Example: `BUDDY-JOHN`.
+Fields: full name, dog(s) name & breed (combined), email, phone, service selection (checkboxes, multi-select from `BOOKING_SERVICES` in `src/lib/data.ts`), days per week (radio 1–5 or "Other" with free text), and an optional notes/queries field. Meihana follows up manually by phone/email for meet & greet scheduling and payment — there's no upfront payment screenshot upload or payment reference generation anymore.
 
 ### Admin Dashboard (`/admin`)
 - Protected by Supabase Auth session (middleware redirects unauthenticated users)
@@ -114,9 +110,7 @@ Payment reference format: `DOGNAME-SURN` (dog name + first 4 chars of surname). 
 | `sendReviewRequest` | Manual / scheduler | Customer |
 | `sendWinBackEmail` | Manual / scheduler | Lapsed customer |
 
-`sendCustomerConfirmation` branches on `bookingType`:
-- `'free'` → amber "first walk FREE" banner, meet & greet steps, no bank details
-- `'paid'` → teal payment box with bank account + reference, transfer steps
+`sendCustomerConfirmation` and `sendOwnerAlert` no longer branch on booking type — one template covers every booking, listing the selected services and days/week.
 
 ---
 
@@ -130,17 +124,17 @@ Payment reference format: `DOGNAME-SURN` (dog name + first 4 chars of surname). 
 | `owner_name` | text | |
 | `email` | text | Lowercased on insert |
 | `phone` | text | |
-| `suburb` | text | |
-| `dog_name` | text | |
-| `breed` | text | |
-| `service` | text | |
-| `preferred_date` | text | |
-| `meet_greet_pref` | text | |
-| `notes` | text | |
+| `suburb` | text | **Unused by current form** — legacy column, always null on new rows |
+| `dog_name` | text | Holds the combined "dog name + breed" string from the current form |
+| `breed` | text | **Unused by current form** — legacy column, always null on new rows |
+| `service` | text | `·`-joined list of selected service labels (form allows multi-select) |
+| `preferred_date` | text | **Unused by current form** — legacy column, always null on new rows |
+| `meet_greet_pref` | text | **Unused by current form** — legacy column, always null on new rows |
+| `notes` | text | Prefixed with `Days per week: N`, then the customer's own notes |
 | `status` | text | `pending` / `confirmed` / `cancelled` (default: `pending`) |
-| `payment_status` | text | `none` / `uploaded` / `verified` (default: `none`) |
-| `payment_screenshot_url` | text | Supabase Storage public URL |
-| `payment_reference` | text | e.g. `BUDDY-JOHN` |
+| `payment_status` | text | `none` / `uploaded` / `verified` (default: `none`) — no longer set by the booking form itself; Meihana manages payment manually |
+| `payment_screenshot_url` | text | Supabase Storage public URL — unused since the form dropped the upload step |
+| `payment_reference` | text | **Unused by current form** — no longer auto-generated |
 | `created_at` | timestamptz | Auto |
 
 **RLS policies:**

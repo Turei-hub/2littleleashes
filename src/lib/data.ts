@@ -134,18 +134,13 @@ export const POLICIES: Policy[] = [
   },
 ]
 
-// Booking form options
-export const SERVICE_OPTIONS = [
-  { value: 'dog-walking-1x',    label: 'Dog Walk — 1x per week ($30/walk)' },
-  { value: 'dog-walking-multi', label: 'Dog Walk — 2+ per week ($25/walk)' },
-  { value: 'dog-wash',          label: 'Dog Wash ($25 per dog)' },
-  { value: 'home-checkin',      label: 'Home Check-In ($25/visit)' },
-  { value: 'checkin-walk',      label: 'Home Check-In + Walk ($50–$55)' },
+// Booking form — service checkboxes (mirrors the owner's Google Form)
+export const BOOKING_SERVICES = [
+  { value: 'walk-1x',    label: '$30 - Dog Walk upto 1 hour for 1 WALK A WEEK' },
+  { value: 'walk-multi', label: '$25 - Dog Walk for upto 1 hour for 2 OR MORE DAYS OF WEEK' },
+  { value: 'extra-dog',  label: '$15 - For extra dog ( If you have 2 or more dogs )' },
+  { value: 'dog-wash',   label: '$25 - Dog Wash ( Per Dog ) Pick up - Wash - Drop off' },
+  { value: 'checkin',    label: '$25 - Check in Service . Feed, Fresh Water, Clean Waste, Security Check of Property' },
 ] as const
 
-export const MEET_GREET_OPTIONS = [
-  'Mornings (7–10am) work best',
-  'Late morning (10am–12pm)',
-  'Afternoon (12–2pm)',
-  'Flexible — please contact me',
-] as const
+export const DAYS_PER_WEEK_OPTIONS = ['1', '2', '3', '4', '5', 'Other'] as const

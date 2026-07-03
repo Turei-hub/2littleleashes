@@ -6,84 +6,52 @@ import { NextRequest, NextResponse } from 'next/server'
 import { sendCustomerConfirmation, sendOwnerAlert } from '@/lib/email'
 import { supabase } from '@/lib/supabase'
 
-function buildPaymentRef(dogName: string, ownerName: string): string {
-  const parts = ownerName.trim().split(/\s+/)
-  const surname = parts.length > 1 ? parts[parts.length - 1] : parts[0]
-  return `${dogName.toUpperCase()}-${surname.slice(0, 4).toUpperCase()}`
-}
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
 
     const {
       ownerName,
+      dogInfo,
       email,
       phone,
-      suburb,
-      dogName,
-      breed,
-      service,
-      preferredDate,
-      meetGreetPref,
+      services,
+      daysPerWeek,
       notes,
-      bookingType,
-      screenshotUrl,
     } = body
 
     // Basic server-side validation
-    if (!ownerName?.trim())     return NextResponse.json({ error: 'Name is required' },                      { status: 400 })
-    if (!email?.trim())         return NextResponse.json({ error: 'Email is required' },                     { status: 400 })
-    if (!dogName?.trim())       return NextResponse.json({ error: "Dog's name required" },                   { status: 400 })
-    if (!service?.trim())       return NextResponse.json({ error: 'Service is required' },                   { status: 400 })
-    if (!meetGreetPref?.trim()) return NextResponse.json({ error: 'Meet & greet preference required' },      { status: 400 })
+    if (!ownerName?.trim())            return NextResponse.json({ error: 'Name is required' },                        { status: 400 })
+    if (!dogInfo?.trim())              return NextResponse.json({ error: "Dog's name and breed is required" },        { status: 400 })
+    if (!email?.trim())                return NextResponse.json({ error: 'Email is required' },                       { status: 400 })
+    if (!phone?.trim())                return NextResponse.json({ error: 'Phone number is required' },                { status: 400 })
+    if (!Array.isArray(services) || services.length === 0)
+                                        return NextResponse.json({ error: 'Please select at least one service' },     { status: 400 })
+    if (!daysPerWeek?.trim())          return NextResponse.json({ error: 'Please select how many days a week' },      { status: 400 })
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 })
     }
 
-    // Server-side guard: treat as returning if any prior booking exists for this email,
-    // regardless of what the client sent. Prevents direct API bypass.
-    let resolvedBookingType: 'free' | 'paid' = bookingType === 'paid' ? 'paid' : 'free'
-    if (resolvedBookingType === 'free') {
-      const { count } = await supabase
-        .from('bookings')
-        .select('id', { count: 'exact', head: true })
-        .eq('email', email.trim().toLowerCase())
-      if ((count ?? 0) > 0) resolvedBookingType = 'paid'
-    }
-
     const bookingData = {
-      ownerName:     ownerName.trim(),
-      email:         email.trim().toLowerCase(),
-      phone:         phone?.trim()        || '',
-      suburb:        suburb?.trim()       || '',
-      dogName:       dogName.trim(),
-      breed:         breed?.trim()        || '',
-      service:       service.trim(),
-      preferredDate: preferredDate?.trim() || '',
-      meetGreetPref: meetGreetPref.trim(),
-      notes:         notes?.trim()        || '',
-      paymentRef:    buildPaymentRef(dogName.trim(), ownerName.trim()),
-      bookingType:   resolvedBookingType,
+      ownerName:   ownerName.trim(),
+      dogInfo:     dogInfo.trim(),
+      email:       email.trim().toLowerCase(),
+      phone:       phone.trim(),
+      services:    services as string[],
+      daysPerWeek: daysPerWeek.trim(),
+      notes:       notes?.trim() || '',
     }
 
     // 1. Save to Supabase (required — fail fast if this errors)
     const { error: dbError } = await supabase.from('bookings').insert({
-      owner_name:        bookingData.ownerName,
-      email:             bookingData.email,
-      phone:             bookingData.phone,
-      suburb:            bookingData.suburb,
-      dog_name:          bookingData.dogName,
-      breed:             bookingData.breed,
-      service:           bookingData.service,
-      preferred_date:    bookingData.preferredDate,
-      meet_greet_pref:   bookingData.meetGreetPref,
-      notes:             bookingData.notes,
-      payment_status:         screenshotUrl ? 'uploaded' : 'none',
-      payment_screenshot_url: screenshotUrl || null,
-      payment_reference:      bookingData.paymentRef,
+      owner_name: bookingData.ownerName,
+      email:      bookingData.email,
+      phone:      bookingData.phone,
+      dog_name:   bookingData.dogInfo,
+      service:    bookingData.services.join(' · '),
+      notes:      `Days per week: ${bookingData.daysPerWeek}${bookingData.notes ? `\n\n${bookingData.notes}` : ''}`,
     })
 
     if (dbError) {
@@ -105,7 +73,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { success: true, message: `Booking received for ${bookingData.dogName}! Check your inbox.` },
+      { success: true, message: `Booking received for ${bookingData.dogInfo}! Check your inbox.` },
       { status: 200 }
     )
   } catch (error) {
