@@ -103,7 +103,7 @@ export default function HomePage() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/book" className="btn-primary w-full sm:w-auto text-sm sm:text-base px-5 py-2.5 sm:px-6 sm:py-3">
-                Book a walk →
+                Pricing and Booking →
               </Link>
             </div>
 
@@ -209,7 +209,7 @@ export default function HomePage() {
           </p>
           <div className="mt-6 flex justify-center gap-3 flex-wrap">
             <Link href="/book" className="btn-primary px-6 py-3">
-              Book a walk →
+              Pricing and Booking →
             </Link>
           </div>
         </div>

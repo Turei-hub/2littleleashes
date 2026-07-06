@@ -34,7 +34,7 @@ export default function Footer() {
               {[
                 { href: '/',         label: 'Home' },
                 { href: '/about',    label: 'About Meihana' },
-                { href: '/book',     label: 'Book a walk' },
+                { href: '/book',     label: 'Pricing and Booking' },
               ].map(l => (
                 <li key={l.href}>
                   <Link href={l.href} className="transition hover:text-white">{l.label}</Link>
