@@ -62,7 +62,7 @@ export default function Navbar() {
             href="/book"
             className="ml-2 rounded-lg bg-amber-500 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-amber-400 active:scale-95"
           >
-            Prices and Booking →
+            Pricing and Booking →
           </Link>
         </div>
 
@@ -99,7 +99,7 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             className="mt-2 block rounded-lg bg-amber-500 px-3 py-2 text-center text-sm font-semibold text-white transition hover:bg-amber-400"
           >
-            Prices and Booking →
+            Pricing and Booking →
           </Link>
         </div>
       )}
