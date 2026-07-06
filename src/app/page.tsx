@@ -24,8 +24,7 @@ export const metadata: Metadata = {
 }
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import ServiceCard from '@/components/ServiceCard'
-import { SERVICES, POLICIES } from '@/lib/data'
+import { POLICIES } from '@/lib/data'
 
 const WHY_CHOOSE: { icon: LucideIcon; title: string; body: string }[] = [
   { icon: Heart,      title: 'Local Family Business',      body: 'Safe, friendly & full of care' },
@@ -106,9 +105,6 @@ export default function HomePage() {
               <Link href="/book" className="btn-primary w-full sm:w-auto text-sm sm:text-base px-5 py-2.5 sm:px-6 sm:py-3">
                 Book a walk →
               </Link>
-              <Link href="/services" className="btn-secondary w-full sm:w-auto text-sm sm:text-base px-5 py-2.5 sm:px-6 sm:py-3">
-                See all services
-              </Link>
             </div>
 
             {/* Pills */}
@@ -124,36 +120,6 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ── SERVICES ──────────────────────────────────────────────────────────── */}
-      <section className="section">
-        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">What we offer</p>
-        <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">Three services, one team</h2>
-        <p className="mt-2 text-sm text-forest-600">
-          All services are personally supervised by Meihana. A meet &amp; greet at your home is required before your first booking.
-        </p>
-
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map(svc => (
-            <ServiceCard
-              key={svc.id}
-              icon={svc.icon}
-              title={svc.title}
-              tagline={svc.tagline}
-              priceLabel={svc.pricing.baseLabel}
-              badge={svc.badge}
-              highlight={svc.highlight}
-              compact
-            />
-          ))}
-        </div>
-
-        <div className="mt-6 text-center">
-          <Link href="/services" className="btn-outline">
-            View full pricing & details →
-          </Link>
         </div>
       </section>
 
@@ -244,9 +210,6 @@ export default function HomePage() {
           <div className="mt-6 flex justify-center gap-3 flex-wrap">
             <Link href="/book" className="btn-primary px-6 py-3">
               Book a walk →
-            </Link>
-            <Link href="/services" className="btn-secondary px-6 py-3">
-              See pricing
             </Link>
           </div>
         </div>

@@ -11,7 +11,6 @@ import MarqueeBanner from '@/components/MarqueeBanner'
 
 const NAV_LINKS = [
   { href: '/',          label: 'Home' },
-  { href: '/services',  label: 'Pricings and Services' },
   { href: '/gallery',   label: 'Gallery' },
   { href: '/about',     label: 'About' },
 ]

@@ -45,7 +45,6 @@ Tailwind config extends `forest` and `cream` as custom colour palettes. Use `bg-
 src/
 ├── app/
 │   ├── page.tsx                  # Home page
-│   ├── services/page.tsx         # Services & pricing
 │   ├── gallery/page.tsx          # Photo gallery
 │   ├── about/page.tsx            # About Meihana
 │   ├── book/page.tsx             # Booking page (renders BookingForm directly)
@@ -64,11 +63,9 @@ src/
 │   ├── AdminFloatingButton.tsx   # Teal float — visible only when logged in
 │   ├── BackToTop.tsx             # Fixed scroll-to-top button
 │   ├── GalleryCarousel.tsx       # Dog photo carousel/lightbox
-│   ├── MarqueeBanner.tsx         # Scrolling info strip below navbar
-│   ├── PricingCalculator.tsx     # Interactive price estimator
-│   └── ServiceCard.tsx
+│   └── MarqueeBanner.tsx         # Scrolling info strip below navbar
 └── lib/
-    ├── data.ts                   # SERVICES, POLICIES, SERVICE_OPTIONS — single source of truth
+    ├── data.ts                   # POLICIES, BOOKING_SERVICES, DAYS_PER_WEEK_OPTIONS — single source of truth
     ├── email.ts                  # All transactional email templates
     ├── supabase.ts               # Anon client (browser-safe)
     └── supabase-server.ts        # SSR + service clients (server only)
@@ -79,11 +76,10 @@ src/
 ## Key Features
 
 ### Public Site
-- **Home** — hero with background photo, stat bar, service cards, reviews (real Facebook reviews), policies, final CTA
-- **Services** — full pricing breakdown per service, `PricingCalculator` interactive estimator
+- **Home** — hero with background photo, why-choose-us, reviews (real Facebook reviews), policies, final CTA. No standalone services/pricing page — removed 2026-07-04 in favor of driving everyone straight to Book a walk; pricing now only appears inline as checkbox labels on the booking form itself.
 - **Gallery** — featured carousel + masonry grid, dog photos in `public/images/`
 - **About** — Meihana's story
-- **Book** — dual booking flow (see below)
+- **Book** — single-page form (see below)
 
 ### Booking Flow (`/book`)
 Single-page form — no email-lookup gate, no free/paid branching. Rebuilt 2026-07-04 to mirror the owner's existing Google Form after customers struggled with the old two-step (email check → routed form) flow.
@@ -215,14 +211,7 @@ Deployed on **Vercel** connected to the GitHub repo. Set all env vars in Vercel 
 All public pages are mobile-first (375px). Key patterns applied:
 
 - Hero sections: `py-16 sm:py-24 lg:py-28`, headings `text-2xl sm:text-4xl`
-- Service detail cards: `flex-col` on mobile → `sm:flex-row sm:justify-between`; price `sm:text-right`
 - Gallery carousel featured photo: `h-[260px] sm:h-[400px]`
-- Booking form pricing grid: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`
+- Booking form service checkboxes stack full-width; days-per-week pills wrap via `flex-wrap`
 - CTA buttons: `w-full sm:w-auto` so they stack on small screens
 - Admin dashboard: separate mobile card layout (`md:hidden`) and desktop table (`hidden md:block`) — no changes needed
-
-### PricingCalculator controls
-- Number of dogs and walks per week use custom `Counter` component (`−` / value / `+` buttons) — no native number inputs
-- Weekend visit uses a two-pill toggle (Weekday / Weekend +$20) — no select dropdown
-- Both counters default to `0` and have `min={0}`
-- Service type select spans full width (`sm:col-span-2`)

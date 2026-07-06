@@ -33,7 +33,6 @@ export default function Footer() {
             <ul className="space-y-2 text-xs">
               {[
                 { href: '/',         label: 'Home' },
-                { href: '/services', label: 'Services & Pricing' },
                 { href: '/about',    label: 'About Meihana' },
                 { href: '/book',     label: 'Book a walk' },
               ].map(l => (

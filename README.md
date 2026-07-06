@@ -25,7 +25,6 @@ src/
 ├── app/
 │   ├── api/book/route.ts     # POST endpoint — validates + fires emails
 │   ├── page.tsx              # Home page
-│   ├── services/page.tsx     # Full pricing & service detail
 │   ├── book/page.tsx         # Booking page
 │   ├── about/page.tsx        # About Meihana
 │   ├── layout.tsx            # Root layout, fonts, metadata
@@ -33,9 +32,7 @@ src/
 ├── components/
 │   ├── Navbar.tsx            # Sticky nav, mobile hamburger
 │   ├── Footer.tsx            # Footer with links and hours
-│   ├── ServiceCard.tsx       # Reusable service card
-│   ├── PricingCalculator.tsx # Interactive pricing estimator
-│   └── BookingForm.tsx       # Full form with validation
+│   └── BookingForm.tsx       # Single-page booking form
 └── lib/
     ├── data.ts               # All services, policies, pricing (edit here)
     └── email.ts              # All email templates (5 flows)
