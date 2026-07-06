@@ -2,7 +2,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Camera, MapPin, Compass, Car, Pill, Handshake, PawPrint } from 'lucide-react'
+import { Camera, MapPin, Car, Handshake, PawPrint } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
@@ -28,9 +28,7 @@ export const metadata: Metadata = {
 const WHY_US: { icon: LucideIcon; title: string; body: string }[] = [
   { icon: Camera,    title: 'Photo after every session',   body: 'We send a photo update after every walk or visit so you can see your dog having the time of their life.' },
   { icon: MapPin,    title: 'Rotorua\'s best locations',    body: 'Forests, lake tracks, and bush paths — we mix up locations so walks stay exciting and stimulating.' },
-  { icon: Compass,   title: "Rotorua's best locations",    body: 'Forests, lake tracks, bush paths — we mix up locations so walks stay exciting and stimulating.' },
   { icon: Car,       title: 'Free pick-up & drop-off',     body: 'We come to you. Your dog is collected and returned safely from your home.' },
-  { icon: Pill,      title: 'Medical care welcome',        body: 'Medication administration and dogs with special needs are welcome — just let us know at booking.' },
   { icon: Handshake, title: 'Meet & greet first',          body: 'Before any walk we visit your home, meet your dog, and understand their needs. No surprises.' },
 ]
 
