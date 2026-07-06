@@ -232,7 +232,7 @@ export default function BookingForm() {
           {status === 'loading' ? (
             <><Loader size={14} className="animate-spin" /> Sending…</>
           ) : (
-            'Request a walk →'
+            'Submit booking'
           )}
         </button>
       </div>
