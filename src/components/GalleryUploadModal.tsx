@@ -3,7 +3,25 @@
 import { useState, useRef } from 'react'
 import { X, Upload, CheckCircle, ImagePlus } from 'lucide-react'
 
-export default function GalleryUploadModal({ onClose }: { onClose: () => void }) {
+export default function GalleryUploadModal({
+  onClose,
+  endpoint = '/api/gallery/submit',
+  title = 'Share your photo',
+  subtitle = 'Photos are reviewed before appearing in the gallery.',
+  successTitle = 'Photo submitted!',
+  successText = "Thanks for sharing — we'll review it shortly.",
+  submitLabel = 'Submit photo',
+  onSuccess,
+}: {
+  onClose: () => void
+  endpoint?: string
+  title?: string
+  subtitle?: string
+  successTitle?: string
+  successText?: string
+  submitLabel?: string
+  onSuccess?: () => void
+}) {
   const [dogName,  setDogName]  = useState('')
   const [caption,  setCaption]  = useState('')
   const [file,     setFile]     = useState<File | null>(null)
@@ -34,12 +52,13 @@ export default function GalleryUploadModal({ onClose }: { onClose: () => void })
     fd.append('caption',  caption.trim())
     fd.append('image',    file)
 
-    const res  = await fetch('/api/gallery/submit', { method: 'POST', body: fd })
+    const res  = await fetch(endpoint, { method: 'POST', body: fd })
     const data = await res.json()
     setLoading(false)
 
     if (!res.ok) { setError(data.error ?? 'Something went wrong.'); return }
     setSuccess(true)
+    onSuccess?.()
   }
 
   return (
@@ -54,8 +73,8 @@ export default function GalleryUploadModal({ onClose }: { onClose: () => void })
         {/* Header */}
         <div className="mb-5 flex items-start justify-between">
           <div>
-            <h2 className="font-display text-xl font-bold text-forest-700">Share your photo</h2>
-            <p className="mt-0.5 text-xs text-forest-600">Photos are reviewed before appearing in the gallery.</p>
+            <h2 className="font-display text-xl font-bold text-forest-700">{title}</h2>
+            <p className="mt-0.5 text-xs text-forest-600">{subtitle}</p>
           </div>
           <button
             onClick={onClose}
@@ -69,10 +88,8 @@ export default function GalleryUploadModal({ onClose }: { onClose: () => void })
         {success ? (
           <div className="flex flex-col items-center py-8 text-center">
             <CheckCircle className="mb-3 h-12 w-12 text-forest-500" />
-            <p className="font-semibold text-forest-700">Photo submitted!</p>
-            <p className="mt-1 text-sm text-forest-600">
-              Thanks for sharing — we&apos;ll review it shortly.
-            </p>
+            <p className="font-semibold text-forest-700">{successTitle}</p>
+            <p className="mt-1 text-sm text-forest-600">{successText}</p>
             <button onClick={onClose} className="btn-primary mt-6">Close</button>
           </div>
         ) : (
@@ -147,7 +164,7 @@ export default function GalleryUploadModal({ onClose }: { onClose: () => void })
               className="btn-primary w-full justify-center disabled:opacity-60"
             >
               <Upload size={14} />
-              {loading ? 'Uploading…' : 'Submit photo'}
+              {loading ? 'Uploading…' : submitLabel}
             </button>
           </form>
         )}
