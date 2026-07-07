@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createAdminClient, createSessionClient } from '@/lib/supabase-server'
 import BookingsSection, { type Booking } from './BookingsSection'
 import GallerySubmissionActions from './GallerySubmissionActions'
+import AdminGalleryUpload from './AdminGalleryUpload'
 import LogoutButton from './LogoutButton'
 
 export const dynamic = 'force-dynamic'
@@ -183,6 +184,7 @@ export default async function AdminPage({
                 </span>
               )}
             </h2>
+            <AdminGalleryUpload />
           </div>
 
           {(approvedPhotos?.length ?? 0) === 0 ? (
