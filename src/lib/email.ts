@@ -14,6 +14,26 @@ export interface BookingData {
   notes: string
 }
 
+// Normalise an owner-alert recipient pulled from an env var.
+// Guards against the most common misconfiguration: the site URL being pasted
+// in as the address (e.g. "www.2littleleashes@gmail.com"), which bounces with
+// "Address not found". We strip a stray protocol / "www." prefix, then validate.
+// Returns a clean address, or null (with a loud log) if it still isn't a valid email.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+function normaliseRecipient(raw?: string): string | null {
+  if (!raw) return null
+  const trimmed = raw.trim()
+  const cleaned = trimmed.replace(/^https?:\/\//i, '').replace(/^www\./i, '')
+  if (!EMAIL_RE.test(cleaned)) {
+    console.error(`[email] Ignoring invalid owner recipient from env: "${raw}"`)
+    return null
+  }
+  if (cleaned !== trimmed) {
+    console.warn(`[email] Corrected malformed owner recipient "${raw}" -> "${cleaned}"`)
+  }
+  return cleaned
+}
+
 function createTransport() {
   return nodemailer.createTransport({
     host:   process.env.SMTP_HOST    || 'smtp.gmail.com',
@@ -202,8 +222,18 @@ export async function sendOwnerAlert(data: BookingData) {
 </html>`
 
   const ownerRecipients = [process.env.OWNER_EMAIL, process.env.OWNER_EMAIL_2]
+    .map(normaliseRecipient)
     .filter(Boolean)
     .join(', ')
+
+  if (!ownerRecipients) {
+    // No valid recipient configured — don't hand nodemailer a bad address.
+    // The booking is already saved; surface this loudly for the operator.
+    throw new Error(
+      'No valid OWNER_EMAIL configured — owner booking alert was not sent. ' +
+        'Check the OWNER_EMAIL / OWNER_EMAIL_2 environment variables.'
+    )
+  }
 
   await transporter.sendMail({
     from:    process.env.FROM_EMAIL,
