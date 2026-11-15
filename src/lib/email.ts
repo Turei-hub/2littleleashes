@@ -490,3 +490,96 @@ export async function sendBookingConfirmed(data: {
     html,
   })
 }
+
+// ─── 7. New review alert (public "Leave a review" form) ───────────────────────
+// Review text comes from the public, so everything user-supplied is escaped.
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+export async function sendNewReviewAlert(data: {
+  name: string
+  dogName: string | null
+  rating: number | null
+  body: string
+}) {
+  const transporter = createTransport()
+  const siteUrl  = process.env.NEXT_PUBLIC_SITE_URL || ''
+  const adminUrl = `${siteUrl}/admin?tab=reviews&status=pending`
+  const stars    = data.rating ? '★'.repeat(data.rating) + '☆'.repeat(5 - data.rating) : 'No rating given'
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    ${SHARED_CSS}
+    table{width:100%;border-collapse:collapse;margin-top:4px;}
+    td{padding:9px 12px;border-bottom:1px solid #f0ede6;font-size:13px;vertical-align:top;}
+    td:first-child{color:#7a9080;width:38%;white-space:nowrap;}
+    td:last-child{font-weight:600;color:#1a3a2a;}
+    .review-box{background:#f3f8f5;border:1px solid #cfe4d7;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:14px;color:#1c2b22;line-height:1.6;white-space:pre-line;}
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      ${logoSection()}
+
+      <div class="email-header" style="background:#1a3a2a;">
+        <h1>⭐ New Review Waiting</h1>
+        <p>Submitted via the 2 Little Leashes website</p>
+      </div>
+
+      <div class="body">
+        <p class="intro" style="margin-bottom:4px;">
+          Someone has left a review. It won't appear on the site until you approve it.
+        </p>
+
+        <div class="detail-box">
+          <p class="detail-box-title">Review</p>
+          <table>
+            <tr><td>Name</td><td>${escapeHtml(data.name)}</td></tr>
+            <tr><td>Dog</td><td>${data.dogName ? escapeHtml(data.dogName) : '—'}</td></tr>
+            <tr><td>Rating</td><td style="color:#d97706;">${stars}</td></tr>
+          </table>
+        </div>
+
+        <div class="review-box">${escapeHtml(data.body)}</div>
+
+        <div style="text-align:center;margin:26px 0 6px;">
+          <a href="${adminUrl}" class="btn btn-forest" style="color:#ffffff;">Review it in the admin →</a>
+        </div>
+      </div>
+
+      ${emailFooter()}
+    </div>
+  </div>
+</body>
+</html>`
+
+  const ownerRecipients = [process.env.OWNER_EMAIL, process.env.OWNER_EMAIL_2]
+    .map(normaliseRecipient)
+    .filter(Boolean)
+    .join(', ')
+
+  if (!ownerRecipients) {
+    throw new Error(
+      'No valid OWNER_EMAIL configured — new review alert was not sent. ' +
+        'Check the OWNER_EMAIL / OWNER_EMAIL_2 environment variables.'
+    )
+  }
+
+  await transporter.sendMail({
+    from:    process.env.FROM_EMAIL,
+    to:      ownerRecipients,
+    subject: `⭐ New review from ${data.name.replace(/[\r\n]+/g, ' ')} — waiting for approval`,
+    html,
+  })
+}
