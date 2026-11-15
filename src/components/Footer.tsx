@@ -2,15 +2,17 @@
 import type { LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { PawPrint, Clock, CalendarDays, MapPin, Car } from 'lucide-react'
+import { getContent } from '@/lib/content'
 
-const HOURS_INFO: { icon: LucideIcon; text: string; href?: string }[] = [
-  { icon: Clock,        text: 'Mon–Fri: 7:00 AM – 2:00 PM' },
-  { icon: CalendarDays, text: 'Weekend: +$20 surcharge' },
-  { icon: MapPin,       text: 'Based in Rotorua, NZ' },
-  { icon: Car,          text: 'Free pick-up & drop-off' },
-]
+export default async function Footer() {
+  const c = await getContent()
+  const HOURS_INFO: { icon: LucideIcon; text: string; href?: string }[] = [
+    { icon: Clock,        text: c['footer.hours'] },
+    { icon: CalendarDays, text: `Weekend: +$${c['price.weekend_surcharge']} surcharge` },
+    { icon: MapPin,       text: c['footer.location'] },
+    { icon: Car,          text: c['footer.pickup'] },
+  ]
 
-export default function Footer() {
   return (
     <footer className="bg-forest-700 text-white/60">
       <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
@@ -24,7 +26,7 @@ export default function Footer() {
               <span className="font-display text-sm font-semibold text-white">2 Little Leashes</span>
             </div>
             <p className="text-xs leading-relaxed">
-              Professional dog walking and caring in Rotorua, New Zealand. Photo updates every session.
+              {c['footer.tagline']}
             </p>
           </div>
 

@@ -24,40 +24,20 @@ export const metadata: Metadata = {
 }
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import { POLICIES } from '@/lib/data'
+import { getPolicies } from '@/lib/data'
+import { getContent } from '@/lib/content'
 
-const WHY_CHOOSE: { icon: LucideIcon; title: string; body: string }[] = [
-  { icon: Heart,      title: 'Local Family Business',      body: 'Safe, friendly & full of care' },
-  { icon: Shield,     title: 'Always Supervised by Dad',   body: 'Owner and main point of contact' },
-  { icon: Smile,      title: 'Love, Laughs & Happy Tails', body: 'Every walk comes with genuine fun and care' },
-  { icon: DollarSign, title: 'Flexible & Affordable',      body: 'For every whānau' },
-]
+const WHY_CHOOSE_ICONS: LucideIcon[] = [Heart, Shield, Smile, DollarSign]
+const HERO_PILL_ICONS: LucideIcon[] = [Camera, Car]
 
-const HERO_PILLS: { icon: LucideIcon; text: string }[] = [
-  { icon: Camera, text: 'Photo update every session' },
-  { icon: Car,    text: 'Free pick-up & drop-off' },
-]
-
-const REVIEWS = [
-  {
-    name: 'Linda Van Staden',
-    text: '2 Little Leashes has been a huge help with my dog, he absolutely loves his pack walks. Always comes back knackered but so happy! I always know where he is going and gets lots of photo updates. 10/10 would recommend 🙌',
-  },
-  {
-    name: 'Donna Shaw',
-    text: "Meihana is the bomb, he's so good with my girl MILO. She loves the runs he takes her on with the other fur babies. Interaction with the other dogs is soooo awesome. Meihana is a awesome trainer and she loves being with him and the other dogs would recommend him to anyone who is interested and looking for a great runner & dog handler.",
-  },
-  {
-    name: 'Denise Frost',
-    text: 'Highly recommend 2 Little Leashes. So happy with this Amazing service. Big ups to Meihana his wife and girls. Cica comes home so happy. Excellent communication as well. Always look forward to cicas next outing.',
-  },
-  {
-    name: 'Ana Sassen',
-    text: "Can't recommend 2 little leashes enough!!! My girl is very reactive, 2 little leashes were still keen to meet her. After 1 meeting they were keen to take her on. Today my little reactive girl Kai didn't react to him at all, came back without her halti on and so so happy.",
-  },
-]
-
-export default function HomePage() {
+export default async function HomePage() {
+  const c = await getContent()
+  const WHY_CHOOSE = WHY_CHOOSE_ICONS.map((icon, i) => ({
+    icon, title: c[`home.why.${i + 1}.title`], body: c[`home.why.${i + 1}.body`],
+  }))
+  const HERO_PILLS = HERO_PILL_ICONS.map((icon, i) => ({ icon, text: c[`home.hero.pill_${i + 1}`] }))
+  const REVIEWS = [1, 2, 3, 4].map(n => ({ name: c[`home.reviews.${n}.name`], text: c[`home.reviews.${n}.text`] }))
+  const POLICIES = getPolicies(c)
   return (
     <>
       <Navbar />
@@ -66,7 +46,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
         {/* Background photo */}
         <Image
-          src="/images/meihana-bulldogs-truck.jpg"
+          src={c['home.hero.image']}
           alt="Meihana walking dogs in Rotorua"
           fill
           className="object-cover object-center"
@@ -90,15 +70,15 @@ export default function HomePage() {
           <div className="max-w-2xl animate-fade-up">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/75">
               <MapPin size={12} />
-              Rotorua, New Zealand · Est. 2022
+              {c['home.hero.badge']}
             </div>
 
             <h1 className="font-display text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
-              2 Little Leashes Dog Walkers Rotorua
+              {c['home.hero.title']}
             </h1>
 
             <p className="mt-4 text-sm leading-relaxed text-white/90 sm:text-base lg:text-lg">
-              Kia ora! We&apos;re 2 Little Leashes – A dog-crazy whānau who absolutely LOVE spending time with furry friends. Rain or shine, we&apos;re ready with leashes, smiles, treats, and heaps of energy!
+              {c['home.hero.intro']}
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -125,8 +105,8 @@ export default function HomePage() {
 
       {/* ── WHY CHOOSE US ─────────────────────────────────────────────────────── */}
       <section className="section">
-        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">Why choose us</p>
-        <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">We&apos;re different — here&apos;s why</h2>
+        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">{c['home.why.eyebrow']}</p>
+        <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">{c['home.why.heading']}</h2>
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
           {WHY_CHOOSE.map(item => {
             const Icon = item.icon
@@ -148,9 +128,9 @@ export default function HomePage() {
       {/* ── REVIEWS ───────────────────────────────────────────────────────────── */}
       <section className="bg-forest-50 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
-          <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">Happy clients</p>
-          <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">What Rotorua families say</h2>
-          <p className="mt-2 text-sm text-forest-600">Real reviews from real dog owners on Facebook.</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">{c['home.reviews.eyebrow']}</p>
+          <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">{c['home.reviews.heading']}</h2>
+          <p className="mt-2 text-sm text-forest-600">{c['home.reviews.subheading']}</p>
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
             {REVIEWS.map(review => {
@@ -177,9 +157,9 @@ export default function HomePage() {
 
       {/* ── POLICIES ──────────────────────────────────────────────────────────── */}
       <section className="section">
-        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">How we work</p>
-        <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">What to expect</h2>
-        <p className="mt-2 text-sm text-forest-600">Simple policies, no surprises.</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-forest-600">{c['home.policies.eyebrow']}</p>
+        <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">{c['home.policies.heading']}</h2>
+        <p className="mt-2 text-sm text-forest-600">{c['home.policies.subheading']}</p>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {POLICIES.map(p => {
@@ -203,9 +183,9 @@ export default function HomePage() {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-amber-500">
             <PawPrint className="h-7 w-7 text-white" />
           </div>
-          <h2 className="font-display text-3xl font-bold text-white">Ready to get started?</h2>
+          <h2 className="font-display text-3xl font-bold text-white">{c['home.cta.heading']}</h2>
           <p className="mt-3 text-white text-sm">
-            Fill out the booking form and Meihana will be in touch within 24 hours to arrange your free meet &amp; greet.
+            {c['home.cta.body']}
           </p>
           <div className="mt-6 flex justify-center gap-3 flex-wrap">
             <Link href="/book" className="btn-primary px-6 py-3">

@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CheckCircle, AlertCircle, Loader, Zap } from 'lucide-react'
-import { BOOKING_SERVICES, DAYS_PER_WEEK_OPTIONS } from '@/lib/data'
+import { DAYS_PER_WEEK_OPTIONS } from '@/lib/data'
+import type { BookingService } from '@/lib/content-defaults'
 
 interface FormValues {
   ownerName:      string
@@ -18,7 +19,7 @@ interface FormValues {
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
-export default function BookingForm() {
+export default function BookingForm({ services, nextSteps }: { services: BookingService[]; nextSteps: string }) {
   const [status,  setStatus]  = useState<Status>('idle')
   const [message, setMessage] = useState('')
 
@@ -37,10 +38,6 @@ export default function BookingForm() {
   const onSubmit = async (data: FormValues) => {
     setStatus('loading')
     try {
-      const services = BOOKING_SERVICES
-        .filter(s => data.services.includes(s.value))
-        .map(s => s.label)
-
       const days = data.daysPerWeek === 'Other'
         ? (data.daysPerWeekOther.trim() || 'Other')
         : data.daysPerWeek
@@ -53,7 +50,7 @@ export default function BookingForm() {
           dogInfo:     data.dogInfo,
           email:       data.email,
           phone:       data.phone,
-          services,
+          services:    data.services, // ids — the API resolves labels/prices server-side
           daysPerWeek: days,
           notes:       data.notes,
         }),
@@ -76,7 +73,7 @@ export default function BookingForm() {
         <h3 className="font-display text-xl font-semibold text-forest-700 mb-2">Booking received! 🎉</h3>
         <p className="text-sm text-forest-600 mb-6">{message}</p>
         <div className="rounded-lg bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800 mb-6">
-          <strong>What&apos;s next:</strong> Meihana will contact you within 24 hours to confirm your booking.
+          <strong>What&apos;s next:</strong> {nextSteps}
         </div>
         <button onClick={() => setStatus('idle')} className="btn-outline text-sm">
           Submit another booking
@@ -144,7 +141,7 @@ export default function BookingForm() {
           Service selection * <span className="normal-case font-normal text-forest-600/50">(select all that apply)</span>
         </legend>
         <div className="space-y-2">
-          {BOOKING_SERVICES.map(s => (
+          {services.map(s => (
             <label
               key={s.value}
               htmlFor={`service-${s.value}`}

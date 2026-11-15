@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import BookingForm from '@/components/BookingForm'
+import { getContent } from '@/lib/content'
+import { bookingServices } from '@/lib/content-defaults'
 
 export const metadata: Metadata = {
   title: 'Book a Walk | 2 Little Leashes Rotorua',
@@ -22,14 +24,16 @@ export const metadata: Metadata = {
   },
 }
 
-export default function BookPage() {
+export default async function BookPage() {
+  const c = await getContent()
+
   return (
     <>
       <Navbar />
 
       <section className="relative overflow-hidden bg-forest-700 px-4 py-14 min-h-96 sm:px-6 lg:px-8">
         <Image
-          src="/images/dog-walk-rotorua.jpg"
+          src={c['book.hero.image']}
           alt="Dog walk in Rotorua"
           fill
           className="object-cover"
@@ -38,16 +42,16 @@ export default function BookPage() {
         />
         <div className="absolute inset-0 bg-forest-700/80" />
         <div className="relative z-10 mx-auto max-w-5xl">
-          <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">New booking</p>
-          <h1 className="font-display mt-1 text-4xl font-bold text-white">Book with 2 Little Leashes</h1>
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">{c['book.hero.eyebrow']}</p>
+          <h1 className="font-display mt-1 text-4xl font-bold text-white">{c['book.hero.heading']}</h1>
           <p className="mt-3 max-w-xl text-sm text-white">
-            Fill out the form below and we'll get you booked in no time.
+            {c['book.hero.subtitle']}
           </p>
         </div>
       </section>
 
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-        <BookingForm />
+        <BookingForm services={bookingServices(c)} nextSteps={c['book.success.next']} />
       </div>
 
       <Footer />
