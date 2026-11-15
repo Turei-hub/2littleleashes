@@ -5,6 +5,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendCustomerConfirmation, sendOwnerAlert } from '@/lib/email'
 import { supabase } from '@/lib/supabase'
+import { getContent } from '@/lib/content'
+import { bookingServices } from '@/lib/content-defaults'
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,12 +36,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 })
     }
 
+    // The form submits service ids; labels (with prices) come from site content so
+    // the saved booking and emails always match what the form displayed.
+    const serviceLabels = bookingServices(await getContent())
+      .filter(s => (services as unknown[]).includes(s.value))
+      .map(s => s.label)
+    if (serviceLabels.length === 0) {
+      return NextResponse.json({ error: 'Please select at least one service' }, { status: 400 })
+    }
+
     const bookingData = {
       ownerName:   ownerName.trim(),
       dogInfo:     dogInfo.trim(),
       email:       email.trim().toLowerCase(),
       phone:       phone.trim(),
-      services:    services as string[],
+      services:    serviceLabels,
       daysPerWeek: daysPerWeek.trim(),
       notes:       notes?.trim() || '',
     }

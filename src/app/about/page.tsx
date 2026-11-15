@@ -6,6 +6,7 @@ import { Camera, MapPin, Car, Handshake, PawPrint } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { getContent } from '@/lib/content'
 
 export const metadata: Metadata = {
   title: 'About Meihana | 2 Little Leashes Dog Walkers Rotorua',
@@ -25,21 +26,21 @@ export const metadata: Metadata = {
   },
 }
 
-const WHY_US: { icon: LucideIcon; title: string; body: string }[] = [
-  { icon: Camera,    title: 'Photo after every session',   body: 'We send a photo update after every walk or visit so you can see your dog having the time of their life.' },
-  { icon: MapPin,    title: 'Rotorua\'s best locations',    body: 'Forests, lake tracks, and bush paths — we mix up locations so walks stay exciting and stimulating.' },
-  { icon: Car,       title: 'Free pick-up & drop-off',     body: 'We come to you. Your dog is collected and returned safely from your home.' },
-  { icon: Handshake, title: 'Meet & greet first',          body: 'Before any walk we visit your home, meet your dog, and understand their needs. No surprises.' },
-]
+const WHY_US_ICONS: LucideIcon[] = [Camera, MapPin, Car, Handshake]
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const c = await getContent()
+  const WHY_US = WHY_US_ICONS.map((icon, i) => ({
+    icon, title: c[`about.why.${i + 1}.title`], body: c[`about.why.${i + 1}.body`],
+  }))
+
   return (
     <>
       <Navbar />
 
       <section className="relative overflow-hidden bg-forest-700 px-4 py-14 min-h-96 sm:px-6 lg:px-8">
         <Image
-          src="/images/about-hero.jpg"
+          src={c['about.hero.image']}
           alt="Meihana with dogs — 2 Little Leashes Rotorua"
           fill
           className="object-cover"
@@ -48,10 +49,10 @@ export default function AboutPage() {
         />
         <div className="absolute inset-0 bg-forest-700/80" />
         <div className="relative z-10 mx-auto max-w-5xl">
-          <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">About us</p>
-          <h1 className="font-display mt-1 text-2xl font-bold text-white sm:text-4xl">Our Whānau, Our Business</h1>
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">{c['about.hero.eyebrow']}</p>
+          <h1 className="font-display mt-1 text-2xl font-bold text-white sm:text-4xl">{c['about.hero.heading']}</h1>
           <p className="mt-3 text-white text-sm max-w-xl">
-            A family dog walking and care business, built with love — right here in Rotorua.
+            {c['about.hero.subtitle']}
           </p>
         </div>
       </section>
@@ -60,22 +61,22 @@ export default function AboutPage() {
       <div className="bg-forest-700 px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl flex flex-col sm:flex-row gap-6 items-start">
           <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full">
-            <Image src="/images/meihana.jpg" alt="Meihana" fill className="object-cover" />
+            <Image src={c['about.bio.image']} alt={c['about.bio.name']} fill className="object-cover" />
           </div>
           <div>
-            <h2 className="font-display text-2xl font-bold text-white">Meihana Herbert</h2>
-            <p className="text-sm text-mint mb-4">Business Owner and Dad · 2 Little Leashes Rotorua</p>
+            <h2 className="font-display text-2xl font-bold text-white">{c['about.bio.name']}</h2>
+            <p className="text-sm text-mint mb-4">{c['about.bio.role']}</p>
             <p className="text-sm text-white/75 leading-relaxed">
-              Kia ora! We&apos;re a whānau dog walking and care business right here in Rotorua.
+              {c['about.bio.p1']}
             </p>
             <p className="mt-3 text-sm text-white/75 leading-relaxed">
-              At 2 Little Leashes, it&apos;s all about the girls. They&apos;ve grown up surrounded by dogs and cats their whole lives. Not long ago, we said goodbye to our beloved Corgi, Odie, who lived with us for 13 amazing years. He wasn&apos;t just a pet — he was part of our whānau.
+              {c['about.bio.p2']}
             </p>
             <p className="mt-3 text-sm text-white/75 leading-relaxed">
-              Now we&apos;ve welcomed Coby and Tahu, our Auntie&apos;s cheeky British Bulldogs into our crew. Loud, lazy, funny, and full of personality — just like the girls.
+              {c['about.bio.p3']}
             </p>
             <p className="mt-3 text-sm text-white/75 leading-relaxed">
-              The girls came up with the idea themselves, and named it 2 Little Leashes all on their own. This isn&apos;t just a hobby — it&apos;s a lesson in commitment, care, and community.
+              {c['about.bio.p4']}
             </p>
           </div>
         </div>
@@ -84,7 +85,7 @@ export default function AboutPage() {
       {/* Why us — full width */}
       <div className="px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
-          <h2 className="font-display text-2xl font-bold text-forest-700 mb-6">Why clients choose us</h2>
+          <h2 className="font-display text-2xl font-bold text-forest-700 mb-6">{c['about.why.heading']}</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {WHY_US.map(w => {
               const WIcon = w.icon
@@ -109,8 +110,8 @@ export default function AboutPage() {
             <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500">
               <PawPrint className="h-6 w-6 text-white" />
             </div>
-            <h2 className="font-display text-2xl font-bold text-amber-900 mb-2">Ready to meet us?</h2>
-            <p className="text-sm text-amber-800 mb-5">Book online and we'll arrange a meet &amp; greet at your home before your first session.</p>
+            <h2 className="font-display text-2xl font-bold text-amber-900 mb-2">{c['about.cta.heading']}</h2>
+            <p className="text-sm text-amber-800 mb-5">{c['about.cta.body']}</p>
             <Link href="/book" className="btn-primary px-6 py-3">Pricing and Booking →</Link>
             </div>
         </div>

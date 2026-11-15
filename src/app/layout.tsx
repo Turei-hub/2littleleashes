@@ -4,6 +4,8 @@ import { Playfair_Display, DM_Sans } from 'next/font/google'
 import './globals.css'
 import BackToTop from '@/components/BackToTop'
 import AdminFloatingButton from '@/components/AdminFloatingButton'
+import { getContent } from '@/lib/content'
+import type { SiteContent } from '@/lib/content-defaults'
 
 const playfair = Playfair_Display({
   subsets:  ['latin'],
@@ -48,48 +50,52 @@ export const metadata: Metadata = {
   },
 }
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: '2 Little Leashes',
-  description: 'Professional dog walking, washing, and home check-ins in Rotorua, New Zealand.',
-  url: 'https://www.2littleleashes.co.nz',
-  email: 'milner.turei@gmail.com',
-  image: 'https://www.2littleleashes.co.nz/images/dog-walk-rotorua.jpg',
-  logo: 'https://www.2littleleashes.co.nz/images/logo.png',
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Rotorua',
-    addressRegion: 'Bay of Plenty',
-    addressCountry: 'NZ',
-  },
-  geo: {
-    '@type': 'GeoCoordinates',
-    latitude: -38.1368,
-    longitude: 176.2497,
-  },
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '07:00',
-      closes: '14:00',
+function buildJsonLd(c: SiteContent) {
+  const walkFrom = Math.min(Number(c['price.walk_1x']), Number(c['price.walk_multi']))
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: '2 Little Leashes',
+    description: 'Professional dog walking, washing, and home check-ins in Rotorua, New Zealand.',
+    url: 'https://www.2littleleashes.co.nz',
+    email: 'milner.turei@gmail.com',
+    image: 'https://www.2littleleashes.co.nz/images/dog-walk-rotorua.jpg',
+    logo: 'https://www.2littleleashes.co.nz/images/logo.png',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Rotorua',
+      addressRegion: 'Bay of Plenty',
+      addressCountry: 'NZ',
     },
-  ],
-  priceRange: '$$',
-  areaServed: { '@type': 'City', name: 'Rotorua' },
-  hasOfferCatalog: {
-    '@type': 'OfferCatalog',
-    name: 'Dog Care Services',
-    itemListElement: [
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dog Walking', description: 'Group walks from $30. Free pick-up and drop-off.' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dog Wash', description: 'Wash and dry from $20.' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Home Check-ins', description: 'Home visits from $20.' } },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: -38.1368,
+      longitude: 176.2497,
+    },
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '07:00',
+        closes: '14:00',
+      },
     ],
-  },
+    priceRange: '$$',
+    areaServed: { '@type': 'City', name: 'Rotorua' },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Dog Care Services',
+      itemListElement: [
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dog Walking', description: `Group walks from $${walkFrom}. Free pick-up and drop-off.` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dog Wash', description: `Wash and dry from $${c['price.dog_wash']}.` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Home Check-ins', description: `Home visits from $${c['price.checkin']}.` } },
+      ],
+    },
+  }
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const jsonLd = buildJsonLd(await getContent())
   return (
     <html lang="en-NZ" className={`${playfair.variable} ${dmSans.variable}`}>
       <body className="bg-cream font-sans text-forest-700 antialiased">

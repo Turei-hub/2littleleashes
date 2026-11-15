@@ -8,6 +8,7 @@ import Footer from '@/components/Footer'
 import GalleryCarousel from '@/components/GalleryCarousel'
 import GalleryShareButton from '@/components/GalleryShareButton'
 import { createAdminClient } from '@/lib/supabase-server'
+import { getContent } from '@/lib/content'
 
 export const metadata: Metadata = {
   title: 'Gallery | 2 Little Leashes Dog Walkers Rotorua',
@@ -28,6 +29,7 @@ export const metadata: Metadata = {
 }
 
 export default async function GalleryPage() {
+  const c = await getContent()
   const { data: approved, error } = await createAdminClient()
     .from('gallery_submissions')
     .select('image_url, dog_name, caption, status')
@@ -45,7 +47,7 @@ export default async function GalleryPage() {
 
       <section className="relative overflow-hidden bg-forest-700 px-4 py-14 min-h-96 sm:px-6 lg:px-8">
         <Image
-          src="/images/dog-walk-rotorua.jpg"
+          src={c['gallery.hero.image']}
           alt="Dog walk in Rotorua"
           fill
           className="object-cover"
@@ -54,10 +56,10 @@ export default async function GalleryPage() {
         />
         <div className="absolute inset-0 bg-forest-700/80" />
         <div className="relative z-10 mx-auto max-w-5xl">
-          <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">Gallery</p>
-          <h1 className="font-display mt-1 text-4xl font-bold text-white">Happy dogs on happy walks</h1>
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">{c['gallery.hero.eyebrow']}</p>
+          <h1 className="font-display mt-1 text-4xl font-bold text-white">{c['gallery.hero.heading']}</h1>
           <p className="mt-3 max-w-xl text-sm text-white">
-            Real photos from real walks — click any photo to expand. Auto-plays every 3 seconds.
+            {c['gallery.hero.subtitle']}
           </p>
           <div className="mt-6">
             <GalleryShareButton />

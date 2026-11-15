@@ -52,12 +52,15 @@ src/
 │   │   ├── page.tsx              # Admin dashboard (protected)
 │   │   ├── login/page.tsx        # Admin login
 │   │   ├── BookingActions.tsx    # Confirm/Cancel/Verify buttons
+│   │   ├── SiteContentEditor.tsx # "Site Content" tab — per-section forms, image upload to site-images
+│   │   ├── content-actions.ts    # Server action: upsert site_content rows + revalidatePath('/', 'layout')
 │   │   └── LogoutButton.tsx
 │   └── api/
 │       ├── book/route.ts         # POST — save booking + send emails
 │       └── admin/bookings/[id]/route.ts  # PATCH — update status / verify payment
 ├── components/
-│   ├── Navbar.tsx                # Sticky nav with Book Now CTA
+│   ├── Navbar.tsx                # Server wrapper — loads banner text via getContent()
+│   ├── NavbarClient.tsx          # Sticky nav with Book Now CTA (client component)
 │   ├── Footer.tsx                # Footer with subtle Admin link
 │   ├── BookingForm.tsx           # Single-page booking form (mirrors the owner's Google Form)
 │   ├── AdminFloatingButton.tsx   # Teal float — visible only when logged in
@@ -65,7 +68,9 @@ src/
 │   ├── GalleryCarousel.tsx       # Dog photo carousel/lightbox
 │   └── MarqueeBanner.tsx         # Scrolling info strip below navbar
 └── lib/
-    ├── data.ts                   # POLICIES, BOOKING_SERVICES, DAYS_PER_WEEK_OPTIONS — single source of truth
+    ├── content-defaults.ts       # CONTENT_FIELDS — every editable key/label/type/section + fallback value
+    ├── content.ts                # getContent() — server-side site_content reader with fallbacks
+    ├── data.ts                   # Fixed structure only: policy icons, getPolicies(), DAYS_PER_WEEK_OPTIONS
     ├── email.ts                  # All transactional email templates
     ├── supabase.ts               # Anon client (browser-safe)
     └── supabase-server.ts        # SSR + service clients (server only)
@@ -81,10 +86,20 @@ src/
 - **About** — Meihana's story
 - **Book** — single-page form (see below)
 
+### Editable Site Content (prices & copy)
+**Source of truth for all prices and marketing copy is the `site_content` table**, with `src/lib/content-defaults.ts` as the fallback/definition. Never hardcode prices or marketing text in components — add a field instead.
+
+- `CONTENT_FIELDS` in `content-defaults.ts` defines every editable key (label, type `text`/`textarea`/`price`/`image`, section) and its fallback value. It also drives the admin form.
+- `getContent()` (`src/lib/content.ts`, server only) returns a key→value object; missing, blank, or non-numeric-price values fall back to the default so the site never shows blanks.
+- Pages, `Footer`, `Navbar` (banner) and the root layout's JSON-LD are server components that call `getContent()`. Client components (`BookingForm`, `NavbarClient`, `MarqueeBanner`) receive content as props.
+- Service prices: `price.<id>` + `service.<id>` keys; `bookingServices(content)` builds the `$30 - …` labels. The booking form submits service **ids**; `/api/book` resolves labels from `getContent()` so saved bookings and emails always match the displayed prices.
+- Weekend surcharge (`price.weekend_surcharge`) is composed into policy 4 and the footer — don't type it into text.
+- **Adding a field:** add it to `CONTENT_FIELDS`, use it via `getContent()`, then regenerate/extend `supabase/seed_site_content.sql` (row's `sort_order` = `(index + 1) * 10`).
+
 ### Booking Flow (`/book`)
 Single-page form — no email-lookup gate, no free/paid branching. Rebuilt 2026-07-04 to mirror the owner's existing Google Form after customers struggled with the old two-step (email check → routed form) flow.
 
-Fields: full name, dog(s) name & breed (combined), email, phone, service selection (checkboxes, multi-select from `BOOKING_SERVICES` in `src/lib/data.ts`), days per week (radio 1–5 or "Other" with free text), and an optional notes/queries field. Meihana follows up manually by phone/email for meet & greet scheduling and payment — there's no upfront payment screenshot upload or payment reference generation anymore.
+Fields: full name, dog(s) name & breed (combined), email, phone, service selection (checkboxes, multi-select, labels/prices from site content via `bookingServices()`), days per week (radio 1–5 or "Other" with free text), and an optional notes/queries field. Meihana follows up manually by phone/email for meet & greet scheduling and payment — there's no upfront payment screenshot upload or payment reference generation anymore.
 
 ### Admin Dashboard (`/admin`)
 - Protected by Supabase Auth session (middleware redirects unauthenticated users)
@@ -93,6 +108,7 @@ Fields: full name, dog(s) name & breed (combined), email, phone, service selecti
 - **Payment badges:** No payment (gray) / Screenshot ↗ (green link) / Verified ✓ (teal)
 - **Verify Payment** button: marks `payment_status = 'verified'`, sets `status = 'confirmed'`, fires `sendBookingConfirmed` email
 - **View Site →** opens public site in new tab
+- **Site Content tab** (`/admin?tab=content`): owner edits copy, prices and hero/about images, grouped by section, one Save per section. Writes use the session client, so `site_content` RLS (`public.is_site_admin()` — milner.turei@gmail.com and 2littleleashes@gmail.com) is enforced; images upload to the public `site-images` bucket (same admin-only write rule)
 - Floating **Admin Dashboard →** teal button appears on public pages when logged in (via `AdminFloatingButton`)
 
 ### Email Flows (`src/lib/email.ts`)
@@ -140,6 +156,19 @@ Fields: full name, dog(s) name & breed (combined), email, phone, service selecti
 
 **Storage:** `payment-screenshots` bucket (public), anon upload allowed.
 
+### `site_content` table
+| Column | Type | Notes |
+|--------|------|-------|
+| `key` | text | Primary key, e.g. `price.walk_1x`, `home.hero.title` |
+| `value` | text | Prices stored as plain numbers (`30`), images as URLs or `/images/...` paths |
+| `label` | text | Friendly name shown in admin |
+| `type` | text | `text` / `textarea` / `price` / `image` |
+| `section` | text | Admin grouping, e.g. `Pricing`, `Home – Hero` |
+| `sort_order` | int | Order in admin form |
+| `updated_at` | timestamptz | |
+
+**RLS:** public SELECT; INSERT/UPDATE only via `public.is_site_admin()`. Table and `site-images` bucket were created manually in Supabase — don't create or alter them from code.
+
 ---
 
 ## Environment Variables
@@ -184,6 +213,9 @@ Migrations live in `supabase/migrations/` and must be run manually in the Supaba
 |------|-------------|
 | `20260517000000_add_status_and_admin_policies.sql` | Status column + RLS policies |
 | `20260517000001_add_payment_system.sql` | Payment columns + storage bucket |
+| `20260518000000_add_gallery_submissions.sql` | Gallery submissions table |
+
+`supabase/seed_site_content.sql` seeds `site_content` with the original hardcoded values (re-runnable; never overwrites edited values).
 
 ---
 
