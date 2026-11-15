@@ -8,6 +8,8 @@ import LogoutButton from './LogoutButton'
 import SiteContentEditor from './SiteContentEditor'
 import { getContent } from '@/lib/content'
 import { CONTENT_FIELDS } from '@/lib/content-defaults'
+import ReviewsManager from './ReviewsManager'
+import { REVIEW_STATUSES, type Review, type ReviewStatus } from '@/lib/reviews'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,6 +31,36 @@ export default async function AdminPage({
     return (
       <AdminShell activeTab="content">
         <SiteContentEditor fields={CONTENT_FIELDS.map(f => ({ ...f, value: content[f.key] }))} />
+      </AdminShell>
+    )
+  }
+
+  if (searchParams.tab === 'reviews') {
+    // Session client so the reviews RLS (is_site_admin) applies.
+    const reviewStatus: ReviewStatus = REVIEW_STATUSES.includes(searchParams.status as ReviewStatus)
+      ? (searchParams.status as ReviewStatus)
+      : 'pending'
+    const countFor = (s: ReviewStatus) =>
+      sessionClient.from('reviews').select('*', { count: 'exact', head: true }).eq('status', s)
+    const [{ data: reviews, error }, pending, approved, hidden] = await Promise.all([
+      sessionClient
+        .from('reviews')
+        .select('*')
+        .eq('status', reviewStatus)
+        .order('created_at', { ascending: false })
+        .order('sort_order', { ascending: true, nullsFirst: false }),
+      countFor('pending'),
+      countFor('approved'),
+      countFor('hidden'),
+    ])
+    if (error) console.error('Admin reviews load error:', error)
+    return (
+      <AdminShell activeTab="reviews">
+        <ReviewsManager
+          reviews={(reviews ?? []) as Review[]}
+          activeStatus={reviewStatus}
+          counts={{ pending: pending.count ?? 0, approved: approved.count ?? 0, hidden: hidden.count ?? 0 }}
+        />
       </AdminShell>
     )
   }
@@ -224,10 +256,11 @@ export default async function AdminPage({
 
 const TABS = [
   { value: 'bookings', label: 'Bookings & Photos', href: '/admin' },
+  { value: 'reviews',  label: 'Reviews',           href: '/admin?tab=reviews' },
   { value: 'content',  label: 'Site Content',      href: '/admin?tab=content' },
 ] as const
 
-function AdminShell({ activeTab, children }: { activeTab: 'bookings' | 'content'; children: React.ReactNode }) {
+function AdminShell({ activeTab, children }: { activeTab: (typeof TABS)[number]['value']; children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-forest-50">
       {/* Header */}

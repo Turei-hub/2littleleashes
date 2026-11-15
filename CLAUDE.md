@@ -48,15 +48,19 @@ src/
 │   ├── gallery/page.tsx          # Photo gallery
 │   ├── about/page.tsx            # About Meihana
 │   ├── book/page.tsx             # Booking page (renders BookingForm directly)
+│   ├── reviews/page.tsx          # All approved reviews + "Leave a review" form (#leave-review)
 │   ├── admin/
 │   │   ├── page.tsx              # Admin dashboard (protected)
 │   │   ├── login/page.tsx        # Admin login
 │   │   ├── BookingActions.tsx    # Confirm/Cancel/Verify buttons
 │   │   ├── SiteContentEditor.tsx # "Site Content" tab — per-section forms, image upload to site-images
 │   │   ├── content-actions.ts    # Server action: upsert site_content rows + revalidatePath('/', 'layout')
+│   │   ├── ReviewsManager.tsx    # "Reviews" tab — status filters, Approve/Hide/Delete, Add review form
+│   │   ├── review-actions.ts     # Server actions: setReviewStatus / deleteReview / addReview (session client)
 │   │   └── LogoutButton.tsx
 │   └── api/
 │       ├── book/route.ts         # POST — save booking + send emails
+│       ├── reviews/route.ts      # POST — public review (honeypot + rate limit) → pending + owner email
 │       └── admin/bookings/[id]/route.ts  # PATCH — update status / verify payment
 ├── components/
 │   ├── Navbar.tsx                # Server wrapper — loads banner text via getContent()
@@ -66,11 +70,14 @@ src/
 │   ├── AdminFloatingButton.tsx   # Teal float — visible only when logged in
 │   ├── BackToTop.tsx             # Fixed scroll-to-top button
 │   ├── GalleryCarousel.tsx       # Dog photo carousel/lightbox
+│   ├── ReviewCard.tsx            # Public review card + <Stars>
+│   ├── ReviewForm.tsx            # Public "Leave a review" form + <StarPicker> (client)
 │   └── MarqueeBanner.tsx         # Scrolling info strip below navbar
 └── lib/
     ├── content-defaults.ts       # CONTENT_FIELDS — every editable key/label/type/section + fallback value
     ├── content.ts                # getContent() — server-side site_content reader with fallbacks
     ├── data.ts                   # Fixed structure only: policy icons, getPolicies(), DAYS_PER_WEEK_OPTIONS
+    ├── reviews.ts                # Review types, REVIEW_LIMITS, validateReviewInput(), getApprovedReviews()
     ├── email.ts                  # All transactional email templates
     ├── supabase.ts               # Anon client (browser-safe)
     └── supabase-server.ts        # SSR + service clients (server only)
@@ -81,10 +88,18 @@ src/
 ## Key Features
 
 ### Public Site
-- **Home** — hero with background photo, why-choose-us, reviews (real Facebook reviews), policies, final CTA. No standalone services/pricing page — removed 2026-07-04 in favor of driving everyone straight to Book a walk; pricing now only appears inline as checkbox labels on the booking form itself.
+- **Home** — hero with background photo, why-choose-us, reviews (latest 6 approved from the `reviews` table + "See all reviews" / "Leave a review" buttons), policies, final CTA. No standalone services/pricing page — removed 2026-07-04 in favor of driving everyone straight to Book a walk; pricing now only appears inline as checkbox labels on the booking form itself.
 - **Gallery** — featured carousel + masonry grid, dog photos in `public/images/`
 - **About** — Meihana's story
 - **Book** — single-page form (see below)
+- **Reviews** (`/reviews`) — every approved review, plus the "Leave a review" form (see below)
+
+### Reviews
+Reviews live in the `reviews` table (not `site_content`); only the section eyebrow/heading/subheading are site content (`home.reviews.*`, reused as the `/reviews` hero).
+- Public display: `getApprovedReviews(limit?)` in `src/lib/reviews.ts` — approved only, newest first, `sort_order` tie-break. Stars only render when `rating` is set.
+- Public form → `POST /api/reviews`: inserts `status='pending'`, `source='website'` via the anon client (**no `.select()`** — anon can't read pending rows). Spam: hidden `website` honeypot (silently returns success) + in-memory per-IP limit (3 per 10 min, per serverless instance). Then `sendNewReviewAlert` (best-effort).
+- Limits in `REVIEW_LIMITS`: name ≤ 80, dog name ≤ 80, body 10–1500 (matches the DB check constraint), rating 1–5 or null. `validateReviewInput()` is shared by the form API and the admin Add form.
+- Admin changes call `revalidatePath('/', 'layout')` so the homepage/reviews page refresh immediately.
 
 ### Editable Site Content (prices & copy)
 **Source of truth for all prices and marketing copy is the `site_content` table**, with `src/lib/content-defaults.ts` as the fallback/definition. Never hardcode prices or marketing text in components — add a field instead.
@@ -109,6 +124,7 @@ Fields: full name, dog(s) name & breed (combined), email, phone, service selecti
 - **Verify Payment** button: marks `payment_status = 'verified'`, sets `status = 'confirmed'`, fires `sendBookingConfirmed` email
 - **View Site →** opens public site in new tab
 - **Site Content tab** (`/admin?tab=content`): owner edits copy, prices and hero/about images, grouped by section, one Save per section. Writes use the session client, so `site_content` RLS (`public.is_site_admin()` — milner.turei@gmail.com and 2littleleashes@gmail.com) is enforced; images upload to the public `site-images` bucket (same admin-only write rule)
+- **Reviews tab** (`/admin?tab=reviews&status=pending|approved|hidden`): Approve / Hide / Delete, plus an "Add review" form for pasting in Facebook/text reviews (`source` = `facebook` or `admin`, saved as approved). Reads and writes use the session client so `is_site_admin()` RLS applies; update/delete use `.select('id')` to detect RLS silently blocking (0 rows). Shows the note: don't hide honest negative reviews (NZ Fair Trading Act).
 - Floating **Admin Dashboard →** teal button appears on public pages when logged in (via `AdminFloatingButton`)
 
 ### Email Flows (`src/lib/email.ts`)
@@ -121,6 +137,7 @@ Fields: full name, dog(s) name & breed (combined), email, phone, service selecti
 | `sendWalkReminder` | Manual / scheduler | Customer |
 | `sendReviewRequest` | Manual / scheduler | Customer |
 | `sendWinBackEmail` | Manual / scheduler | Lapsed customer |
+| `sendNewReviewAlert` | On public review submit | OWNER_EMAIL + OWNER_EMAIL_2 |
 
 `sendCustomerConfirmation` and `sendOwnerAlert` no longer branch on booking type — one template covers every booking, listing the selected services and days/week.
 
@@ -168,6 +185,21 @@ Fields: full name, dog(s) name & breed (combined), email, phone, service selecti
 | `updated_at` | timestamptz | |
 
 **RLS:** public SELECT; INSERT/UPDATE only via `public.is_site_admin()`. Table and `site-images` bucket were created manually in Supabase — don't create or alter them from code.
+
+### `reviews` table
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | uuid | Primary key |
+| `name` | text | Reviewer name |
+| `dog_name` | text | Optional |
+| `body` | text | Check constraint: 10–1500 chars |
+| `rating` | int | 1–5, nullable (the 4 original Facebook reviews have no rating) |
+| `status` | text | `pending` / `approved` / `hidden` |
+| `source` | text | `website` / `facebook` / `admin` |
+| `sort_order` | int | Tie-break after `created_at desc` |
+| `created_at` | timestamptz | |
+
+**RLS:** public can SELECT approved; public can INSERT only `status='pending'` + `source='website'`; `public.is_site_admin()` can do everything. Created manually in Supabase — don't create or alter it from code. The old `home.reviews.{1-4}.name/text` site_content keys were retired (copied into this table as approved).
 
 ---
 

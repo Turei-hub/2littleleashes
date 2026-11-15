@@ -66,15 +66,8 @@ export const CONTENT_FIELDS: ContentField[] = [
   // ── Home – Reviews ───────────────────────────────────────────────────────
   f(REVIEWS, 'home.reviews.eyebrow',    'Small heading',   'text',     'Happy clients'),
   f(REVIEWS, 'home.reviews.heading',    'Heading',         'text',     'What Rotorua families say'),
-  f(REVIEWS, 'home.reviews.subheading', 'Subheading',      'text',     'Real reviews from real dog owners on Facebook.'),
-  f(REVIEWS, 'home.reviews.1.name',     'Review 1 name',   'text',     'Linda Van Staden'),
-  f(REVIEWS, 'home.reviews.1.text',     'Review 1 text',   'textarea', '2 Little Leashes has been a huge help with my dog, he absolutely loves his pack walks. Always comes back knackered but so happy! I always know where he is going and gets lots of photo updates. 10/10 would recommend 🙌'),
-  f(REVIEWS, 'home.reviews.2.name',     'Review 2 name',   'text',     'Donna Shaw'),
-  f(REVIEWS, 'home.reviews.2.text',     'Review 2 text',   'textarea', "Meihana is the bomb, he's so good with my girl MILO. She loves the runs he takes her on with the other fur babies. Interaction with the other dogs is soooo awesome. Meihana is a awesome trainer and she loves being with him and the other dogs would recommend him to anyone who is interested and looking for a great runner & dog handler."),
-  f(REVIEWS, 'home.reviews.3.name',     'Review 3 name',   'text',     'Denise Frost'),
-  f(REVIEWS, 'home.reviews.3.text',     'Review 3 text',   'textarea', 'Highly recommend 2 Little Leashes. So happy with this Amazing service. Big ups to Meihana his wife and girls. Cica comes home so happy. Excellent communication as well. Always look forward to cicas next outing.'),
-  f(REVIEWS, 'home.reviews.4.name',     'Review 4 name',   'text',     'Ana Sassen'),
-  f(REVIEWS, 'home.reviews.4.text',     'Review 4 text',   'textarea', "Can't recommend 2 little leashes enough!!! My girl is very reactive, 2 little leashes were still keen to meet her. After 1 meeting they were keen to take her on. Today my little reactive girl Kai didn't react to him at all, came back without her halti on and so so happy."),
+  f(REVIEWS, 'home.reviews.subheading', 'Subheading',      'text',     'Real reviews from real Rotorua dog owners.'),
+  // The reviews themselves live in the `reviews` table — managed in the admin Reviews tab.
 
   // ── Home – Policies ──────────────────────────────────────────────────────
   f(POLICIES, 'home.policies.eyebrow',    'Small heading',  'text',     'How we work'),

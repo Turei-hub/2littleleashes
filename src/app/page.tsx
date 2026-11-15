@@ -26,17 +26,20 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { getPolicies } from '@/lib/data'
 import { getContent } from '@/lib/content'
+import { getApprovedReviews } from '@/lib/reviews'
+import ReviewCard from '@/components/ReviewCard'
+
+const HOME_REVIEW_LIMIT = 6
 
 const WHY_CHOOSE_ICONS: LucideIcon[] = [Heart, Shield, Smile, DollarSign]
 const HERO_PILL_ICONS: LucideIcon[] = [Camera, Car]
 
 export default async function HomePage() {
-  const c = await getContent()
+  const [c, reviews] = await Promise.all([getContent(), getApprovedReviews(HOME_REVIEW_LIMIT)])
   const WHY_CHOOSE = WHY_CHOOSE_ICONS.map((icon, i) => ({
     icon, title: c[`home.why.${i + 1}.title`], body: c[`home.why.${i + 1}.body`],
   }))
   const HERO_PILLS = HERO_PILL_ICONS.map((icon, i) => ({ icon, text: c[`home.hero.pill_${i + 1}`] }))
-  const REVIEWS = [1, 2, 3, 4].map(n => ({ name: c[`home.reviews.${n}.name`], text: c[`home.reviews.${n}.text`] }))
   const POLICIES = getPolicies(c)
   return (
     <>
@@ -132,25 +135,19 @@ export default async function HomePage() {
           <h2 className="font-display mt-1 text-3xl font-bold text-forest-700">{c['home.reviews.heading']}</h2>
           <p className="mt-2 text-sm text-forest-600">{c['home.reviews.subheading']}</p>
 
-          <div className="mt-8 grid gap-5 sm:grid-cols-2">
-            {REVIEWS.map(review => {
-              const initials = review.name.split(' ').map(n => n[0]).join('')
-              return (
-                <div key={review.name} className="flex flex-col rounded-xl border border-forest-700/10 bg-white p-6 shadow-sm">
-                  <div className="mb-3 text-lg tracking-tight text-amber-400">★★★★★</div>
-                  <p className="flex-1 text-sm leading-relaxed text-forest-600">&ldquo;{review.text}&rdquo;</p>
-                  <div className="mt-5 flex items-center gap-3 border-t border-forest-700/8 pt-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest-100 text-xs font-bold text-forest-700">
-                      {initials}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-forest-700">{review.name}</p>
-                      <p className="text-xs text-forest-600">Facebook Review</p>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
+          {reviews.length > 0 && (
+            <div className="mt-8 grid gap-5 sm:grid-cols-2">
+              {reviews.map(review => <ReviewCard key={review.id} review={review} />)}
+            </div>
+          )}
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/reviews" className="btn-primary w-full justify-center sm:w-auto">
+              See all reviews →
+            </Link>
+            <Link href="/reviews#leave-review" className="btn-outline w-full justify-center bg-white sm:w-auto">
+              Leave a review
+            </Link>
           </div>
         </div>
       </section>
